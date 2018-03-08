@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/weinfuse_api
+    docker:
+      - image: circleci/ruby:2.4
+    steps:
+      - checkout
+      - type: restore-cache
+        key: redox_{{ checksum "Gemfile.lock" }}
+        key: redox
+      - run: bundle install --path vendor/bundle --jobs 20 --retry 5
+      - type: cache-save
+        key: redox_{{ checksum "Gemfile.lock" }}
+        key: redox
+        paths:
+          - vendor/bundle
+      - type: shell
+        command: |
+          bundle exec rubocop
+      - type: shell
+        command: |
+          bundle exec rake test
+      - type: store_test_results
+        path: /tmp/test-results
+

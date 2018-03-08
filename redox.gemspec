@@ -1,5 +1,4 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'redox/version'
 
@@ -7,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'redox'
   spec.version       = Redox::VERSION
   spec.authors       = ['Alexander Clark']
-  spec.email         = ['alexander.clark@weinfuse.com']
+  spec.email         = ['sasha.jackal@gmail.com']
 
   spec.summary       = 'Ruby wrapper for the Redox Engine API'
   spec.homepage      = 'https://github.com/WeInfuse/redox'
@@ -28,8 +27,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '~> 1.13'
-  spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'minitest', '~> 5.0'
+  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rubocop', '~> 0.5'
   spec.add_development_dependency 'webmock', '~> 3.1'
   spec.add_development_dependency 'yard', '~> 0.9'
 end
