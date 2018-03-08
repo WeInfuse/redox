@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+# [0.1.2] - 2018-03-08
+### Added
+- CircleCI config
+- .editorconfig
+- Added rubocop as dev dependency
+
+### Changed
+- Corrected author email
+- Tweaks to pass rubocop
+
 # [0.1.1] - 2017-10-12
 ### Removed
 - Redundant .gem file
@@ -15,5 +25,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial Release
 
-[Unreleased]: https://github.com/WeInfuse/redox/compare/0.1.0...HEAD
+[Unreleased]: https://github.com/WeInfuse/redox/compare/0.1.2...HEAD
+[0.1.2]: https://github.com/WeInfuse/redox/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/WeInfuse/redox/compare/0.1.0...0.1.1
