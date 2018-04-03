@@ -19,6 +19,14 @@ Or install it yourself as:
 
 ## Usage
 
+In an initializer file:
+```ruby
+Redox.configure do |redox|
+  redox.api_key = #{Your API Key}
+  redox.secret = #{Your secret}
+end
+```
+
 ```ruby
 source = {
   Name: 'Redox Dev Tools',
@@ -32,9 +40,7 @@ destinations = [
   }
 ]
 
-redox = Redox::Redox.new(
-  api_key: ENV['REDOX_KEY'],
-  secret: ENV['REDOX_SECRET'],
+redox = Redox::Client.new(
   source: source,
   destinations: destinations,
   test: true
@@ -47,6 +53,27 @@ redox.add_patient(
     ...
   }
 )
+```
+
+Initializing with a persisted access token (check if it's expired, client will load naively)
+```ruby
+c = Redox::Client.new(
+  source: source,
+  destinations: destinations,
+  test: true,
+  token: <Existing access token>
+)
+```
+
+Initializing with a persisted refresh token (client will get a new access token)
+```ruby
+c = Redox::Client.new(
+  source: source,
+  destinations: destinations,
+  test: true,
+  refresh_token: <Existing refresh token>
+)
+c.access_token # => returns new token
 ```
 
 ## Development
