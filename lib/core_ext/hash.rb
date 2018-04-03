@@ -1,12 +1,20 @@
 # Help us deal with hashes with various key shapes/types
 class Hash
-  # Rails method, find at
-  # activesupport/lib/active_support/core_ext/hash/keys.rb, line 8
-  def transform_keys
-    return enum_for(:transform_keys) unless block_given?
+  # recursively transform keys according to a given block
+  def transform_keys(&block)
     result = self.class.new
     each_key do |key|
-      result[yield(key)] = self[key]
+      if self[key].respond_to? :transform_keys
+        result[yield(key)] = self[key].transform_keys(&block)
+      elsif self[key].class == Array
+        o = []
+        self[key].each do |e|
+          o << (e.respond_to?(:transform_keys) ? e.transform_keys(&block) : e)
+        end
+        result[yield(key)] = o
+      else
+        result[yield(key)] = self[key]
+      end
     end
     result
   end

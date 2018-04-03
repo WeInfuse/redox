@@ -41,12 +41,21 @@ module Redox
     #     }
     #   )
     def add_patient(patient_params)
-      patient_request = Net::HTTP::Post.new('/endpoint', auth_header)
       request_body = request_meta(
         data_model: 'PatientAdmin', event_type: 'NewPatient'
-      ).merge(Patient: patient_params)
-      patient_request.body = request_body.to_json
-      response = connection.request(patient_request)
+      ).merge(Patient: patient_params.redoxify_keys)
+      endpoint_request.body = request_body.to_json
+      response = connection.request(endpoint_request)
+
+      JSON.parse(response.body)
+    end
+
+    def search_patient(patient_params)
+      request_body = request_meta(
+        data_model: 'PatientSearch', event_type: 'Query'
+      ).merge(Patient: patient_params.redoxify_keys)
+      endpoint_request.body = request_body.to_json
+      response = connection.request(endpoint_request)
 
       JSON.parse(response.body)
     end
@@ -74,6 +83,10 @@ module Redox
       http.verify_depth = 5
 
       @connection = http
+    end
+
+    def endpoint_request
+      Net::HTTP::Post.new('/endpoint', auth_header)
     end
 
     def auth_header

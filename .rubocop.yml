@@ -18,3 +18,4 @@ AllCops:
     - '**/Cheffile'
     - '**/Vagabondfile'
     - 'vendor/**/*'
+    - 'lib/core_ext/hash.rb'
