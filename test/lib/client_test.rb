@@ -9,10 +9,7 @@ class ClientTest < Minitest::Test
   end
 
   def test_token_fetch
-    VCR.use_cassette('client/new/token') do
-      r = redox
-      refute_nil r.access_token
-    end
+    VCR.use_cassette('client/new/token') { refute_nil redox.access_token }
   end
 
   def test_init_with_token
@@ -22,11 +19,11 @@ class ClientTest < Minitest::Test
 
   def test_token_fetch_with_refresh
     VCR.use_cassette('client/new/token') do |cassette|
-      token_response = cassette.http_interactions.interactions[0].response.to_hash
-      refresh_token = JSON.parse(token_response['body']['string'])['refreshToken']
+      token_response = cassette.http_interactions.interactions[0].response
+      response_body = token_response.to_hash['body']['string']
+      refresh_token = JSON.parse(response_body)['refreshToken']
       VCR.use_cassette('client/new/token_with_refresh') do
-        r = redox(refresh: refresh_token)
-        refute_nil r.access_token
+        refute_nil redox(refresh: refresh_token).access_token
       end
     end
   end
@@ -115,54 +112,6 @@ class ClientTest < Minitest::Test
       Identifiers: [],
       Demographics: {
         FirstName: 'Joe'
-      }
-    }
-  end
-
-  def real_patient
-    {
-      "Identifiers": [
-         {
-            "ID": "0000000001",
-            "IDType": "MR"
-         },
-         {
-            "ID": "e167267c-16c9-4fe3-96ae-9cff5703e90a",
-            "IDType": "EHRID"
-         },
-         {
-            "ID": "a1d4ee8aba494ca",
-            "IDType": "NIST"
-         }
-      ],
-      "Demographics": {
-         "FirstName": "Timothy",
-         "MiddleName": "Paul",
-         "LastName": "Bixby",
-         "DOB": "2008-01-06",
-         "SSN": "101-01-0001",
-         "Sex": "Male",
-         "Race": "Asian",
-         "IsHispanic": nil,
-         "MaritalStatus": "Single",
-         "IsDeceased": nil,
-         "DeathDateTime": nil,
-         "PhoneNumber": {
-            "Home": "+18088675301",
-            "Office": nil,
-            "Mobile": nil
-         },
-         "EmailAddresses": [],
-         "Language": "en",
-         "Citizenship": [],
-         "Address": {
-            "StreetAddress": "4762 Hickory Street",
-            "City": "Monroe",
-            "State": "WI",
-            "ZIP": "53566",
-            "County": "Green",
-            "Country": "US"
-         }
       }
     }
   end

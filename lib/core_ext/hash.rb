@@ -2,15 +2,22 @@
 class Hash
   # recursively transform keys according to a given block
   def transform_keys(&block)
-    result = {}
-    each do |key, value|
-      result[yield(key)] = if value.respond_to?(:each_index)
-                             value.map { |e| e.transform_keys(&block) rescue e }
-                           else
-                             value.transform_keys(&block) rescue value
-                           end
+    map do |key, value|
+      [
+        yield(key),
+        transform_value(value, &block)
+      ]
+    end.to_h
+  end
+
+  def transform_value(value, &block)
+    if value.respond_to?(:each_index)
+      value.map do |elem|
+        elem.transform_keys(&block) rescue elem
+      end
+    else
+      value.transform_keys(&block) rescue value
     end
-    result
   end
 
   # Rails method, find at
@@ -36,14 +43,11 @@ class Hash
   # transform RedoxCase string keys to ruby symbol keys
   def rubyize_keys
     transform_keys do |key|
-      begin
-        next :id if key == 'ID'
-        new_key = key.chars.map { |c| c =~ /[A-Z]+/ ? "_#{c.downcase}" : c }
-        new_key[0] = new_key[0].slice(1)
-        new_key.join.to_sym
-      rescue StandardError
-        key
-      end
+      next :id if key == 'ID'
+      next :id_type if key == 'IDType'
+      new_key = key.chars.map { |c| c =~ /[A-Z]+/ ? "_#{c.downcase}" : c }
+      new_key[0] = new_key[0].slice(1)
+      new_key.join.to_sym rescue key
     end
   end
 end
