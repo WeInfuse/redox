@@ -1,5 +1,6 @@
 require 'redox/version'
 require 'redox/client'
+require 'core_ext/hash'
 require 'json'
 require 'net/http'
 require 'uri'

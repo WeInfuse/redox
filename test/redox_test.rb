@@ -7,8 +7,8 @@ class RedoxTest < Minitest::Test
 
   def setup
     Redox.configure do |r|
-      r.api_key = ENV['Redox_key']
-      r.secret = ENV['Redox_secret']
+      r.api_key = redox_keys[:api_key]
+      r.secret = redox_keys[:secret]
     end
   end
 
@@ -22,34 +22,30 @@ class RedoxTest < Minitest::Test
   end
 
   def test_add_patient
-    Redox.configure do |r|
-      r.api_key = 'test'
-      r.secret = 'test'
-    end
-
-    VCR.use_cassette('patient/new_test') do
-      redox.add_patient(patient)
+    VCR.use_cassette('client/new/token') do 
+      r = redox
+      VCR.use_cassette('patient/new_test') do
+        r.add_patient(patient)
+      end
     end
   end
 
   private
 
   def redox
-    VCR.use_cassette('client/new/get_token_test') do
-      Redox::Client.new(
-        source: source,
-        destinations: destinations,
-        test: true
-      )
-    end
+    Redox::Client.new(
+      source: source,
+      destinations: destinations,
+      test: true
+    )
   end
 
   def redox_keys
     file = File.open(File.join(__dir__, 'redox_keys.yml'))
     if file
-      return YAML.load(file)
+      return YAML.load(file).symbolize_keys
     end
-    raise 'Keys not found. Please save real redox keys in test/redox_keys.yml to run tests'
+    raise StandardError, 'Keys not found. Please save real redox keys in test/redox_keys.yml to run tests'
   end
 
   def request_body
