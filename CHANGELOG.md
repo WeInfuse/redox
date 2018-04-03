@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- Change Redox::Redox to Redox::Client
+- Refactor Module to accept configuration
+- Refactor Client to pass Rubocop linting
+- Refactor Client to accept stored token/refresh token
+- Refactor/add tests
 
 # [0.1.2] - 2018-03-08
 ### Added

@@ -1,23 +1,28 @@
 module Redox
   # Redox API client
   class Client
+    attr_reader :source, :destinations, :test, :access_token, :refresh_token
     # Instantiates a new Redox connection object
     #
-    # @param [String] api_key API key for the connection
-    # @param [String] secret API secret for the connection
     # @param [Hash] source source information
     # @param [Array<Hash>] destinations list of destinations
     # @param [Boolean] test whether to use test mode
+    # @param [String] Optional param to provide an existing Access Token
+    # @param [String] Optional param to provide an existing Refresh Token
     # @example
-    #   redox = Redox::Redox.new(
-    #     api_key: ENV['REDOX_KEY'],
-    #     secret: ENV['REDOX_SECRET'],
+    #   redox = Redox::Client.new(
     #     source: source,
     #     destinations: destinations,
-    #     test: true
+    #     test: true,
+    #     OPTIONAL: (If tokens/refresh_tokens are being persisted elsewhere)
+    #     token: (existing access token),
+    #     refresh_token: (existing refresh token)
     #   )
-    def initialize(source:, destinations:, test: true)
-      return unless access_token
+    def initialize(
+      source:, destinations:, test: true, token: nil, refresh_token: nil
+    )
+      @refresh_token = refresh_token
+      @access_token = token || fetch_access_token
 
       @source = source
       @destinations = destinations
@@ -48,20 +53,16 @@ module Redox
 
     private
 
-    attr_reader :source, :destinations, :test
-
-    def access_token
+    def fetch_access_token
       return @access_token if @access_token
 
-      response = connection.request(login_request)
+      response = connection.request(login_request(@refresh_token))
       code = response.code.to_i
+      raise TokenError, 'Error obtaining token' unless code >= 200 && code < 400
       body = JSON.parse(response.body)
-      if code >= 200
-        @refresh_token = body['refreshToken']
-        @access_token = body['accessToken']
-        return
-      end
-      raise TokenError, 'Unable to obtain token.'
+      @refresh_token = body['refreshToken']
+
+      body['accessToken']
     end
 
     def connection
@@ -95,12 +96,12 @@ module Redox
       }
     end
 
-    def login_request
-      req_url = @refresh_token ? 'auth/refreshToken' : '/auth/authenticate'
+    def login_request(refresh_token = nil)
+      req_url = refresh_token ? '/auth/refreshToken' : '/auth/authenticate'
       req = Net::HTTP::Post.new(req_url, 'Content-Type' => 'application/json')
       req_body = { apiKey: Redox.api_key }
-      if @refresh_token
-        req_body[:refreshToken] = @refresh_token
+      if refresh_token
+        req_body[:refreshToken] = refresh_token
       else
         req_body[:secret] = Redox.secret
       end
