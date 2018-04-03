@@ -22,7 +22,7 @@ class RedoxTest < Minitest::Test
   end
 
   def test_add_patient
-    VCR.use_cassette('client/new/token') do 
+    VCR.use_cassette('client/new/token') do
       r = redox
       VCR.use_cassette('patient/new_test') do
         r.add_patient(patient)
@@ -42,10 +42,9 @@ class RedoxTest < Minitest::Test
 
   def redox_keys
     file = File.open(File.join(__dir__, 'redox_keys.yml'))
-    if file
-      return YAML.load(file).symbolize_keys
-    end
-    raise StandardError, 'Keys not found. Please save real redox keys in test/redox_keys.yml to run tests'
+    return YAML.safe_load(file).symbolize_keys if file
+    raise StandardError, 'Keys not found. Please save real redox keys in \
+    test/redox_keys.yml to run tests'
   end
 
   def request_body

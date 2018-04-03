@@ -18,7 +18,7 @@ class HashTest < Minitest::Test
   def test_symbolize_keys
     sym_keys = patient_demo_hash_redox_keys.symbolize_keys
     assert_equal(
-      [:FirstName, :LastName],
+      %i[FirstName LastName],
       sym_keys.keys
     )
   end
@@ -31,5 +31,4 @@ class HashTest < Minitest::Test
       rubyized_keys
     )
   end
-
 end

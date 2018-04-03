@@ -17,11 +17,11 @@ module Redox
     #     test: true
     #   )
     def initialize(source:, destinations:, test: true)
-      if access_token
-        @source = source
-        @destinations = destinations
-        @test = test
-      end
+      return unless access_token
+
+      @source = source
+      @destinations = destinations
+      @test = test
     end
 
     # Send NewPatient message
@@ -39,8 +39,7 @@ module Redox
       patient_request = Net::HTTP::Post.new('/endpoint', auth_header)
       request_body = request_meta(
         data_model: 'PatientAdmin', event_type: 'NewPatient'
-      ).merge({ Patient: patient_params })
-      p request_body
+      ).merge(Patient: patient_params)
       patient_request.body = request_body.to_json
       response = connection.request(patient_request)
 
@@ -54,25 +53,10 @@ module Redox
     def access_token
       return @access_token if @access_token
 
-      login_request = Net::HTTP::Post.new(
-        (@refresh_token ? 
-          'auth/refreshToken' :
-          '/auth/authenticate'),
-          'Content-Type' => 'application/json'
-      )
-      login_request.body = @refresh_token ? 
-        {
-          apiKey: Redox.api_key,
-          refreshToken: @refresh_token
-        }.to_json :
-        {
-          apiKey: Redox.api_key,
-          secret: Redox.secret
-        }.to_json
       response = connection.request(login_request)
       code = response.code.to_i
       body = JSON.parse(response.body)
-      if (code >= 200)
+      if code >= 200
         @refresh_token = body['refreshToken']
         @access_token = body['accessToken']
         return
@@ -109,6 +93,19 @@ module Redox
           Destinations: @destinations
         }
       }
+    end
+
+    def login_request
+      req_url = @refresh_token ? 'auth/refreshToken' : '/auth/authenticate'
+      req = Net::HTTP::Post.new(req_url, 'Content-Type' => 'application/json')
+      req_body = { apiKey: Redox.api_key }
+      if @refresh_token
+        req_body[:refreshToken] = @refresh_token
+      else
+        req_body[:secret] = Redox.secret
+      end
+      req.body = req_body.to_json
+      req
     end
   end
 end

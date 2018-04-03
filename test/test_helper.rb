@@ -8,7 +8,7 @@ require 'vcr'
 WebMock.disable_net_connect!(allow_localhost: true)
 
 VCR.configure do |c|
-  #the directory where cassettes will be saved
+  # the directory where cassettes will be saved
   c.cassette_library_dir = 'test/vcr'
   c.hook_into :webmock
 end

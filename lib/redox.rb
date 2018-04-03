@@ -5,8 +5,9 @@ require 'json'
 require 'net/http'
 require 'uri'
 
+# a set of Ruby classes for Redox HTTP API interactions
 module Redox
-  API_URL = URI.parse("https://api.redoxengine.com/")
+  API_URL = URI.parse('https://api.redoxengine.com/')
   class << self
     attr_accessor :api_key, :secret
   end
