@@ -63,7 +63,7 @@ module Redox
     private
 
     def fetch_access_token
-      return @access_token if @access_token
+      return @access_token if defined? @access_token
 
       response = connection.request(login_request(@refresh_token))
       code = response.code.to_i
@@ -75,7 +75,7 @@ module Redox
     end
 
     def connection
-      return @connection if @connection
+      return @connection if defined? @connection
 
       http = Net::HTTP.new(API_URL.host, API_URL.port)
       http.use_ssl = true
