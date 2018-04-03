@@ -1,7 +1,10 @@
 module Redox
   # Redox API client
   class Client
-    attr_reader :source, :destinations, :test, :access_token, :refresh_token, :response
+    attr_reader(
+      :source, :destinations, :test,
+      :access_token, :refresh_token, :response
+    )
     # Instantiates a new Redox connection object
     #
     # @param [Hash] source source information
@@ -87,9 +90,7 @@ module Redox
       @connection = http
     end
 
-    def endpoint_request
-      
-    end
+    def endpoint_request; end
 
     def auth_header
       {

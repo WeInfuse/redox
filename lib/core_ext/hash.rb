@@ -3,13 +3,11 @@ class Hash
   # recursively transform keys according to a given block
   def transform_keys(&block)
     result = {}
-    each_key do |key|
-      result[yield(key)] = if self[key].class == Array
-                             self[key].map do |e|
-                               e.transform_keys(&block) rescue e
-                             end
+    each do |key, value|
+      result[yield(key)] = if value.respond_to?(:each_index)
+                             value.map { |e| e.transform_keys(&block) rescue e }
                            else
-                             self[key].transform_keys(&block) rescue self[key]
+                             value.transform_keys(&block) rescue value
                            end
     end
     result
