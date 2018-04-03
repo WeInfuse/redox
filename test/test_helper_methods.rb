@@ -53,4 +53,70 @@ module TestHelpers
       }
     }
   end
+
+  def dummy_redox(refresh: nil, access: nil)
+    Redox::Client.new(
+      source: source,
+      destinations: destinations,
+      test: true,
+      token: access,
+      refresh_token: refresh
+    )
+  end
+
+  def redox(refresh: nil, access: nil)
+    Redox::Client.new(
+      source: real_source,
+      destinations: real_destinations,
+      test: true,
+      token: access,
+      refresh_token: refresh
+    )
+  end
+
+  def request_body_new_patient
+    {
+      Meta: {
+        DataModel: 'PatientAdmin',
+        EventType: 'NewPatient',
+        Test: true,
+        Source: source,
+        Destinations: destinations
+      },
+      Patient: patient
+    }
+  end
+
+  def source
+    {
+      Name: 'Redox Dev Tools',
+      ID: '4-5-6'
+    }
+  end
+
+  def real_source
+    redox_keys[:source_data]
+  end
+
+  def destinations
+    [
+      {
+        Name: 'Redox EMR',
+        ID: '7-8-9'
+      }
+    ]
+  end
+
+  def real_destinations
+    redox_keys[:destinations_data]
+  end
+
+  def patient
+    {
+      Identifiers: [],
+      Demographics: {
+        FirstName: 'Joe'
+      }
+    }
+  end
 end
