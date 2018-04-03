@@ -6,40 +6,61 @@ class RedoxTest < Minitest::Test
   end
 
   def setup
-    stub_request(:post, 'https://api.redoxengine.com/auth/authenticate')
-      .with(body: { apiKey: '1-2-3', secret: 'xJp3Ba' },
-            headers: { 'Content-Type' => 'application/json' })
-      .to_return(status: 200, body: { accessToken: 'let.me.in' }.to_json)
+    Redox.configure do |r|
+      r.api_key = ENV['Redox_key']
+      r.secret = ENV['Redox_secret']
+    end
+  end
 
-    stub_request(:post, 'https://api.redoxengine.com/endpoint')
-      .with(body: hash_including(request_body),
-            headers: { 'Authorization' => 'Bearer let.me.in' })
-      .to_return(status: 200, body: '{ "Success": true }')
+  def test_configure_method
+    Redox.configure do |r|
+      r.api_key = 'test'
+      r.secret = 'test'
+    end
+    assert_equal(Redox.api_key, 'test')
+    assert_equal(Redox.secret, 'test')
   end
 
   def test_add_patient
-    redox = Redox::Redox.new(
-      api_key: '1-2-3',
-      secret: 'xJp3Ba',
-      source: source,
-      destinations: destinations,
-      test: true
-    )
+    Redox.configure do |r|
+      r.api_key = 'test'
+      r.secret = 'test'
+    end
 
-    redox.add_patient(patient)
+    VCR.use_cassette('patient/new_test') do
+      redox.add_patient(patient)
+    end
   end
 
   private
 
+  def redox
+    VCR.use_cassette('client/new/get_token_test') do
+      Redox::Client.new(
+        source: source,
+        destinations: destinations,
+        test: true
+      )
+    end
+  end
+
+  def redox_keys
+    file = File.open(File.join(__dir__, 'redox_keys.yml'))
+    if file
+      return YAML.load(file)
+    end
+    raise 'Keys not found. Please save real redox keys in test/redox_keys.yml to run tests'
+  end
+
   def request_body
     {
-      Meta: hash_including(
+      Meta: {
         DataModel: 'PatientAdmin',
         EventType: 'NewPatient',
         Test: true,
         Source: source,
         Destinations: destinations
-      ),
+      },
       Patient: patient
     }
   end
