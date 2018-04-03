@@ -21,9 +21,13 @@ class ClientTest < Minitest::Test
   end
 
   def test_token_fetch_with_refresh
-    VCR.use_cassette('client/new/token_with_refresh') do
-      r = redox(refresh: 'aeb9a5b4-d670-4990-9b79-52ce98a00fa3')
-      refute_nil r.access_token
+    VCR.use_cassette('client/new/token') do |cassette|
+      token_response = cassette.http_interactions.interactions[0].response.to_hash
+      refresh_token = JSON.parse(token_response['body']['string'])['refreshToken']
+      VCR.use_cassette('client/new/token_with_refresh') do
+        r = redox(refresh: refresh_token)
+        refute_nil r.access_token
+      end
     end
   end
 
@@ -42,16 +46,26 @@ class ClientTest < Minitest::Test
   def test_add_patient
     VCR.use_cassette('client/new/token') do
       r = redox
-      VCR.use_cassette('patient/new_test') { r.add_patient(patient) }
+      VCR.use_cassette('patient/new_test') { r.add_patient(real_patient) }
     end
   end
 
   private
 
-  def redox(refresh: nil, access: nil)
+  def test_redox(refresh: nil, access: nil)
     Redox::Client.new(
       source: source,
       destinations: destinations,
+      test: true,
+      token: access,
+      refresh_token: refresh
+    )
+  end
+
+  def redox(refresh: nil, access: nil)
+    Redox::Client.new(
+      source: real_source,
+      destinations: real_destinations,
       test: true,
       token: access,
       refresh_token: refresh
@@ -78,6 +92,10 @@ class ClientTest < Minitest::Test
     }
   end
 
+  def real_source
+    redox_keys[:source_data]
+  end
+
   def destinations
     [
       {
@@ -87,11 +105,63 @@ class ClientTest < Minitest::Test
     ]
   end
 
+  def real_destinations
+    redox_keys[:destinations_data]
+  end
+
   def patient
     {
       Identifiers: [],
       Demographics: {
         FirstName: 'Joe'
+      }
+    }
+  end
+
+  def real_patient
+    {
+      "Identifiers": [
+         {
+            "ID": "0000000001",
+            "IDType": "MR"
+         },
+         {
+            "ID": "e167267c-16c9-4fe3-96ae-9cff5703e90a",
+            "IDType": "EHRID"
+         },
+         {
+            "ID": "a1d4ee8aba494ca",
+            "IDType": "NIST"
+         }
+      ],
+      "Demographics": {
+         "FirstName": "Timothy",
+         "MiddleName": "Paul",
+         "LastName": "Bixby",
+         "DOB": "2008-01-06",
+         "SSN": "101-01-0001",
+         "Sex": "Male",
+         "Race": "Asian",
+         "IsHispanic": nil,
+         "MaritalStatus": "Single",
+         "IsDeceased": nil,
+         "DeathDateTime": nil,
+         "PhoneNumber": {
+            "Home": "+18088675301",
+            "Office": nil,
+            "Mobile": nil
+         },
+         "EmailAddresses": [],
+         "Language": "en",
+         "Citizenship": [],
+         "Address": {
+            "StreetAddress": "4762 Hickory Street",
+            "City": "Monroe",
+            "State": "WI",
+            "ZIP": "53566",
+            "County": "Green",
+            "Country": "US"
+         }
       }
     }
   end
