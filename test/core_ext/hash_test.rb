@@ -24,7 +24,34 @@ class HashTest < Minitest::Test
       'ArrayKey' => [
         { 'YetAnotherName' => 'Not Pedro' },
         'non Hash element'
-      ]
+      ],
+      'DeepHashKey' => {
+        'DeeperHashKey' => {
+          'DeepestHashKey' => {
+            'DeepKey' => 'DeepValue'
+          }
+        }
+      }
+    }
+  end
+
+  def transformed_deep_hash
+    {
+      first_name: 'Pedro',
+      hash_key: {
+        other_name: 'Not Pedro'
+      },
+      array_key: [
+        { yet_another_name: 'Not Pedro' },
+        'non Hash element'
+      ],
+      deep_hash_key: {
+        deeper_hash_key: {
+          deepest_hash_key: {
+            deep_key: 'DeepValue'
+          }
+        }
+      }
     }
   end
 
@@ -45,9 +72,11 @@ class HashTest < Minitest::Test
     )
   end
 
-  def test_deep_transform_keys
-    deep_hash.rubyize_keys.each_key do |k|
-      p deep_hash.rubyize_keys[k]
-    end
+  def test_deep_transform_keys_rubyize
+    assert_equal transformed_deep_hash, deep_hash.rubyize_keys
+  end
+
+  def test_deep_transform_keys_redoxify
+    assert_equal deep_hash, transformed_deep_hash.redoxify_keys
   end
 end
