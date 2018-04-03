@@ -44,9 +44,10 @@ class ClientTest < Minitest::Test
   end
 
   def test_add_patient
-    VCR.use_cassette('client/new/token') do
+    VCR.use_cassette('patient/new_test') do
       r = redox
-      VCR.use_cassette('patient/new_test') { r.add_patient(real_patient) }
+      response = r.add_patient(real_patient)
+      p response, r.response
     end
   end
 
@@ -72,7 +73,7 @@ class ClientTest < Minitest::Test
     )
   end
 
-  def request_body
+  def request_body_new_patient
     {
       Meta: {
         DataModel: 'PatientAdmin',

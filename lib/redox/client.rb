@@ -1,7 +1,7 @@
 module Redox
   # Redox API client
   class Client
-    attr_reader :source, :destinations, :test, :access_token, :refresh_token
+    attr_reader :source, :destinations, :test, :access_token, :refresh_token, :response
     # Instantiates a new Redox connection object
     #
     # @param [Hash] source source information
@@ -44,20 +44,22 @@ module Redox
       request_body = request_meta(
         data_model: 'PatientAdmin', event_type: 'NewPatient'
       ).merge(Patient: patient_params.redoxify_keys)
-      endpoint_request.body = request_body.to_json
-      response = connection.request(endpoint_request)
+      request = Net::HTTP::Post.new('/endpoint', auth_header)
+      request.body = request_body.to_json
+      @response = connection.request(request)
 
-      JSON.parse(response.body)
+      JSON.parse(response.body).rubyize_keys
     end
 
     def search_patient(patient_params)
       request_body = request_meta(
         data_model: 'PatientSearch', event_type: 'Query'
       ).merge(Patient: patient_params.redoxify_keys)
-      endpoint_request.body = request_body.to_json
-      response = connection.request(endpoint_request)
+      request = Net::HTTP::Post.new('/endpoint', auth_header)
+      request.body = request_body.to_json
+      @response = connection.request(request)
 
-      JSON.parse(response.body)
+      JSON.parse(response.body).rubyize_keys
     end
 
     private
@@ -86,7 +88,7 @@ module Redox
     end
 
     def endpoint_request
-      Net::HTTP::Post.new('/endpoint', auth_header)
+      
     end
 
     def auth_header

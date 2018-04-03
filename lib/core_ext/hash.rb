@@ -30,7 +30,8 @@ class Hash
   # transform camel_case (symbol) keys to RedoxCase string keys
   def redoxify_keys
     transform_keys do |key|
-      key.to_s.split('_').map(&:capitalize).join rescue key
+      next key if key.class == String
+      key.to_s.split('_').map(&:capitalize).join
     end
   end
 
@@ -38,7 +39,8 @@ class Hash
   def rubyize_keys
     transform_keys do |key|
       begin
-        new_key = key.chars.map { |c| c =~ /[A-Z]/ ? "_#{c.downcase}" : c }
+        next :id if key == 'ID'
+        new_key = key.chars.map { |c| c =~ /[A-Z]+/ ? "_#{c.downcase}" : c }
         new_key[0] = new_key[0].slice(1)
         new_key.join.to_sym
       rescue StandardError
