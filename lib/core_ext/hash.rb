@@ -30,7 +30,7 @@ class Hash
   # transform camel_case (symbol) keys to RedoxCase string keys
   def redoxify_keys
     transform_keys do |key|
-      next key if key.class == String
+      next key if key =~ /["A-Z]/
       key.to_s.split('_').map(&:capitalize).join
     end
   end
