@@ -19,6 +19,10 @@ AllCops:
     - '**/Vagabondfile'
     - 'vendor/**/*'
 
+Metrics/MethodLength:
+  Exclude:
+    - 'test/core_ext/hash_test.rb'
+
 Style/RescueModifier:
   Exclude:
     - 'lib/core_ext/hash.rb'
