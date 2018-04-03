@@ -47,7 +47,7 @@ class HashTest < Minitest::Test
 
   def test_deep_transform_keys
     deep_hash.rubyize_keys.each_key do |k|
-      p k, deep_hash.rubyize_keys[k]
+      p deep_hash.rubyize_keys[k]
     end
   end
 end

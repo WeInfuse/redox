@@ -2,19 +2,15 @@
 class Hash
   # recursively transform keys according to a given block
   def transform_keys(&block)
-    result = self.class.new
+    result = {}
     each_key do |key|
-      if self[key].respond_to? :transform_keys
-        result[yield(key)] = self[key].transform_keys(&block)
-      elsif self[key].class == Array
-        o = []
-        self[key].each do |e|
-          o << (e.respond_to?(:transform_keys) ? e.transform_keys(&block) : e)
-        end
-        result[yield(key)] = o
-      else
-        result[yield(key)] = self[key]
-      end
+      result[yield(key)] = if self[key].class == Array
+                             self[key].map do |e|
+                               e.transform_keys(&block) rescue e
+                             end
+                           else
+                             self[key].transform_keys(&block) rescue self[key]
+                           end
     end
     result
   end
@@ -34,11 +30,7 @@ class Hash
   # transform camel_case (symbol) keys to RedoxCase string keys
   def redoxify_keys
     transform_keys do |key|
-      begin
-        key.to_s.split('_').map(&:capitalize).join
-      rescue StandardError
-        key
-      end
+      key.to_s.split('_').map(&:capitalize).join rescue key
     end
   end
 
