@@ -18,11 +18,12 @@ AllCops:
     - '**/Cheffile'
     - '**/Vagabondfile'
     - 'vendor/**/*'
+    - 'test/test_helper_methods.rb'
 
 Metrics/MethodLength:
   Exclude:
-    - 'test/core_ext/hash_test.rb'
-
+    - 'test/**/*'
+  
 Style/RescueModifier:
   Exclude:
     - 'lib/core_ext/hash.rb'

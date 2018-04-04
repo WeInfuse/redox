@@ -56,7 +56,7 @@ module Redox
 
     def search_patient(patient_params)
       request_body = request_meta(
-        data_model: 'PatientSearch', 
+        data_model: 'PatientSearch',
         event_type: 'Query',
         destination_name: 'athenahealth sandbox'
       ).merge(Patient: patient_params.redoxify_keys)
@@ -114,12 +114,13 @@ module Redox
           EventDateTime: Time.now.to_json,
           Test: @test,
           Source: @source,
-          Destinations: find_destination(destination_name) || @destinations.first
+          Destinations: find_destination(destination_name)
         }
       }
     end
 
-    def find_destination(destination_name)
+    def find_destination(destination_name = nil)
+      return @destinations.first if destination_name.nil?
       @destinations.select { |dest| dest[:Name] == destination_name }
     end
 
