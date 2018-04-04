@@ -9,7 +9,7 @@ class ClientPatientTest < Minitest::Test
   end
 
   def test_add_patient_success
-    VCR.use_cassette('patient/new_test') do
+    VCR.use_cassette('patient/new/valid') do
       r = redox
       response = r.add_patient(real_patient)
       assert_equal 200, r.response.code.to_i
@@ -18,7 +18,7 @@ class ClientPatientTest < Minitest::Test
   end
 
   def test_add_patient_failed
-    VCR.use_cassette('patient/new_test_patient_invalid') do
+    VCR.use_cassette('patient/new/invalid') do
       r = redox
       response = r.add_patient(p: 'e', d: 'r')
       assert_equal 400, r.response.code.to_i
@@ -64,6 +64,35 @@ class ClientPatientTest < Minitest::Test
             id_type: 'not an id'
           }
         ]
+      )
+      assert_equal 400, r.response.code.to_i
+      refute_nil response[:errors]
+    end
+  end
+
+  def test_patient_chart_success
+    VCR.use_cassette('patient/clinical_summary_get/valid') do
+      r = redox
+      response = r.get_summary_for_patient(
+        identifiers: [{
+          'ID' => '4681',
+          'IDType' => 'AthenaNet Enterprise ID'
+        }]
+      )
+      assert_equal 200, r.response.code.to_i
+      refute response[:errors]
+      assert response[:header][:patient][:identifiers]
+    end
+  end
+
+  def test_patient_chart_failed
+    VCR.use_cassette('patient/clinical_summary_get/invalid') do
+      r = redox
+      response = r.get_summary_for_patient(
+        identifiers: [{
+          'ID' => 'randomId',
+          'IDType' => 'Pedro ID'
+        }]
       )
       assert_equal 400, r.response.code.to_i
       refute_nil response[:errors]

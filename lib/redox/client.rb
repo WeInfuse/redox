@@ -5,7 +5,7 @@ module Redox
       :source, :destinations, :test,
       :access_token, :refresh_token, :response
     )
-    # Instantiates a new Redox connection object
+    # Instantiates a new Redox Client object
     #
     # @param [Hash] source source information
     # @param [Array<Hash>] destinations list of destinations
@@ -32,12 +32,12 @@ module Redox
       @test = test
     end
 
-    # Send NewPatient message
+    # Send PatientAdmin#NewPatient message
     #
     # @param [Hash] patient_params data to send in the Patient JSON object
     # @return [Hash] parsed response object
     # @example
-    #   Redox::Redox.new(*connection_params).add_patient(
+    #   Redox::Client.new(*connection_params).add_patient(
     #     Identifiers: [],
     #     Demographics: {
     #       FirstName: 'Joe'
@@ -46,34 +46,67 @@ module Redox
     def add_patient(patient_params)
       request_body = request_meta(
         data_model: 'PatientAdmin',
-        event_type: 'NewPatient',
-        destination_name: 'athenahealth sandbox ccda'
+        event_type: 'NewPatient'
       ).merge(Patient: patient_params.redoxify_keys)
-      request = Net::HTTP::Post.new('/endpoint', auth_header)
-      request.body = request_body.to_json
-      handle_response(request, 'Error in Patient New.')
+      handle_request(request_body, 'Error in Patient New.')
     end
 
+    # Send PatientSearch#Query message
+    #
+    # @param [Hash] patient_params data to send in the Patient JSON object
+    # @return [Hash] parsed response object
+    # @example
+    #   Redox::Client.new(*connection_params).search_patient(
+    #     demographics: {
+    #       FirstName: 'Joe'
+    #       ...
+    #     }
+    #   )
     def search_patient(patient_params)
       request_body = request_meta(
         data_model: 'PatientSearch',
-        event_type: 'Query',
-        destination_name: 'athenahealth sandbox'
+        event_type: 'Query'
       ).merge(Patient: patient_params.redoxify_keys)
-      request = Net::HTTP::Post.new('/endpoint', auth_header)
-      request.body = request_body.to_json
-      handle_response(request, 'Error in Patient Search.')
+      handle_request(request_body, 'Error in Patient Search.')
+    end
+
+    # Send ClinicalSummary#PatientQuery message
+    #
+    # @param [Hash] patient_params data to send in the Patient JSON object
+    # @return [Hash] parsed response object
+    # @example
+    #   Redox::Client.new(*connection_params).search_patient(
+    #     identifiers: [
+    #       {
+    #         id: '4681'
+    #         id_type: 'AthenaNet Enterprise ID'
+    #       }
+    #     ]
+    #   )
+    def get_summary_for_patient(patient_params)
+      request_body = request_meta(
+        data_model: 'Clinical Summary',
+        event_type: 'PatientQuery'
+      ).merge(Patient: patient_params.redoxify_keys)
+      handle_request(
+        request_body,
+        'Error fetching Patient Clinical Summary'
+      )
     end
 
     private
 
-    def handle_response(request, error_message)
+    def handle_request(request_body, error_message)
+      request = Net::HTTP::Post.new('/endpoint', auth_header)
+      request.body = request_body.to_json
       @response = connection.request(request)
+      body = JSON.parse(response.body).rubyize_keys
       if @response.code == '400'
         warn error_message
-        return JSON.parse(response.body).rubyize_keys[:meta]
+        return body[:meta]
       end
-      JSON.parse(response.body).rubyize_keys
+
+      body
     end
 
     def fetch_access_token
@@ -106,7 +139,7 @@ module Redox
       }
     end
 
-    def request_meta(data_model:, event_type:, destination_name:)
+    def request_meta(data_model:, event_type:)
       {
         Meta: {
           DataModel: data_model,
@@ -114,14 +147,13 @@ module Redox
           EventDateTime: Time.now.to_json,
           Test: @test,
           Source: @source,
-          Destinations: find_destination(destination_name)
+          Destinations: find_destination(data_model)
         }
       }
     end
 
-    def find_destination(destination_name = nil)
-      return @destinations.first if destination_name.nil?
-      @destinations.select { |dest| dest[:Name] == destination_name }
+    def find_destination(destination_name)
+      [@destinations[destination_name.split(' ').join.to_sym]]
     end
 
     def login_request(refresh_token = nil)
