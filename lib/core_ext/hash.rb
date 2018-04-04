@@ -1,6 +1,6 @@
 # Help us deal with hashes with various key shapes/types
 class Hash
-  # recursively transform keys according to a given block
+  # recursively transform keys/values according to a given block
   def transform_keys(&block)
     map do |key, value|
       [
@@ -10,6 +10,8 @@ class Hash
     end.to_h
   end
 
+  # recursively transform values that contain a data structure,
+  # return the value if it isn't a hash
   def transform_value(value, &block)
     if value.respond_to?(:each_index)
       value.map do |elem|
@@ -23,13 +25,7 @@ class Hash
   # Rails method, find at
   # activesupport/lib/active_support/core_ext/hash/keys.rb, line 50
   def symbolize_keys
-    transform_keys do |key|
-      begin
-        key.to_sym
-      rescue StandardError
-        key
-      end
-    end
+    transform_keys { |key| key.to_sym rescue key }
   end
 
   # transform camel_case (symbol) keys to RedoxCase string keys
@@ -46,12 +42,12 @@ class Hash
   # transform RedoxCase string keys to ruby symbol keys
   def rubyize_keys
     transform_keys do |key|
-      key = key.to_s
-      next :id_type if key == 'IDType'
-      next key.downcase.to_sym if key =~ /[A-Z]{2,3}/
-      new_key = key.chars.map { |c| c =~ /[A-Z]/ ? "_#{c.downcase}" : c }.join
-      new_key = new_key[0] == '_' ? new_key[1..-1] : new_key
-      new_key.to_sym
+      key
+        .to_s
+        .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+        .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+        .downcase
+        .to_sym
     end
   end
 end

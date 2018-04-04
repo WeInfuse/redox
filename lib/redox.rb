@@ -1,4 +1,3 @@
-
 require 'core_ext/hash'
 require 'redox/version'
 require 'redox/util'
