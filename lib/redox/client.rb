@@ -1,6 +1,8 @@
 module Redox
   # Redox API client
   class Client
+    include RequestHelpers
+
     attr_reader(
       :source, :destinations, :test,
       :access_token, :refresh_token, :response
@@ -94,79 +96,37 @@ module Redox
       )
     end
 
-    private
-
-    def handle_request(request_body, error_message)
-      request = Net::HTTP::Post.new('/endpoint', auth_header)
-      request.body = request_body.to_json
-      @response = connection.request(request)
-      body = JSON.parse(response.body).rubyize_keys
-      if @response.code == '400'
-        warn error_message
-        return body[:meta]
-      end
-
-      body
-    end
-
-    def fetch_access_token
-      return @access_token if defined? @access_token
-
-      response = connection.request(login_request(@refresh_token))
-      code = response.code.to_i
-      raise TokenError, 'Error obtaining token' unless code >= 200 && code < 400
-      body = JSON.parse(response.body)
-      @refresh_token = body['refreshToken']
-
-      body['accessToken']
-    end
-
-    def connection
-      return @connection if defined? @connection
-
-      http = Net::HTTP.new(API_URL.host, API_URL.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-      http.verify_depth = 5
-
-      @connection = http
-    end
-
-    def auth_header
-      {
-        'Authorization' => "Bearer #{access_token}",
-        'Content-Type' => 'application/json'
-      }
-    end
-
-    def request_meta(data_model:, event_type:)
-      {
-        Meta: {
-          DataModel: data_model,
-          EventType: event_type,
-          EventDateTime: Time.now.to_json,
-          Test: @test,
-          Source: @source,
-          Destinations: find_destination(data_model)
-        }
-      }
-    end
-
-    def find_destination(destination_name)
-      [@destinations[destination_name.split(' ').join.to_sym]]
-    end
-
-    def login_request(refresh_token = nil)
-      req_url = refresh_token ? '/auth/refreshToken' : '/auth/authenticate'
-      req = Net::HTTP::Post.new(req_url, 'Content-Type' => 'application/json')
-      req_body = { apiKey: Redox.api_key }
-      if refresh_token
-        req_body[:refreshToken] = refresh_token
-      else
-        req_body[:secret] = Redox.secret
-      end
-      req.body = req_body.to_json
-      req
+    # Send Scheduling#BookedSlots message
+    #
+    # @param [Hash] visit data to send in the Visit JSON object
+    # @param [String|Time] start datetime to search from
+    # @params [String|Time] end datetime to search until
+    # @return [Hash] parsed response object
+    # @example
+    #   Redox::Client.new(*connection_params).get_booked_slots(
+    #     visit: {
+    #       reason?: string
+    #       attending_providers: Provider[]
+    #       location: {
+    #         type: string
+    #         facility: string
+    #         department: string | number
+    #         room: string | number
+    #       }
+    #     }
+    #    start_time?: Time | String (ISO-8601 Time String)
+    #    end_time?: Time | String (ISO-8601 Time String)
+    # )
+    def get_booked_slots(visit:, start_time: nil, end_time: nil)
+      request_body = scheduling_query(
+        visit: visit,
+        start_time: start_time,
+        end_time: end_time
+      )
+      handle_request(
+        request_body,
+        'Error fetching Booked Slots'
+      )
     end
   end
 end

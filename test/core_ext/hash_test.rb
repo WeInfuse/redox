@@ -72,6 +72,15 @@ class HashTest < Minitest::Test
     )
   end
 
+  def test_rubyize_already_ruby_keys
+    ruby_keys = patient_demo_hash_ruby_keys.keys
+    rubyized_ruby_keys = patient_demo_hash_ruby_keys.rubyize_keys.keys
+    assert_equal(
+      ruby_keys,
+      rubyized_ruby_keys
+    )
+  end
+
   def test_redoxify_keys
     redox_keys = patient_demo_hash_redox_keys.keys
     redoxified_keys = patient_demo_hash_ruby_keys.redoxify_keys.keys

@@ -8,47 +8,47 @@ module TestHelpers
 
   def real_patient
     {
-      "Identifiers": [
+      "Identifiers" => [
         {
-            "ID": "0000000001",
-            "IDType": "MR"
+            "ID" => "0000000001",
+            "IDType" => "MR"
         },
         {
-            "ID": "e167267c-16c9-4fe3-96ae-9cff5703e90a",
-            "IDType": "EHRID"
+            "ID" => "e167267c-16c9-4fe3-96ae-9cff5703e90a",
+            "IDType" => "EHRID"
         },
         {
-            "ID": "a1d4ee8aba494ca",
-            "IDType": "NIST"
+            "ID" => "a1d4ee8aba494ca",
+            "IDType" => "NIST"
         }
       ],
-      "Demographics": {
-        "FirstName": "Timothy",
-        "MiddleName": "Paul",
-        "LastName": "Bixby",
-        "DOB": "2008-01-06",
-        "SSN": "101-01-0001",
-        "Sex": "Male",
-        "Race": "Asian",
-        "IsHispanic": nil,
-        "MaritalStatus": "Single",
-        "IsDeceased": nil,
-        "DeathDateTime": nil,
-        "PhoneNumber": {
-            "Home": "+18088675301",
-            "Office": nil,
-            "Mobile": nil
+      "Demographics" => {
+        "FirstName" => "Timothy",
+        "MiddleName" => "Paul",
+        "LastName" => "Bixby",
+        "DOB" => "2008-01-06",
+        "SSN" => "101-01-0001",
+        "Sex" => "Male",
+        "Race" => "Asian",
+        "IsHispanic" => nil,
+        "MaritalStatus" => "Single",
+        "IsDeceased" => nil,
+        "DeathDateTime" => nil,
+        "PhoneNumber" => {
+            "Home" => "+18088675301",
+            "Office" => nil,
+            "Mobile" => nil
         },
-        "EmailAddresses": [],
-        "Language": "en",
-        "Citizenship": [],
-        "Address": {
-            "StreetAddress": "4762 Hickory Street",
-            "City": "Monroe",
-            "State": "WI",
-            "ZIP": "53566",
-            "County": "Green",
-            "Country": "US"
+        "EmailAddresses" => [],
+        "Language" => "en",
+        "Citizenship" => [],
+        "Address" => {
+            "StreetAddress" => "4762 Hickory Street",
+            "City" => "Monroe",
+            "State" => "WI",
+            "ZIP" => "53566",
+            "County" => "Green",
+            "Country" => "US"
         }
       }
     }
@@ -116,6 +116,20 @@ module TestHelpers
       Identifiers: [],
       Demographics: {
         FirstName: 'Joe'
+      }
+    }
+  end
+
+  def visit
+    {
+      'Reason' => nil,
+      'AttendingProviders' => [
+        {
+          'ID' => 108
+        }
+      ],
+      'Location' => {
+        'Department' => 150
       }
     }
   end

@@ -1,6 +1,10 @@
-require 'redox/version'
-require 'redox/client'
+
 require 'core_ext/hash'
+require 'redox/version'
+require 'redox/util'
+require 'redox/request_helpers'
+require 'redox/client'
+require 'redox/patient'
 require 'json'
 require 'net/http'
 require 'uri'

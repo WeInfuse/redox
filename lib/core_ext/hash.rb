@@ -48,9 +48,9 @@ class Hash
     transform_keys do |key|
       next :id_type if key == 'IDType'
       next key.downcase.to_sym if key =~ /[A-Z]{2,3}/
-      new_key = key.chars.map { |c| c =~ /[A-Z]+/ ? "_#{c.downcase}" : c }
-      new_key[0] = new_key[0].slice(1)
-      new_key.join.to_sym rescue key
+      new_key = key.chars.map { |c| c =~ /[A-Z]/ ? "_#{c.downcase}" : c }.join
+      new_key = new_key[0] == '_' ? new_key[1..-1] : new_key
+      new_key.to_sym
     end
   end
 end
