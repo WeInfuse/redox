@@ -39,13 +39,4 @@ class ClientTest < Minitest::Test
       end
     end
   end
-
-  def test_add_patient
-    VCR.use_cassette('patient/new_test') do
-      r = redox
-      response = r.add_patient(real_patient)
-      assert_equal 200, r.response.code.to_i
-      refute_nil response[:patient]
-    end
-  end
 end

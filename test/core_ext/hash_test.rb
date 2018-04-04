@@ -97,4 +97,9 @@ class HashTest < Minitest::Test
   def test_deep_transform_keys_redoxify
     assert_equal deep_hash, transformed_deep_hash.redoxify_keys
   end
+
+  def test_redoxify_keys_id
+    output = { id: 'test' }.redoxify_keys
+    assert_equal({ 'ID' => 'test' }, output)
+  end
 end

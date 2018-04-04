@@ -45,27 +45,36 @@ module Redox
     #   )
     def add_patient(patient_params)
       request_body = request_meta(
-        data_model: 'PatientAdmin', event_type: 'NewPatient'
+        data_model: 'PatientAdmin',
+        event_type: 'NewPatient',
+        destination_name: 'athenahealth sandbox ccda'
       ).merge(Patient: patient_params.redoxify_keys)
       request = Net::HTTP::Post.new('/endpoint', auth_header)
       request.body = request_body.to_json
-      @response = connection.request(request)
-
-      JSON.parse(response.body).rubyize_keys
+      handle_response(request, 'Error in Patient New.')
     end
 
     def search_patient(patient_params)
       request_body = request_meta(
-        data_model: 'PatientSearch', event_type: 'Query'
+        data_model: 'PatientSearch', 
+        event_type: 'Query',
+        destination_name: 'athenahealth sandbox'
       ).merge(Patient: patient_params.redoxify_keys)
       request = Net::HTTP::Post.new('/endpoint', auth_header)
       request.body = request_body.to_json
-      @response = connection.request(request)
-
-      JSON.parse(response.body).rubyize_keys
+      handle_response(request, 'Error in Patient Search.')
     end
 
     private
+
+    def handle_response(request, error_message)
+      @response = connection.request(request)
+      if @response.code == '400'
+        warn error_message
+        return JSON.parse(response.body).rubyize_keys[:meta]
+      end
+      JSON.parse(response.body).rubyize_keys
+    end
 
     def fetch_access_token
       return @access_token if defined? @access_token
@@ -90,8 +99,6 @@ module Redox
       @connection = http
     end
 
-    def endpoint_request; end
-
     def auth_header
       {
         'Authorization' => "Bearer #{access_token}",
@@ -99,7 +106,7 @@ module Redox
       }
     end
 
-    def request_meta(data_model:, event_type:)
+    def request_meta(data_model:, event_type:, destination_name:)
       {
         Meta: {
           DataModel: data_model,
@@ -107,9 +114,13 @@ module Redox
           EventDateTime: Time.now.to_json,
           Test: @test,
           Source: @source,
-          Destinations: @destinations
+          Destinations: find_destination(destination_name) || @destinations.first
         }
       }
+    end
+
+    def find_destination(destination_name)
+      @destinations.select { |dest| dest[:Name] == destination_name }
     end
 
     def login_request(refresh_token = nil)
