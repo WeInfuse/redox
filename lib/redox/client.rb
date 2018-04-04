@@ -53,6 +53,14 @@ module Redox
       handle_request(request_body, 'Error in Patient New.')
     end
 
+    def update_patient(patient_params)
+      request_body = request_meta(
+        data_model: 'PatientAdmin',
+        event_type: 'PatientUpdate'
+      ).merge(Patient: patient_params.redoxify_keys)
+      handle_request(request_body, 'Error updating Patient.')
+    end
+
     # Send PatientSearch#Query message
     #
     # @param [Hash] patient_params data to send in the Patient JSON object

@@ -35,17 +35,18 @@ class Hash
   # transform camel_case (symbol) keys to RedoxCase string keys
   def redoxify_keys
     transform_keys do |key|
-      next 'ID' if key == :id
-      next 'IDType' if key == :id_type
-      next 'DOB' if key == :dob
-      next key if key =~ /["A-Z]/
-      key.to_s.split('_').map(&:capitalize).join
+      key = key.to_s
+      next 'IDType' if key == 'id_type'
+      next key if key =~ /^([A-Z]{1}[a-z]+)+/
+      next key.upcase if key =~ /^[a-z]{2,3}$/
+      key.split('_').map(&:capitalize).join
     end
   end
 
   # transform RedoxCase string keys to ruby symbol keys
   def rubyize_keys
     transform_keys do |key|
+      key = key.to_s
       next :id_type if key == 'IDType'
       next key.downcase.to_sym if key =~ /[A-Z]{2,3}/
       new_key = key.chars.map { |c| c =~ /[A-Z]/ ? "_#{c.downcase}" : c }.join

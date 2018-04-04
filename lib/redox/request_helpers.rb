@@ -25,15 +25,15 @@ module Redox
 
     def request_meta(data_model:, event_type:)
       {
-        Meta: {
-          DataModel: data_model,
-          EventType: event_type,
-          EventDateTime: Time.now.iso8601,
-          Test: @test,
-          Source: @source,
-          Destinations: find_destination(data_model)
+        meta: {
+          data_model: data_model,
+          event_type: event_type,
+          event_date_time: Time.now.iso8601,
+          test: @test,
+          source: @source,
+          destinations: find_destination(data_model)
         }
-      }
+      }.redoxify_keys
     end
 
     def scheduling_query(visit:, start_time: nil, end_time: nil)
