@@ -53,6 +53,17 @@ module Redox
       handle_request(request_body, 'Error in Patient New.')
     end
 
+    # Send PatientAdmin#PatientUpdate message
+    #
+    # @param [Hash] patient_params data to send in the Patient JSON object
+    # @return [Hash] parsed response object
+    # @example
+    #   Redox::Client.new(*connection_params).update_patient(
+    #     Identifiers: [],
+    #     Demographics: {
+    #       FirstName: 'Joe'
+    #     }
+    #   )
     def update_patient(patient_params)
       request_body = request_meta(
         data_model: 'PatientAdmin',

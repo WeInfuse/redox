@@ -111,4 +111,10 @@ class HashTest < Minitest::Test
     output = { id: 'test' }.redoxify_keys
     assert_equal({ 'ID' => 'test' }, output)
   end
+
+  def test_rubyize_keys_id
+    output = { 'ID' => 'test' }.rubyize_keys
+    assert_equal({ id: 'test' }, output)
+  end
+  
 end

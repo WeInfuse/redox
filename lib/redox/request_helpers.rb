@@ -9,7 +9,7 @@ module Redox
       @response = connection.request(request)
       body = JSON.parse(response.body).rubyize_keys
       if @response.code == '400'
-        warn error_message
+        $stdout.print error_message
         return body[:meta]
       end
 
