@@ -28,7 +28,7 @@ module RedoxEngine
         meta: {
           data_model: data_model,
           event_type: event_type,
-          event_date_time: Time.now.iso8601,
+          event_date_time: Time.now.utc.iso8601,
           test: @test,
           source: @source,
           destinations: find_destination(data_model)
@@ -36,16 +36,27 @@ module RedoxEngine
       }.redoxify_keys
     end
 
-    def scheduling_query(visit:, start_time: nil, end_time: nil)
+    def scheduling_query(query_data:, start_time: nil, end_time: nil, type:)
+      request_meta(data_model: 'Scheduling', event_type: type)
+        .merge(
+          scheduling_body(
+            query_data: query_data,
+            start_time: start_time,
+            end_time: end_time
+          )
+        ).redoxify_keys
+    end
+
+    def scheduling_body(query_data:, start_time: nil, end_time: nil)
       start_time = start_time ? Time.parse(start_time.to_s) : Time.now
       end_time = end_time ? Time.parse(end_time.to_s) : start_time + 864_000
-      request_meta(data_model: 'Scheduling', event_type: 'Booked')
-        .merge(
-          visit: visit,
-          start_date_time: start_time.iso8601,
-          end_date_time: end_time.iso8601
-        )
-        .redoxify_keys
+      {
+        visit: query_data[:visit],
+        start_date_time: start_time.utc.iso8601,
+        end_date_time: end_time.utc.iso8601,
+        patient: query_data[:patient],
+        visit_number: query_data[:visit][:visit_number]
+      }
     end
 
     def login_request(refresh_token = nil)

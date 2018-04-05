@@ -8,8 +8,8 @@ class VisitTest < Minitest::Test
                      id: 108
                    }
                  ], v.attending_providers)
-    assert_equal({
+    assert_equal([{
                    department: 150
-                 }, v.location)
+                 }], v.locations)
   end
 end

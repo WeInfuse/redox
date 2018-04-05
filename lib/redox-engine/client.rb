@@ -45,9 +45,13 @@ module RedoxEngine
     # @return [Hash] parsed response object
     # @example
     #   RedoxEngine::Client.new(*connection_params).add_patient(
-    #     Identifiers: [],
+    #     Identifiers: [{
+    #       ID: string
+    #       IDType: string
+    #     }*],
     #     Demographics: {
-    #       FirstName: 'Joe'
+    #       FirstName: string
+    #       ...
     #     }
     #   )
     def add_patient(patient_params)
@@ -60,13 +64,18 @@ module RedoxEngine
 
     # Send PatientAdmin#PatientUpdate message
     #
-    # @param [Hash] patient_params data to send in the Patient JSON object
+    # @param [Hash] <Patient> patient_params data to send in the
+    #               Patient JSON object
     # @return [Hash] parsed response object
     # @example
     #   RedoxEngine::Client.new(*connection_params).update_patient(
-    #     Identifiers: [],
+    #     Identifiers: [{
+    #       ID: string
+    #       IDType: string
+    #     }*],
     #     Demographics: {
-    #       FirstName: 'Joe'
+    #       FirstName: string
+    #       ...
     #     }
     #   )
     def update_patient(patient_params)
@@ -79,12 +88,12 @@ module RedoxEngine
 
     # Send PatientSearch#Query message
     #
-    # @param [Hash] patient_params data to send in the Patient JSON object
+    # @param [Hash] <Patient> data to send in the Patient JSON object
     # @return [Hash] parsed response object
     # @example
     #   RedoxEngine::Client.new(*connection_params).search_patient(
     #     demographics: {
-    #       FirstName: 'Joe'
+    #       FirstName: string
     #       ...
     #     }
     #   )
@@ -98,14 +107,14 @@ module RedoxEngine
 
     # Send ClinicalSummary#PatientQuery message
     #
-    # @param [Hash] patient_params data to send in the Patient JSON object
+    # @param [Hash] <Patient> data to send in the Patient JSON object
     # @return [Hash] parsed response object
     # @example
     #   RedoxEngine::Client.new(*connection_params).search_patient(
     #     identifiers: [
     #       {
-    #         id: '4681'
-    #         id_type: 'AthenaNet Enterprise ID'
+    #         id: string
+    #         id_type: string
     #       }
     #     ]
     #   )
@@ -122,34 +131,63 @@ module RedoxEngine
 
     # Send Scheduling#BookedSlots message
     #
-    # @param [Hash] visit data to send in the Visit JSON object
+    # NOTE: Endpoint not supported by all Health Systems, talk to your
+    # redox rep for more information
+    # @param [Hash] query_data to send in the <Visit>/<Patient> JSON objects
     # @param [String|Time] start_time datetime to search from
     # @params [String|Time] end_time datetime to search until
     # @return [Hash] parsed response object
     # @example
     #   RedoxEngine::Client.new(*connection_params).get_booked_slots(
-    #     visit: {
-    #       reason?: string
-    #       attending_providers: Provider[]
-    #       location: {
-    #         type: string
-    #         facility: string
-    #         department: string | number
-    #         room: string | number
-    #       }
-    #     }
+    #     query_data: {
+    #       visit: <Visit>
+    #       patient: <Patient>
+    #    }
     #    start_time?: Time | String (ISO-8601 Time String)
     #    end_time?: Time | String (ISO-8601 Time String)
     # )
-    def get_booked_slots(visit:, start_time: nil, end_time: nil)
+    def get_booked_slots(visit:, patient: nil, start_time: nil, end_time: nil)
       request_body = scheduling_query(
-        visit: visit,
+        query_data: { visit: visit, patient: patient },
         start_time: start_time,
-        end_time: end_time
+        end_time: end_time,
+        type: 'Booked'
       )
       handle_request(
         request_body,
-        'Error fetching Booked Slots'
+        'Error fetching Booked Slots.'
+      )
+    end
+
+    # Send Scheduling#AvailableSlots message
+    #
+    # NOTE: Endpoint not supported by all Health Systems, talk to your
+    # redox rep for more information
+    # @param [Hash] query_data to send in the <Visit>/<Patient> JSON objects
+    # @param [String|Time] start_time datetime to search from
+    # @params [String|Time] end_time datetime to search until
+    # @return [Hash] parsed response object
+    # @example
+    #   RedoxEngine::Client.new(*connection_params).get_available_slots(
+    #     query_data: {
+    #       visit: <Visit>
+    #       patient: <Patient>
+    #    }
+    #    start_time?: Time | String (ISO-8601 Time String)
+    #    end_time?: Time | String (ISO-8601 Time String)
+    # )
+    def get_available_slots(
+      visit:, patient: nil, start_time: nil, end_time: nil
+    )
+      request_body = scheduling_query(
+        query_data: { visit: visit, patient: patient },
+        start_time: start_time,
+        end_time: end_time,
+        type: 'AvailableSlots'
+      )
+      handle_request(
+        request_body,
+        'Error fetching Available Slots.'
       )
     end
   end

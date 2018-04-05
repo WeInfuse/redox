@@ -62,4 +62,70 @@ class ClientSchedulingTest < Minitest::Test
       refute_nil slots[:visits]
     end
   end
+
+  def test_fetch_available_slots_no_options
+    VCR.use_cassette('scheduling/available_slots/no_options') do
+      slots = @client.get_available_slots(visit: visit, patient: {
+                                            identifiers: []
+                                          })
+      assert_equal 200, @client.response.code.to_i
+      refute_nil slots[:available_slots]
+    end
+  end
+
+  def test_fetch_available_slots_start_time_string_given
+    VCR.use_cassette('scheduling/available_slots/start_time_given') do
+      slots = @client.get_available_slots(
+        visit: visit,
+        start_time: Time.new(2018, 1, 15).iso8601,
+        patient: {
+          identifiers: []
+        }
+      )
+      assert_equal 200, @client.response.code.to_i
+      refute_nil slots[:available_slots]
+    end
+  end
+
+  def test_fetch_available_slots_start_time_object_given
+    VCR.use_cassette('scheduling/available_slots/start_time_given_obj') do
+      slots = @client.get_available_slots(
+        visit: visit,
+        start_time: Time.new(2018, 1, 15),
+        patient: {
+          identifiers: []
+        }
+      )
+      assert_equal 200, @client.response.code.to_i
+      refute_nil slots[:available_slots]
+    end
+  end
+
+  def test_fetch_available_slots_end_time_string_given
+    VCR.use_cassette('scheduling/available_slots/end_time_given') do
+      slots = @client.get_available_slots(
+        visit: visit,
+        end_time: Time.new(2018, 4, 15).iso8601,
+        patient: {
+          identifiers: []
+        }
+      )
+      assert_equal 200, @client.response.code.to_i
+      refute_nil slots[:available_slots]
+    end
+  end
+
+  def test_fetch_available_slots_end_time_object_given
+    VCR.use_cassette('scheduling/available_slots/end_time_given_obj') do
+      slots = @client.get_available_slots(
+        visit: visit,
+        end_time: Time.new(2018, 4, 15),
+        patient: {
+          identifiers: []
+        }
+      )
+      assert_equal 200, @client.response.code.to_i
+      refute_nil slots[:available_slots]
+    end
+  end
 end

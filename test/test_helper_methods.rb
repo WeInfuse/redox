@@ -131,9 +131,9 @@ module TestHelpers
           'ID' => 108
         }
       ],
-      'Location' => {
+      'Locations' => [{
         'Department' => 150
-      }
+      }]
     }
   end
 end
