@@ -76,6 +76,33 @@ c = Redox::Client.new(
 c.access_token # => returns new token
 ```
 
+## Testing
+To run the test suite, save the following in redox_keys.yml in the test/directory (already in the .gitignore for your convenience):
+
+```yaml
+api_key: <Your Redox API Key>
+secret: <Your Redox API Secret>
+
+source_data:
+  Name: <Redox Source Name>
+  ID: <Redox Source ID>
+
+destinations_data:
+  ClinicalSummary: 
+    Name: <Destination Name>
+    ID: <Destination ID>
+  PatientAdmin:
+    Name: <Destination Name>
+    ID: <Destination ID>
+  Scheduling:
+    Name: <Destination Name>
+    ID: <Destination ID>
+  PatientSearch:
+    Name: <Destination Name>
+    ID: <Destination ID>
+
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

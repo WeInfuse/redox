@@ -1,9 +1,16 @@
 module TestHelpers
+  KEY_ERROR_MSG = """
+  Keys not found. Please save real redox keys in test/redox_keys.yml to run tests
+  """
+
   def redox_keys
-    file = File.open(File.join(__dir__, 'redox_keys.yml'))
-    return YAML.safe_load(file).symbolize_keys if file
-    raise StandardError, 'Keys not found. Please save real redox keys in \
-    test/redox_keys.yml to run tests'
+    begin
+      file = File.open(File.join(__dir__, 'redox_keys.yml'))
+      YAML.safe_load(file).symbolize_keys
+    rescue
+      raise Redox::APIKeyError,
+            KEY_ERROR_MSG
+    end
   end
 
   def real_patient
@@ -58,7 +65,7 @@ module TestHelpers
     Redox::Client.new(
       source: source,
       destinations: destinations,
-      test: true,
+      test_mode: true,
       token: access,
       refresh_token: refresh
     )
@@ -68,7 +75,7 @@ module TestHelpers
     Redox::Client.new(
       source: real_source,
       destinations: real_destinations,
-      test: true,
+      test_mode: true,
       token: access,
       refresh_token: refresh
     )
@@ -76,21 +83,21 @@ module TestHelpers
 
   def request_body_new_patient
     {
-      Meta: {
-        DataModel: 'PatientAdmin',
-        EventType: 'NewPatient',
-        Test: true,
-        Source: source,
-        Destinations: destinations
+      'Meta' => {
+        'DataModel' => 'PatientAdmin',
+        'EventType' => 'NewPatient',
+        'Test' => true,
+        'Source' => source,
+        'Destinations' => destinations
       },
-      Patient: patient
+      'Patient' => patient
     }
   end
 
   def source
     {
-      Name: 'Redox Dev Tools',
-      ID: '4-5-6'
+      'Name' => 'Redox Dev Tools',
+      'ID' => '4-5-6'
     }
   end
 
@@ -101,8 +108,8 @@ module TestHelpers
   def destinations
     [
       {
-        Name: 'Redox EMR',
-        ID: '7-8-9'
+        'Name' => 'Redox EMR',
+        'ID' => '7-8-9'
       }
     ]
   end
@@ -113,9 +120,9 @@ module TestHelpers
 
   def patient
     {
-      Identifiers: [],
-      Demographics: {
-        FirstName: 'Joe'
+      'Identifiers' => [],
+      'Demographics' => {
+        'FirstName' => 'Joe'
       }
     }
   end

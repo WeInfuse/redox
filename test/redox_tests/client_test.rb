@@ -27,16 +27,4 @@ class ClientTest < Minitest::Test
       end
     end
   end
-
-  def test_token_bad_keys
-    Redox.configure do |r|
-      r.api_key = 'bad'
-      r.secret = 'keys'
-    end
-    VCR.use_cassette('client/new/token_invalid_key') do
-      assert_raises(Redox::TokenError) do
-        redox
-      end
-    end
-  end
 end

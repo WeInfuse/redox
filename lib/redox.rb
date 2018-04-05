@@ -2,6 +2,7 @@ require 'core_ext/hash'
 require 'redox/version'
 require 'redox/util'
 require 'redox/request_helpers'
+require 'redox/exceptions'
 require 'redox/client'
 require 'redox/patient'
 require 'redox/visit'
@@ -20,6 +21,4 @@ module Redox
     yield self
     true
   end
-
-  class TokenError < StandardError; end
 end

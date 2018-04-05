@@ -11,27 +11,30 @@ module Redox
     #
     # @param [Hash] source source information
     # @param [Array<Hash>] destinations list of destinations
-    # @param [Boolean] test whether to use test mode
-    # @param [String] Optional param to provide an existing Access Token
-    # @param [String] Optional param to provide an existing Refresh Token
+    # @param [Boolean] test_mode whether to use test mode
+    # @param [String] access_token Optional param to provide an existing Access
+    #                 Token
+    # @param [String] refresh_token Optional param to provide an existing
+    #                 Refresh Token
     # @example
     #   redox = Redox::Client.new(
     #     source: source,
     #     destinations: destinations,
-    #     test: true,
+    #     test_mode: true,
     #     OPTIONAL: (If tokens/refresh_tokens are being persisted elsewhere)
     #     token: (existing access token),
     #     refresh_token: (existing refresh token)
     #   )
     def initialize(
-      source:, destinations:, test: true, token: nil, refresh_token: nil
+      source:, destinations:, test_mode: true, token: nil, refresh_token: nil
     )
+      raise APIKeyError if [Redox.api_key, Redox.secret].any?(&:nil?)
       @refresh_token = refresh_token
       @access_token = token || fetch_access_token
 
       @source = source
       @destinations = destinations
-      @test = test
+      @test = test_mode
     end
 
     # Send PatientAdmin#NewPatient message
@@ -118,8 +121,8 @@ module Redox
     # Send Scheduling#BookedSlots message
     #
     # @param [Hash] visit data to send in the Visit JSON object
-    # @param [String|Time] start datetime to search from
-    # @params [String|Time] end datetime to search until
+    # @param [String|Time] start_time datetime to search from
+    # @params [String|Time] end_time datetime to search until
     # @return [Hash] parsed response object
     # @example
     #   Redox::Client.new(*connection_params).get_booked_slots(
