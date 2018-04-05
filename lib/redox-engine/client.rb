@@ -28,7 +28,9 @@ module RedoxEngine
     def initialize(
       source:, destinations:, test_mode: true, token: nil, refresh_token: nil
     )
-      raise APIKeyError if [RedoxEngine.api_key, RedoxEngine.secret].any?(&:nil?)
+      if [RedoxEngine.api_key, RedoxEngine.secret].any?(&:nil?)
+        raise APIKeyError
+      end
       @refresh_token = refresh_token
       @access_token = token || fetch_access_token
 

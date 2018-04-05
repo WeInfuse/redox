@@ -18,4 +18,10 @@ class ExceptionsTest < Minitest::Test
       assert_raises(RedoxEngine::TokenError) { redox }
     end
   end
+
+  def test_redox_test_throws_without_keys
+    File.stub(:open, nil) do
+      assert_raises(RedoxEngine::APIKeyError) { redox }
+    end
+  end
 end

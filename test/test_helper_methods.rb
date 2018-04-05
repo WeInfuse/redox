@@ -1,15 +1,11 @@
 module TestHelpers
-  KEY_ERROR_MSG = """
-  Keys not found. Please save real redox keys in test/redox_keys.yml to run tests
-  """
-
   def redox_keys
     begin
       file = File.open(File.join(__dir__, 'redox_keys.yml'))
       YAML.safe_load(file).symbolize_keys
     rescue
-      raise RedoxEngine::APIKeyError,
-            KEY_ERROR_MSG
+      raise RedoxEngine::APIKeyError, 
+            'Tests require API Keys to be saved in test/redox_keys.yml. Check the README for information.'
     end
   end
 
