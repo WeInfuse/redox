@@ -1,12 +1,12 @@
 # RedoxEngine
-Ruby API wrapper for [RedoxEngine Engine](https://www.redoxengine.com)
+Ruby API wrapper for [RedoxEngine](https://www.redoxengine.com)
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'redox'
+gem 'redox-engine'
 ```
 
 And then execute:
@@ -15,7 +15,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install redox
+    $ gem install redox-engine
 
 ## Usage
 
@@ -29,16 +29,21 @@ end
 
 ```ruby
 source = {
-  Name: 'RedoxEngine Dev Tools',
-  ID: ENV['REDOX_SRC_ID']
+  Name => Your Source Name,
+  ID => <REDOX_SRC_ID>
 }
 
-destinations = [
-  {
-    Name: 'RedoxEngine EMR',
-    ID: ENV['REDOX_DEST_ID']
-  }
-]
+destinations = {
+  PatientAdmin => {
+    Name => Destination Name,
+    ID => <REDOX_DEST_ID>
+  },
+  ClinicalSummary => {
+    Name => Destination Name,
+    ID => <REDOX_DEST_ID>
+  },
+  ...
+}
 
 redox = RedoxEngine::Client.new(
   source: source,
@@ -77,6 +82,7 @@ c.access_token # => returns new token
 ```
 
 ## Testing
+
 To run the test suite, save the following in redox_keys.yml in the test/directory (already in the .gitignore for your convenience):
 
 ```yaml
