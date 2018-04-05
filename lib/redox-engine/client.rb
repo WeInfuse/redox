@@ -179,15 +179,33 @@ module RedoxEngine
     def get_available_slots(
       visit:, patient: nil, start_time: nil, end_time: nil
     )
+      visit[:reasons] = ['-1']
       request_body = scheduling_query(
         query_data: { visit: visit, patient: patient },
         start_time: start_time,
         end_time: end_time,
         type: 'AvailableSlots'
       )
+      handle_request(request_body, 'Error fetching Available Slots.')
+    end
+
+    # Send Scheduling#New message
+    #
+    # @param [Hash] <Visit>
+    # @param [Hash] <Patient>
+    # @return [Hash] parsed response object
+    # @example
+    #   RedoxEngine::Client.new(*connection_params).get_available_slots(
+    #    visit: <Visit>
+    #    patient: <Patient>
+    # )
+    def add_appointment(visit:, patient:)
+      request_body = scheduling_query(
+        query_data: { visit: visit, patient: patient }, type: 'New'
+      )
       handle_request(
         request_body,
-        'Error fetching Available Slots.'
+        'Error posting New Appointment.'
       )
     end
   end

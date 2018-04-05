@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ClientSchedulingTest < Minitest::Test
+class ClientSchedulingSlotsTest < Minitest::Test
   def setup
     RedoxEngine.configure do |r|
       r.api_key = redox_keys[:api_key]

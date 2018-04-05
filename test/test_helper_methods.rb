@@ -123,6 +123,14 @@ module TestHelpers
     }
   end
 
+  def patient_identifiers
+    {
+      identifiers: [
+        { id: '4681', id_type: 'AthenaNet Enterprise ID'}
+      ]
+    }
+  end
+
   def visit
     {
       'Reason' => nil,
@@ -134,6 +142,18 @@ module TestHelpers
       'Locations' => [{
         'Department' => 150
       }]
+    }
+  end
+
+  def booked_visit
+    {
+      visit_number: '825583',
+      visit_date_time: '2018-04-07T09:00:00.000Z',
+      duration: '15',
+      reason: '563',
+      location: {
+        department: '150',
+      }
     }
   end
 end
