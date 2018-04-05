@@ -1,5 +1,5 @@
-module Redox
-  # Serialize the Visit response object from Redox
+module RedoxEngine
+  # Serialize the Visit response object from RedoxEngine
   class Visit
     include Util
     def initialize(visit_hash)

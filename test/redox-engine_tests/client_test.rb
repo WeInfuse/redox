@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ClientTest < Minitest::Test
   def setup
-    Redox.configure do |r|
+    RedoxEngine.configure do |r|
       r.api_key = redox_keys[:api_key]
       r.secret = redox_keys[:secret]
     end

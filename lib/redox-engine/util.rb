@@ -1,4 +1,4 @@
-module Redox
+module RedoxEngine
   # utility methods for serializing responses
   module Util
     def map_hash_to_attributes(hash)

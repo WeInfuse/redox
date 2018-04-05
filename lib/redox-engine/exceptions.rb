@@ -1,9 +1,9 @@
-module Redox
+module RedoxEngine
   # Exceptions used in this gem will be defined here
 
   # raise this on errors obtaining an access token
   class TokenError < StandardError; end
 
-  # raise this on Redox::Client.new without setting api_key/secret
+  # raise this on RedoxEngine::Client.new without setting api_key/secret
   class APIKeyError < StandardError; end
 end

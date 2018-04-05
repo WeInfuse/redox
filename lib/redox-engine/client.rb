@@ -1,5 +1,5 @@
-module Redox
-  # Redox API client
+module RedoxEngine
+  # RedoxEngine API client
   class Client
     include RequestHelpers
 
@@ -7,7 +7,7 @@ module Redox
       :source, :destinations, :test,
       :access_token, :refresh_token, :response
     )
-    # Instantiates a new Redox Client object
+    # Instantiates a new RedoxEngine Client object
     #
     # @param [Hash] source source information
     # @param [Array<Hash>] destinations list of destinations
@@ -17,7 +17,7 @@ module Redox
     # @param [String] refresh_token Optional param to provide an existing
     #                 Refresh Token
     # @example
-    #   redox = Redox::Client.new(
+    #   redox = RedoxEngine::Client.new(
     #     source: source,
     #     destinations: destinations,
     #     test_mode: true,
@@ -28,7 +28,7 @@ module Redox
     def initialize(
       source:, destinations:, test_mode: true, token: nil, refresh_token: nil
     )
-      raise APIKeyError if [Redox.api_key, Redox.secret].any?(&:nil?)
+      raise APIKeyError if [RedoxEngine.api_key, RedoxEngine.secret].any?(&:nil?)
       @refresh_token = refresh_token
       @access_token = token || fetch_access_token
 
@@ -42,7 +42,7 @@ module Redox
     # @param [Hash] patient_params data to send in the Patient JSON object
     # @return [Hash] parsed response object
     # @example
-    #   Redox::Client.new(*connection_params).add_patient(
+    #   RedoxEngine::Client.new(*connection_params).add_patient(
     #     Identifiers: [],
     #     Demographics: {
     #       FirstName: 'Joe'
@@ -61,7 +61,7 @@ module Redox
     # @param [Hash] patient_params data to send in the Patient JSON object
     # @return [Hash] parsed response object
     # @example
-    #   Redox::Client.new(*connection_params).update_patient(
+    #   RedoxEngine::Client.new(*connection_params).update_patient(
     #     Identifiers: [],
     #     Demographics: {
     #       FirstName: 'Joe'
@@ -80,7 +80,7 @@ module Redox
     # @param [Hash] patient_params data to send in the Patient JSON object
     # @return [Hash] parsed response object
     # @example
-    #   Redox::Client.new(*connection_params).search_patient(
+    #   RedoxEngine::Client.new(*connection_params).search_patient(
     #     demographics: {
     #       FirstName: 'Joe'
     #       ...
@@ -99,7 +99,7 @@ module Redox
     # @param [Hash] patient_params data to send in the Patient JSON object
     # @return [Hash] parsed response object
     # @example
-    #   Redox::Client.new(*connection_params).search_patient(
+    #   RedoxEngine::Client.new(*connection_params).search_patient(
     #     identifiers: [
     #       {
     #         id: '4681'
@@ -125,7 +125,7 @@ module Redox
     # @params [String|Time] end_time datetime to search until
     # @return [Hash] parsed response object
     # @example
-    #   Redox::Client.new(*connection_params).get_booked_slots(
+    #   RedoxEngine::Client.new(*connection_params).get_booked_slots(
     #     visit: {
     #       reason?: string
     #       attending_providers: Provider[]

@@ -1,4 +1,4 @@
-module Redox
+module RedoxEngine
   # module to abstract request helper methods out of the client class
   module RequestHelpers
     private
@@ -51,11 +51,11 @@ module Redox
     def login_request(refresh_token = nil)
       req_url = refresh_token ? '/auth/refreshToken' : '/auth/authenticate'
       req = Net::HTTP::Post.new(req_url, 'Content-Type' => 'application/json')
-      req_body = { apiKey: Redox.api_key }
+      req_body = { apiKey: RedoxEngine.api_key }
       if refresh_token
         req_body[:refreshToken] = refresh_token
       else
-        req_body[:secret] = Redox.secret
+        req_body[:secret] = RedoxEngine.secret
       end
       req.body = req_body.to_json
       req

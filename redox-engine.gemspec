@@ -1,14 +1,14 @@
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'redox/version'
+require 'redox-engine/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'redox'
-  spec.version       = Redox::VERSION
-  spec.authors       = ['Alexander Clark', 'Pedro De Ona']
+  spec.name          = 'redox-engine'
+  spec.version       = RedoxEngine::VERSION
+  spec.authors       = ['Alexander Clark (forked from)', 'Pedro De Ona']
   spec.email         = ['p.deona2005@gmail.com']
   spec.licenses      = ['MIT']
-  spec.summary       = 'Ruby wrapper for the Redox Engine API'
+  spec.summary       = 'Ruby wrapper for the RedoxEngine Engine API'
   spec.homepage      = 'https://github.com/pdeona/redox'
 
   # Prevent pushing this gem to RubyGems.org.

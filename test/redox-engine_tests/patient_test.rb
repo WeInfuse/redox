@@ -2,7 +2,7 @@ require 'test_helper'
 
 class PatientTest < Minitest::Test
   def test_attributes_map_from_response
-    pt = Redox::Patient.new(real_patient)
+    pt = RedoxEngine::Patient.new(real_patient)
     assert_equal [
       {
         id: '0000000001',

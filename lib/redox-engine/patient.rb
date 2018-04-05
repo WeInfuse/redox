@@ -1,5 +1,5 @@
-module Redox
-  # Serialize the Patient response object from Redox
+module RedoxEngine
+  # Serialize the Patient response object from RedoxEngine
   class Patient
     include Util
     def initialize(patient_hash)

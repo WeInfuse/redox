@@ -2,22 +2,22 @@ require 'test_helper'
 
 class RedoxTest < Minitest::Test
   def test_that_it_has_a_version_number
-    refute_nil ::Redox::VERSION
+    refute_nil ::RedoxEngine::VERSION
   end
 
   def setup
-    Redox.configure do |r|
+    RedoxEngine.configure do |r|
       r.api_key = redox_keys[:api_key]
       r.secret = redox_keys[:secret]
     end
   end
 
   def test_configure_method
-    Redox.configure do |r|
+    RedoxEngine.configure do |r|
       r.api_key = 'test'
       r.secret = 'test'
     end
-    assert_equal(Redox.api_key, 'test')
-    assert_equal(Redox.secret, 'test')
+    assert_equal(RedoxEngine.api_key, 'test')
+    assert_equal(RedoxEngine.secret, 'test')
   end
 end

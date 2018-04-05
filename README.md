@@ -1,5 +1,5 @@
-# Redox
-Ruby API wrapper for [Redox Engine](https://www.redoxengine.com)
+# RedoxEngine
+Ruby API wrapper for [RedoxEngine Engine](https://www.redoxengine.com)
 
 ## Installation
 
@@ -21,7 +21,7 @@ Or install it yourself as:
 
 In an initializer file:
 ```ruby
-Redox.configure do |redox|
+RedoxEngine.configure do |redox|
   redox.api_key = #{Your API Key}
   redox.secret = #{Your secret}
 end
@@ -29,18 +29,18 @@ end
 
 ```ruby
 source = {
-  Name: 'Redox Dev Tools',
+  Name: 'RedoxEngine Dev Tools',
   ID: ENV['REDOX_SRC_ID']
 }
 
 destinations = [
   {
-    Name: 'Redox EMR',
+    Name: 'RedoxEngine EMR',
     ID: ENV['REDOX_DEST_ID']
   }
 ]
 
-redox = Redox::Client.new(
+redox = RedoxEngine::Client.new(
   source: source,
   destinations: destinations,
   test: true
@@ -57,7 +57,7 @@ redox.add_patient(
 
 Initializing with a persisted access token (check if it's expired, client will load naively)
 ```ruby
-c = Redox::Client.new(
+c = RedoxEngine::Client.new(
   source: source,
   destinations: destinations,
   test: true,
@@ -67,7 +67,7 @@ c = Redox::Client.new(
 
 Initializing with a persisted refresh token (client will get a new access token)
 ```ruby
-c = Redox::Client.new(
+c = RedoxEngine::Client.new(
   source: source,
   destinations: destinations,
   test: true,
@@ -80,12 +80,12 @@ c.access_token # => returns new token
 To run the test suite, save the following in redox_keys.yml in the test/directory (already in the .gitignore for your convenience):
 
 ```yaml
-api_key: <Your Redox API Key>
-secret: <Your Redox API Secret>
+api_key: <Your RedoxEngine API Key>
+secret: <Your RedoxEngine API Secret>
 
 source_data:
-  Name: <Redox Source Name>
-  ID: <Redox Source ID>
+  Name: <RedoxEngine Source Name>
+  ID: <RedoxEngine Source ID>
 
 destinations_data:
   ClinicalSummary: 

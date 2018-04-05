@@ -8,7 +8,7 @@ module TestHelpers
       file = File.open(File.join(__dir__, 'redox_keys.yml'))
       YAML.safe_load(file).symbolize_keys
     rescue
-      raise Redox::APIKeyError,
+      raise RedoxEngine::APIKeyError,
             KEY_ERROR_MSG
     end
   end
@@ -62,7 +62,7 @@ module TestHelpers
   end
 
   def dummy_redox(refresh: nil, access: nil)
-    Redox::Client.new(
+    RedoxEngine::Client.new(
       source: source,
       destinations: destinations,
       test_mode: true,
@@ -72,7 +72,7 @@ module TestHelpers
   end
 
   def redox(refresh: nil, access: nil)
-    Redox::Client.new(
+    RedoxEngine::Client.new(
       source: real_source,
       destinations: real_destinations,
       test_mode: true,
@@ -96,7 +96,7 @@ module TestHelpers
 
   def source
     {
-      'Name' => 'Redox Dev Tools',
+      'Name' => 'RedoxEngine Dev Tools',
       'ID' => '4-5-6'
     }
   end
@@ -108,7 +108,7 @@ module TestHelpers
   def destinations
     [
       {
-        'Name' => 'Redox EMR',
+        'Name' => 'RedoxEngine EMR',
         'ID' => '7-8-9'
       }
     ]
