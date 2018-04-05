@@ -5,15 +5,15 @@ require 'redox/version'
 Gem::Specification.new do |spec|
   spec.name          = 'redox'
   spec.version       = Redox::VERSION
-  spec.authors       = ['Alexander Clark']
-  spec.email         = ['sasha.jackal@gmail.com']
-
+  spec.authors       = ['Alexander Clark', 'Pedro De Ona']
+  spec.email         = ['p.deona2005@gmail.com']
+  spec.licenses      = ['MIT']
   spec.summary       = 'Ruby wrapper for the Redox Engine API'
-  spec.homepage      = 'https://github.com/WeInfuse/redox'
+  spec.homepage      = 'https://github.com/pdeona/redox'
 
   # Prevent pushing this gem to RubyGems.org.
   if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = ''
+    spec.metadata['allowed_push_host'] = 'https://rubygems.org'
   else
     raise 'RubyGems 2.0 or newer is required to protect against ' \
       'public gem pushes.'
