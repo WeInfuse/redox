@@ -116,5 +116,4 @@ class HashTest < Minitest::Test
     output = { 'ID' => 'test' }.rubyize_keys
     assert_equal({ id: 'test' }, output)
   end
-  
 end

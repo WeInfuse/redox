@@ -110,15 +110,15 @@ class ClientPatientTest < Minitest::Test
       r = redox
       updated_patient = real_patient.rubyize_keys
       updated_patient[:identifiers] = [
-        { id: '4681', id_type: 'AthenaNet Enterprise ID'}
+        { id: '4681', id_type: 'AthenaNet Enterprise ID' }
       ]
       updated_patient[:demographics][:address] = {
-        :street_address => "100 main street",
-        :city => "Miami",
-        :state => "FL",
-        :zip => "33133",
-        :county => "Miami-Dade",
-        :country => "US"
+        street_address: '100 main street',
+        city: 'Miami',
+        state: 'FL',
+        zip: '33133',
+        county: 'Miami-Dade',
+        country: 'US'
       }
       response = r.update_patient(updated_patient)
       assert_equal 200, r.response.code.to_i
@@ -131,13 +131,13 @@ class ClientPatientTest < Minitest::Test
       r = redox
       updated_patient = real_patient.rubyize_keys
       updated_patient[:identifiers] = [
-        { id: 'random_id', id_type: 'Pedro ID'}
+        { id: 'random_id', id_type: 'Pedro ID' }
       ]
       updated_patient[:demographics][:address] = {
-        :street_address => "100 main street",
-        :city => "Miami",
-        :county => "Miami-Dade",
-        :country => "US"
+        street_address: '100 main street',
+        city: 'Miami',
+        county: 'Miami-Dade',
+        country: 'US'
       }
       assert_output 'Error updating Patient.' do
         response = r.update_patient(updated_patient)

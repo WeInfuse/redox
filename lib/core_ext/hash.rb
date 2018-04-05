@@ -32,7 +32,7 @@ class Hash
   def redoxify_keys
     transform_keys do |key|
       key = key[0..-1]
-      next 'IDType' if (key == 'id_type' || key == 'IDType')
+      next 'IDType' if %w[id_type IDType].include? key
       next key if key =~ /^([A-Z]{1}[a-z]+)+/
       next key.upcase if key =~ /^[A-Za-z]{2,3}$/
       key.split('_').map(&:capitalize).join
