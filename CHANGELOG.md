@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.1.3] - 2018-04-04
+## [1.0.0] - 2018-04-04 - (Renamed 0.1.3)
 - Change RedoxEngine::RedoxEngine to RedoxEngine::Client
 - Refactor Module to accept configuration
 - Refactor Client to pass Rubocop linting
@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - client.get_summary_for_patient
 - Add classes:
   - Patient
-  - Visit  
+  - Visit
+- Bump Ruby version to 2.4.1
 
 # [0.1.2] - 2018-03-08
 ### Added
