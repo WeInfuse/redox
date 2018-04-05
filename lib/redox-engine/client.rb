@@ -7,6 +7,8 @@ module RedoxEngine
       :source, :destinations, :test,
       :access_token, :refresh_token, :response
     )
+
+    #################################################
     # Instantiates a new RedoxEngine Client object
     #
     # @param [Hash] source source information
@@ -39,6 +41,7 @@ module RedoxEngine
       @test = test_mode
     end
 
+    #################################################
     # Send PatientAdmin#NewPatient message
     #
     # @param [Hash] patient_params data to send in the Patient JSON object
@@ -62,6 +65,7 @@ module RedoxEngine
       handle_request(request_body, 'Error in Patient New.')
     end
 
+    #################################################
     # Send PatientAdmin#PatientUpdate message
     #
     # @param [Hash] <Patient> patient_params data to send in the
@@ -86,6 +90,7 @@ module RedoxEngine
       handle_request(request_body, 'Error updating Patient.')
     end
 
+    #################################################
     # Send PatientSearch#Query message
     #
     # @param [Hash] <Patient> data to send in the Patient JSON object
@@ -105,6 +110,7 @@ module RedoxEngine
       handle_request(request_body, 'Error in Patient Search.')
     end
 
+    #################################################
     # Send ClinicalSummary#PatientQuery message
     #
     # @param [Hash] <Patient> data to send in the Patient JSON object
@@ -123,12 +129,10 @@ module RedoxEngine
         data_model: 'Clinical Summary',
         event_type: 'PatientQuery'
       ).merge(Patient: patient_params.redoxify_keys)
-      handle_request(
-        request_body,
-        'Error fetching Patient Clinical Summary'
-      )
+      handle_request(request_body, 'Error fetching Patient Clinical Summary')
     end
 
+    #################################################
     # Send Scheduling#BookedSlots message
     #
     # NOTE: Endpoint not supported by all Health Systems, talk to your
@@ -159,6 +163,7 @@ module RedoxEngine
       )
     end
 
+    #################################################
     # Send Scheduling#AvailableSlots message
     #
     # NOTE: Endpoint not supported by all Health Systems, talk to your
@@ -189,6 +194,7 @@ module RedoxEngine
       handle_request(request_body, 'Error fetching Available Slots.')
     end
 
+    #################################################
     # Send Scheduling#New message
     #
     # @param [Hash] <Visit>
@@ -206,6 +212,27 @@ module RedoxEngine
       handle_request(
         request_body,
         'Error posting New Appointment.'
+      )
+    end
+
+    #################################################
+    # Send Scheduling#Cancel message
+    #
+    # @param [Hash] <Visit>
+    # @param [Hash] <Patient>
+    # @return [Hash] parsed response object
+    # @example
+    #   RedoxEngine::Client.new(*connection_params).get_available_slots(
+    #    visit: <Visit>
+    #    patient: <Patient>
+    # )
+    def cancel_appointment(visit:, patient:)
+      request_body = scheduling_query(
+        query_data: { visit: visit, patient: patient }, type: 'Cancel'
+      )
+      handle_request(
+        request_body,
+        'Error posting Cancel Appointment.'
       )
     end
   end
