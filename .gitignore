@@ -10,3 +10,5 @@
 
 /test/redox_keys.yml
 /test/vcr/
+
+*.gem
