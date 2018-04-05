@@ -31,3 +31,8 @@ Metrics/ClassLength:
 Style/RescueModifier:
   Exclude:
     - 'lib/core_ext/hash.rb'
+
+Naming/FileName:
+  Exclude:
+    - 'lib/**/*'
+    - 'test/**/*'
