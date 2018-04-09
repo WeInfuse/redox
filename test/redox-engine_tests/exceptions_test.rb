@@ -24,15 +24,4 @@ class ExceptionsTest < Minitest::Test
       assert_raises(RedoxEngine::APIKeyError) { redox }
     end
   end
-
-  def test_redox_test_circle_ci_style
-    File.stub(:open, nil) do
-      assert_raises(RedoxEngine::APIKeyError) { redox }
-      ENV['REDOX_API_KEY'] = 'test'
-      ENV['REDOX_SECRET'] = 'test'
-      VCR.use_cassette('client/token/invalid') do
-        assert_raises(RedoxEngine::TokenError) { redox }
-      end
-    end
-  end
 end
