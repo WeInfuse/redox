@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/WeInfuse/redox.svg?style=svg)](https://circleci.com/gh/WeInfuse/redox)
+
 # Redox
 Ruby API wrapper for [Redox Engine](https://www.redoxengine.com)
 
