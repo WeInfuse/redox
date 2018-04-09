@@ -7,12 +7,12 @@ jobs:
     steps:
       - checkout
       - type: restore-cache
-        key: redox_{{ checksum "Gemfile.lock" }}
+        key: redox-engine_{{ checksum "Gemfile.lock" }}
         key: redox
       - run: bundle install --path vendor/bundle --jobs 20 --retry 5
       - type: cache-save
-        key: redox_{{ checksum "Gemfile.lock" }}
-        key: redox
+        key: redox-engine_{{ checksum "Gemfile.lock" }}
+        key: redox-engine
         paths:
           - vendor/bundle
       - type: shell
