@@ -1,4 +1,14 @@
 module TestHelpers
+  def redox(refresh: nil, access: nil)
+    RedoxEngine::Client.new(
+      source: real_source,
+      destinations: real_destinations,
+      test_mode: true,
+      token: access,
+      refresh_token: refresh
+    )
+  end
+  
   def redox_keys
     begin
       file = File.open(File.join(__dir__, 'redox_keys.yml'))
@@ -85,16 +95,6 @@ module TestHelpers
     RedoxEngine::Client.new(
       source: source,
       destinations: destinations,
-      test_mode: true,
-      token: access,
-      refresh_token: refresh
-    )
-  end
-
-  def redox(refresh: nil, access: nil)
-    RedoxEngine::Client.new(
-      source: real_source,
-      destinations: real_destinations,
       test_mode: true,
       token: access,
       refresh_token: refresh

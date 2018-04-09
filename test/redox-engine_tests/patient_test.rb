@@ -1,6 +1,13 @@
 require 'test_helper'
 
 class PatientTest < Minitest::Test
+  def setup
+    RedoxEngine.configure do |r|
+      r.api_key = redox_keys[:api_key]
+      r.secret = redox_keys[:secret]
+    end
+  end
+
   def test_attributes_map_from_response
     VCR.use_cassette('client/new/token') do
       pt = RedoxEngine::Patient.new(client: redox, patient_data: real_patient)
