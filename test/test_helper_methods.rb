@@ -4,8 +4,32 @@ module TestHelpers
       file = File.open(File.join(__dir__, 'redox_keys.yml'))
       YAML.safe_load(file).symbolize_keys
     rescue
-      raise RedoxEngine::APIKeyError, 
-            'Tests require API Keys to be saved in test/redox_keys.yml. Check the README for information.'
+      if ENV['REDOX_API_KEY']
+        destination = {
+          Name: ENV['REDOX_DESTINATIONS_MAIN_NAME'],
+          ID: ENV['REDOX_DESTINATIONS_MAIN_ID'],
+        }
+        {
+          api_key: ENV['REDOX_API_KEY'],
+          secret: ENV['REDOX_SECRET'],
+          source_data: {
+            Name: ENV['REDOX_SOURCE_NAME'],
+            ID: ENV['REDOX_SOURCE_ID'],
+          },
+          destinations_data: {
+            ClinicalSummary: {
+              Name: ENV['REDOX_DESTINATIONS_CCDA_NAME'],
+              ID: ENV['REDOX_DESTINATIONS_CCDA_ID'],
+            },
+            PatientAdmin: destination,
+            Scheduling: destination,
+            PatientSearch: destination,
+          }
+        }
+      else
+        raise RedoxEngine::APIKeyError, 
+              'Tests require API Keys to be saved in test/redox_keys.yml. Check the README for information.'
+      end
     end
   end
 
