@@ -5,9 +5,9 @@ require 'redox/version'
 Gem::Specification.new do |spec|
   spec.name          = 'redox'
   spec.version       = Redox::VERSION
-  spec.authors       = ['Alexander Clark']
-  spec.email         = ['sasha.jackal@gmail.com']
-
+  spec.authors       = ['Alexander Clark', 'Pedro De Ona']
+  spec.email         = ['sasha.jackal@gmail.com', 'p.deona2005@gmail.com']
+  spec.licenses      = ['MIT']
   spec.summary       = 'Ruby wrapper for the Redox Engine API'
   spec.homepage      = 'https://github.com/WeInfuse/redox'
 
@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rubocop', '~> 0.5'
+  spec.add_development_dependency 'vcr', '~> 4.0'
   spec.add_development_dependency 'webmock', '~> 3.1'
   spec.add_development_dependency 'yard', '~> 0.9'
 end
