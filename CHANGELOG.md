@@ -8,25 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Code of Conduct
 - CircleCI status badge
-- Add methods:
-  - client.update_patient
-  - client.get_booked_slots
-  - client.search_patient
-  - client.get_summary_for_patient
-- Add classes:
-  - Patient
-  - Visit
 
 ### Changed
 - Update gemspec to allow pushes to rubygems.org
-- Refactor + linting
-- Change to README
-- Change Redox::Redox to Redox::Client
-- Refactor Module to accept configuration
-- Refactor Client to pass Rubocop linting
-- Refactor Client to accept stored token/refresh token
-- Refactor/add tests
-- Bump Ruby version to 2.4.1
 
 # [0.1.2] - 2018-03-08
 ### Added

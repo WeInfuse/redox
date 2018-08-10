@@ -1,3 +1,3 @@
 module Redox
-  VERSION = '1.0.3'.freeze
+  VERSION = '0.1.2'.freeze
 end

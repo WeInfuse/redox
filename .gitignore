@@ -7,14 +7,3 @@
 /pkg/
 /spec/reports/
 /tmp/
-
-/test/redox_keys.yml
-/test/vcr/
-
-*.gem
-
-/doc/
-
-/.vscode/
-yarn*
-
