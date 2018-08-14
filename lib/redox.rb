@@ -29,7 +29,7 @@ module Redox
       @test = test
     end
 
-    # Send NewPatient message
+    # Send PatientUpdate message
     #
     # @param [Hash] patient_params data to send in the Patient JSON object
     # @return [Hash] parsed response object
@@ -43,7 +43,7 @@ module Redox
     def add_patient(patient_params)
       patient_request = Net::HTTP::Post.new('/endpoint', auth_header)
       request_body = request_meta(
-        data_model: 'PatientAdmin', event_type: 'NewPatient'
+        data_model: 'PatientAdmin', event_type: 'PatientUpdate'
       ).merge(Patient: patient_params)
       patient_request.body = request_body.to_json
 
