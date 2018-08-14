@@ -17,9 +17,6 @@ jobs:
           - vendor/bundle
       - type: shell
         command: |
-          bundle exec rubocop
-      - type: shell
-        command: |
           bundle exec rake test
       - type: store_test_results
         path: /tmp/test-results

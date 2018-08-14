@@ -35,7 +35,7 @@ class RedoxTest < Minitest::Test
     {
       Meta: hash_including(
         DataModel: 'PatientAdmin',
-        EventType: 'NewPatient',
+        EventType: 'PatientUpdate',
         Test: true,
         Source: source,
         Destinations: destinations

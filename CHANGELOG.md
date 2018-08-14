@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Update gemspec to allow pushes to rubygems.org
+- Use PatientUpdate EventType instead of NewPatient
+
+### Removed
+- rubocop
 
 # [0.1.2] - 2018-03-08
 ### Added
