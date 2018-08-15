@@ -93,7 +93,7 @@ module Redox
         Meta: {
           DataModel: data_model,
           EventType: event_type,
-          EventDateTime: Time.now.to_json,
+          EventDateTime: nil,
           Test: test,
           Source: source,
           Destinations: destinations
