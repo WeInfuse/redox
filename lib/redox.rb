@@ -96,7 +96,8 @@ module Redox
           EventDateTime: nil,
           Test: test,
           Source: source,
-          Destinations: destinations
+          Destinations: destinations,
+          FacilityCode: 1
         }
       }
     end
