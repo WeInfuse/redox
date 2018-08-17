@@ -97,7 +97,7 @@ module Redox
           Test: test,
           Source: source,
           Destinations: destinations,
-          FacilityCode: 1
+          FacilityCode: "1"
         }
       }
     end
