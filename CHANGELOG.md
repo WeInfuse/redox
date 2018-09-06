@@ -8,10 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Code of Conduct
 - CircleCI status badge
+- PatientUpdate EventType
 
 ### Changed
 - Update gemspec to allow pushes to rubygems.org
-- Use PatientUpdate EventType instead of NewPatient
 
 ### Removed
 - rubocop

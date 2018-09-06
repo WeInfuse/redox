@@ -43,6 +43,18 @@ module Redox
     def add_patient(patient_params)
       patient_request = Net::HTTP::Post.new('/endpoint', auth_header)
       request_body = request_meta(
+        data_model: 'PatientAdmin', event_type: 'NewPatient'
+      ).merge(Patient: patient_params)
+      patient_request.body = request_body.to_json
+
+      response = connection.request(patient_request)
+
+      JSON.parse(response.body)
+    end
+
+    def update_patient(patient_params)
+      patient_request = Net::HTTP::Post.new('/endpoint', auth_header)
+      request_body = request_meta(
         data_model: 'PatientAdmin', event_type: 'PatientUpdate'
       ).merge(Patient: patient_params)
       patient_request.body = request_body.to_json
@@ -97,7 +109,7 @@ module Redox
           Test: test,
           Source: source,
           Destinations: destinations,
-          FacilityCode: "1"
+          FacilityCode: nil
         }
       }
     end
