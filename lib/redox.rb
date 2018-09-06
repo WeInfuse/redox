@@ -21,11 +21,12 @@ module Redox
     #     destinations: destinations,
     #     test: true
     #   )
-    def initialize(api_key:, secret:, source:, destinations:, test: true)
+    def initialize(api_key:, secret:, source:, destinations:, facility_code: nil, test: true)
       @api_key = api_key
       @secret = secret
       @source = source
       @destinations = destinations
+      @facility_code = facility_code
       @test = test
     end
 
@@ -66,7 +67,7 @@ module Redox
 
     private
 
-    attr_reader :api_key, :secret, :source, :destinations, :test
+    attr_reader :api_key, :secret, :source, :destinations, :facility_code, :test
 
     def access_token
       return @access_token if @access_token
@@ -101,7 +102,7 @@ module Redox
     end
 
     def request_meta(data_model:, event_type:)
-      {
+      meta_object = {
         Meta: {
           DataModel: data_model,
           EventType: event_type,
@@ -109,9 +110,12 @@ module Redox
           Test: test,
           Source: source,
           Destinations: destinations,
-          FacilityCode: nil
         }
       }
+
+      meta_object[:Meta][:FacilityCode] = facility_code if facility_code.present?
+
+      meta_object
     end
   end
 end
