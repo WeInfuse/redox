@@ -30,7 +30,7 @@ module Redox
       @test = test
     end
 
-    # Send PatientUpdate message
+    # Send NewPatient message
     #
     # @param [Hash] patient_params data to send in the Patient JSON object
     # @return [Hash] parsed response object
@@ -53,6 +53,17 @@ module Redox
       JSON.parse(response.body)
     end
 
+    # Send PatientUpdate message
+    #
+    # @param [Hash] patient_params data to send in the Patient JSON object
+    # @return [Hash] parsed response object
+    # @example
+    #   Redox::Redox.new(*connection_params).update_patient(
+    #     Identifiers: [],
+    #     Demographics: {
+    #       FirstName: 'Joe'
+    #     }
+    #   )
     def update_patient(patient_params)
       patient_request = Net::HTTP::Post.new('/endpoint', auth_header)
       request_body = request_meta(
@@ -113,7 +124,7 @@ module Redox
         }
       }
 
-      meta_object[:Meta][:FacilityCode] = facility_code if facility_code.present?
+      meta_object[:Meta][:FacilityCode] = facility_code if facility_code
 
       meta_object
     end

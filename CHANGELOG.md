@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Code of Conduct
 - CircleCI status badge
 - PatientUpdate EventType
+- Ability to set FacilityCode
 
 ### Changed
 - Update gemspec to allow pushes to rubygems.org
