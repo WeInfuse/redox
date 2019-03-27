@@ -2,6 +2,7 @@ require 'redox/version'
 require 'json'
 require 'net/http'
 require 'uri'
+require 'openssl'
 
 module Redox
   # Redox API client
@@ -28,6 +29,8 @@ module Redox
       @destinations = destinations
       @facility_code = facility_code
       @test = test
+      @connection = nil
+      @access_token = nil
     end
 
     # Send NewPatient message
@@ -76,6 +79,29 @@ module Redox
       JSON.parse(response.body)
     end
 
+    # Send PatientSearch query
+    #
+    # @param [Hash] patient_params data to send in the Patient JSON object
+    # @return [Hash] parsed response object
+    # @example
+    #   Redox::Redox.new(*connection_params).search_patients(
+    #     Identifiers: [],
+    #     Demographics: {
+    #       FirstName: 'Joe'
+    #     }
+    #   )
+    def search_patients(patient_params)
+      patient_request = Net::HTTP::Post.new('/query', auth_header)
+      request_body = request_meta(
+        data_model: 'PatientSearch', event_type: 'Query'
+      ).merge(Patient: patient_params)
+      patient_request.body = request_body.to_json
+
+      response = connection.request(patient_request)
+
+      JSON.parse(response.body)
+    end
+
     private
 
     attr_reader :api_key, :secret, :source, :destinations, :facility_code, :test
@@ -88,6 +114,11 @@ module Redox
       )
       login_request.body = { apiKey: api_key, secret: secret }.to_json
       response = connection.request(login_request)
+
+      if (false == response.is_a?(Net::HTTPOK))
+        raise "Failed to authenticate '#{response.code}' '#{response.body}'."
+      end
+
       body = JSON.parse(response.body)
 
       @access_token = body['accessToken']
@@ -119,12 +150,12 @@ module Redox
           EventType: event_type,
           EventDateTime: nil,
           Test: test,
-          Source: source,
-          Destinations: destinations,
         }
       }
 
       meta_object[:Meta][:FacilityCode] = facility_code if facility_code
+      meta_object[:Meta][:Source] = source if source
+      meta_object[:Meta][:Destinations] = destinations if destinations && !destinations.empty?
 
       meta_object
     end
