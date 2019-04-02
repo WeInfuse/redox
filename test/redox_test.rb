@@ -6,10 +6,23 @@ class RedoxTest < Minitest::Test
   end
 
   def setup
+    @redox = Redox::Redox.new(
+      api_key: '1-2-3',
+      secret: 'xJp3Ba',
+      source: source,
+      destinations: destinations,
+      test: true
+    )
+
     stub_request(:post, 'https://api.redoxengine.com/auth/authenticate')
       .with(body: { apiKey: '1-2-3', secret: 'xJp3Ba' },
             headers: { 'Content-Type' => 'application/json' })
       .to_return(status: 200, body: { accessToken: 'let.me.in' }.to_json)
+
+    stub_request(:post, 'https://api.redoxengine.com/auth/authenticate')
+      .with(body: { apiKey: 'wrong', secret: 'xJp3Ba' },
+            headers: { 'Content-Type' => 'application/json' })
+      .to_return(status: 401, body: 'Invalid request')
 
     stub_request(:post, 'https://api.redoxengine.com/endpoint')
       .with(body: hash_including(request_body),
@@ -20,30 +33,39 @@ class RedoxTest < Minitest::Test
       .with(body: hash_including(request_body('NewPatient')),
             headers: { 'Authorization' => 'Bearer let.me.in' })
       .to_return(status: 200, body: '{ "Success": true }')
+
+    stub_request(:post, 'https://api.redoxengine.com/query')
+      .with(headers: { 'Authorization' => 'Bearer let.me.in' })
+      .to_return(status: 200, body: load_sample('patient_search_single_result.response.json'))
+  end
+
+  def test_auth_fails_returns_reasonable_error
+    redox = Redox::Redox.new(
+      api_key: 'wrong',
+      secret: 'xJp3Ba',
+      source: source,
+      destinations: destinations,
+      test: true
+    )
+
+    error = assert_raises { redox.add_patient(patient) }
+
+    assert_match(/Failed to authenticate/, error.message)
   end
 
   def test_add_patient
-    redox = Redox::Redox.new(
-      api_key: '1-2-3',
-      secret: 'xJp3Ba',
-      source: source,
-      destinations: destinations,
-      test: true
-    )
-
-    redox.add_patient(patient)
+    @redox.add_patient(patient)
   end
 
   def test_update_patient
-    redox = Redox::Redox.new(
-      api_key: '1-2-3',
-      secret: 'xJp3Ba',
-      source: source,
-      destinations: destinations,
-      test: true
-    )
+    @redox.update_patient(patient)
+  end
 
-    redox.update_patient(patient)
+  def test_search_patients
+    results = @redox.search_patients(patient)
+
+    assert(results.is_a?(Hash))
+    assert(results.include?("Meta"))
   end
 
   private
