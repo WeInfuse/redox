@@ -1,0 +1,27 @@
+{
+   "Meta": {
+      "DataModel": "PatientSearch",
+      "EventType": "Query",
+      "Message": {
+         "ID": 1135210193
+      },
+      "Source": {
+         "ID": "x72i2ec6-de0b-471a-a6d5-41b786c93c17",
+         "Name": "Development Source"
+      },
+      "Destinations": [
+         {
+            "ID": "0f4bd1d1-451d-4351-8cfd-b767d1b488d6",
+            "Name": "Patient Search Endpoint"
+         }
+      ],
+      "Errors": [
+         {
+            "ID": 19511136,
+            "Text": "No subscriptions. Meta.Destinations needs to contain a destination from existing subscriptions https://dashboard.redoxengine.com/#/dashboard/organization/1933/source/e15d3ec6-de0b-471a-a6d5-41b786c93c17/subscriptions",
+            "Type": "message",
+            "Module": "Subscriptions"
+         }
+      ]
+   }
+}

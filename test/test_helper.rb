@@ -4,12 +4,21 @@ require 'redox'
 require 'minitest/autorun'
 require 'webmock/minitest'
 
-def load_sample(file)
-  sample_file = File.join('test', 'samples', file)
+def load_sample(file, parse: false)
+  file = File.join('test', 'samples', file)
+  file_contents = nil
 
-  if (false == File.exist?(sample_file))
-    raise "Can't find file '#{sample_file}'."
+  if (false == File.exist?(file))
+    raise "Can't find file '#{file}'."
   end
 
-  return File.read(sample_file)
+  file_contents = File.read(file)
+
+  if (true == parse)
+    if (true == file.end_with?('.json'))
+      return JSON.parse(file_contents)
+    end
+  end
+
+  return file_contents
 end
