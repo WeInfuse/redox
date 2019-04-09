@@ -1,8 +1,13 @@
-require 'redox/version'
 require 'json'
 require 'net/http'
 require 'uri'
 require 'openssl'
+require 'redox/version'
+require 'redox/redox_exception'
+require 'redox/models/model'
+require 'redox/models/patient'
+require 'redox/models/demographics'
+require 'redox/models/identifiers'
 
 module Redox
   # Redox API client
@@ -82,7 +87,7 @@ module Redox
     # Send PatientSearch query
     #
     # @param [Hash] patient_params data to send in the Patient JSON object
-    # @return [Hash] parsed response object
+    # @return [Hash] Redox Patient object
     # @example
     #   Redox::Redox.new(*connection_params).search_patients(
     #     Identifiers: [],
@@ -91,15 +96,14 @@ module Redox
     #     }
     #   )
     def search_patients(patient_params)
-      patient_request = Net::HTTP::Post.new('/query', auth_header)
-      request_body = request_meta(
-        data_model: 'PatientSearch', event_type: 'Query'
-      ).merge(Patient: patient_params)
+      patient_request = Net::HTTP::Post.new(Models::Patient::SEARCH[:endpoint], auth_header)
+      request_body = request_meta(Models::Patient::SEARCH[:meta])
+        .merge(Patient: patient_params)
       patient_request.body = request_body.to_json
 
       response = connection.request(patient_request)
 
-      JSON.parse(response.body)
+      return Models::Patient.new(JSON.parse(response.body))
     end
 
     private
@@ -116,7 +120,7 @@ module Redox
       response = connection.request(login_request)
 
       if (false == response.is_a?(Net::HTTPOK))
-        raise "Failed to authenticate '#{response.code}' '#{response.body}'."
+        raise RedoxException.from_response(response, msg: 'Authentication')
       end
 
       body = JSON.parse(response.body)

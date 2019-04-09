@@ -48,9 +48,11 @@ class RedoxTest < Minitest::Test
       test: true
     )
 
-    error = assert_raises { redox.add_patient(patient) }
+    error = assert_raises(Redox::RedoxException) { redox.add_patient(patient) }
 
-    assert_match(/Failed to authenticate/, error.message)
+    assert_match(/Failed Authenticat/, error.message)
+    assert_match(/HTTP code: 401/, error.message)
+    assert_match(/MSG: Invalid request/, error.message)
   end
 
   def test_add_patient
@@ -64,8 +66,8 @@ class RedoxTest < Minitest::Test
   def test_search_patients
     results = @redox.search_patients(patient)
 
-    assert(results.is_a?(Hash))
-    assert(results.include?("Meta"))
+    assert(results.is_a?(Redox::Models::Patient))
+    assert(results.valid?)
   end
 
   private
