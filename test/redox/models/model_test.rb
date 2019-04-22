@@ -1,56 +1,26 @@
 require 'test_helper'
 
 class ModelTest < Minitest::Test
-  SAMPLE_DATA = {
-    "X" => {
-      "Y" => {
-        "Z" => "ZVAL"
-      }
-    },
-    "M" => "MVAL"
-  }
-
   def setup
-    @sample = Redox::Models::Model.new(SAMPLE_DATA)
+    @sample = load_sample('patient_search_single_result.response.json', parse: true)
   end
 
-  def test_map_understands_strings
-    assert_equal({mvalue: "MVAL"}, @sample.map(mapper: {"M" => :mvalue}))
+  def test_valid_returns_true_for_hash_with_patient
+    assert(Redox::Models::Patient.new(@sample).valid?)
   end
 
-  def test_map_can_traverse_nested_hashes
-    mapper = {
-      "X" => {
-        "Y" => {
-          "Z" => :zvalue
-        }
-      }
-    }
+  def test_valid_returns_false_for_hash_missing_patient
+    @sample["_patient_"] = @sample.delete("Patient")
 
-    assert_equal({zvalue: "ZVAL"}, @sample.map(mapper: mapper))
+    assert(false == Redox::Models::Patient.new(@sample).valid?)
   end
 
-  def test_map_understands_lambdas
-    my_lambda = ->(val) {
-      return { mvalue_key: "#{val}:#{val}" }
-    }
-
-    assert_equal(my_lambda.call("MVAL"), @sample.map(mapper: {"M" => my_lambda}))
+  def test_valid_returns_false_for_not_hash
+    assert(false == Redox::Models::Patient.new(nil).valid?)
+    assert(false == Redox::Models::Patient.new('hi').valid?)
   end
 
-  def test_map_throws_with_mappers_that_arent_hashes
-    e = assert_raises { @sample.map(mapper: "bob") }
-
-    assert_match(/mapper must be a hash/, e.message)
-  end
-
-  def test_map_throws_with_lambdas_that_dont_return_hashes
-    my_lambda = ->(val) {
-      return "#{val}:#{val}"
-    }
-
-    e = assert_raises { @sample.map(mapper: {"M" => my_lambda}) }
-
-    assert_match(/lambda must return hash/, e.message)
+  def test_inner_returns_patient_value
+    assert_equal(@sample[Redox::Models::Patient::KEY], Redox::Models::Patient.new(@sample).inner)
   end
 end

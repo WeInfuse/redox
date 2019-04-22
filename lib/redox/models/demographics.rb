@@ -1,7 +1,7 @@
 module Redox
   module Models
     class Demographics < Model
-      KEY = 'Demographics'
+      KEY = 'Demographics'.freeze
     end
   end
 end

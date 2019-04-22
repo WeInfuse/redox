@@ -3,6 +3,7 @@ require 'redox'
 
 require 'minitest/autorun'
 require 'webmock/minitest'
+require 'byebug'
 
 def load_sample(file, parse: false)
   file = File.join('test', 'samples', file)

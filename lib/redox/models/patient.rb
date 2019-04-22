@@ -3,22 +3,38 @@ module Redox
     class Patient < Model
       attr_reader :demographics, :identifiers
 
-      KEY = 'Patient'
+      KEY = 'Patient'.freeze
 
       SEARCH = {
         meta: {
-          data_model: 'PatientSearch',
-          event_type: 'Query'
+          'DataModel' => 'PatientSearch',
+          'EventType' => 'Query'
         },
         endpoint: '/query'
+      }
+
+      ADD = {
+        meta: {
+          'DataModel' => 'PatientAdmin',
+          'EventType' => 'NewPatient'
+        },
+        endpoint: '/endpoint'
+      }
+
+      UPDATE = {
+        meta: {
+          'DataModel' => 'PatientAdmin',
+          'EventType' => 'PatientUpdate'
+        },
+        endpoint: '/endpoint'
       }
 
       def initialize(data)
         super(data)
 
         if (self.valid?)
-          @demographics = Demographics.new(self.raw)
-          @identifiers  = Identifiers.new(self.raw)
+          @demographics = Demographics.new(self.inner)
+          @identifiers  = Identifiers.new(self.inner)
         end
       end
     end
