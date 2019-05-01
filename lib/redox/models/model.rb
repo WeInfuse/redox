@@ -12,15 +12,19 @@ module Redox
       alias_method :meta, :Meta
 
       def initialize(data = {})
-        if (data.is_a?(Hash) && data.include?(key))
-          data = data[key]
+        if data.is_a?(Hash)
+          if data.include?(key)
+            data = data[key]
+          elsif data.include?(key.to_sym)
+            data = data[key.to_sym]
+          end
         end
 
         super(data)
       end
 
       def to_h
-        return {"#{key}" => super.to_h}
+        return { key => super.to_h }
       end
 
       def to_json
@@ -46,7 +50,7 @@ module Redox
       private
 
       def key
-        return self.class.to_s.split('::').last
+        return self.class.to_s.split('::').last.to_s
       end
     end
   end
