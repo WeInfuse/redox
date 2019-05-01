@@ -1,26 +1,74 @@
 require 'test_helper'
 
+class Redox::Models::Model < Hashie::Trash
+  property :HelloWorld, from: :hello_world
+end
+
 class ModelTest < Minitest::Test
-  def setup
-    @sample = load_sample('patient_search_single_result.response.json', parse: true)
-  end
+  describe 'model' do
+    it 'ignores undeclared' do
+      z = Redox::Models::Model.new({other: 50})
 
-  def test_valid_returns_true_for_hash_with_patient
-    assert(Redox::Models::Patient.new(@sample).valid?)
-  end
+      assert_raises { z[:other] }
+    end
 
-  def test_valid_returns_false_for_hash_missing_patient
-    @sample["_patient_"] = @sample.delete("Patient")
+    it 'has indifferent access hash' do
+      z = Redox::Models::Model.new
+      z['HelloWorld'] = 10
+      z[:HelloWorld]  = 20
 
-    assert(false == Redox::Models::Patient.new(@sample).valid?)
-  end
+      assert_equal(z[:HelloWorld], z['HelloWorld'])
+    end
 
-  def test_valid_returns_false_for_not_hash
-    assert(false == Redox::Models::Patient.new(nil).valid?)
-    assert(false == Redox::Models::Patient.new('hi').valid?)
-  end
+    it 'can deep merge' do
+      y = Redox::Models::Model.new
+      z = Redox::Models::Model.new
+      y[:HelloWorld] = {i: {j: 20}}
+      z[:HelloWorld] = {i: {j: 10}}
 
-  def test_inner_returns_patient_value
-    assert_equal(@sample[Redox::Models::Patient::KEY], Redox::Models::Patient.new(@sample).inner)
+      assert_equal(y, z.merge(y))
+    end
+
+    it 'can use camel or snake case' do
+      y = Redox::Models::Model.new(hello_world: 10)
+      z = Redox::Models::Model.new(HelloWorld: 10)
+
+      assert_equal(y, z)
+    end
+
+    it 'can methods instead' do
+      y = Redox::Models::Model.new()
+      z = Redox::Models::Model.new()
+      y.hello_world = 10
+      z.HelloWorld = 10
+
+      assert_equal(y, z)
+    end
+
+    describe '#to_json' do
+      it 'adds top level key to hash' do
+        z = Redox::Models::Model.new
+        z[:HelloWorld] = 10
+
+        assert_equal({'Model' => {HelloWorld: 10}}.to_json, z.to_json)
+      end
+    end
+
+    describe '#from_response' do
+      it 'adds response' do
+        model = Redox::Models::Model.from_response('bob')
+        assert_equal('bob', model.response)
+      end
+
+      it 'adds patient' do
+        model = Redox::Models::Model.from_response({ 'Patient' => {'Demographics' => {'FirstName' => 'Charles'}}})
+        assert_equal('Charles', model.patient.demographics.first_name)
+      end
+
+      it 'adds meta' do
+        model = Redox::Models::Model.from_response({ 'Meta' => {'FacilityCode' => '09'}})
+        assert_equal('09', model.meta.facility_code)
+      end
+    end
   end
 end

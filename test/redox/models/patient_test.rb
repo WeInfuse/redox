@@ -1,15 +1,209 @@
 require 'test_helper'
 
 class PatientTest < Minitest::Test
-  def setup
-    @sample = load_sample('patient_search_single_result.response.json', parse: true)
-  end
+  describe 'patient' do
+    let (:meta) { Redox::Models::Meta.new }
 
-  def test_has_demographics
-    assert(@sample[Redox::Models::Patient::KEY][Redox::Models::Demographics::KEY], Redox::Models::Patient.new(@sample).demographics.inner)
-  end
+    describe 'demographics' do
+      it 'can be initialized' do
+        p = Redox::Models::Patient.new('Demographics' => {'FirstName' => 'Joe'})
 
-  def test_has_identifiers
-    assert(@sample[Redox::Models::Patient::KEY][Redox::Models::Identifiers::KEY], Redox::Models::Patient.new(@sample).identifiers.inner)
+        assert_equal('Joe', p.Demographics['FirstName'])
+      end
+
+      it 'can be built' do
+        p = Redox::Models::Patient.new
+
+        p.demographics.first_name = 'Bob'
+        assert_equal('Bob', p.Demographics['FirstName'])
+      end
+    end
+
+    describe 'pcp' do
+      it 'can be initialized' do
+        p = Redox::Models::Patient.new('PCP' => {'FirstName' => 'Joe'})
+
+        assert_equal('Joe', p.primary_care_provider['FirstName'])
+      end
+
+      it 'can be built' do
+        p = Redox::Models::Patient.new
+
+        p.primary_care_provider['FirstName'] = 'Bob'
+        assert_equal('Bob', p.primary_care_provider['FirstName'])
+      end
+    end
+
+    describe 'insurances' do
+      it 'can be initialized' do
+        p = Redox::Models::Patient.new('Insurances' => [{'Plan' => 'xx'}])
+
+        assert_equal('xx', p.Insurances.first['Plan'])
+      end
+
+      it 'can be built' do
+        p = Redox::Models::Patient.new
+
+        p.add_insurance(Plan: 'zz')
+        assert_equal('zz', p.insurances.first['Plan'])
+      end
+    end
+
+    describe 'identifiers' do
+      it 'can be initialized' do
+        p = Redox::Models::Patient.new('Identifiers' => [{'ID' => 'xx', 'IDType' => 'BigTime'}])
+
+        assert_equal('xx', p.Identifiers.first['ID'])
+        assert_equal('BigTime', p.identifiers.first['IDType'])
+      end
+
+      it 'can be built' do
+        p = Redox::Models::Patient.new
+
+        p.add_identifier(type: 'MyType', value: 'zz')
+        assert_equal('zz', p.identifiers.first['ID'])
+        assert_equal('MyType', p.identifiers.first['IDType'])
+      end
+    end
+
+    describe '#body' do
+      describe 'creates a request' do
+        it 'has a meta' do
+          result = Redox::Models::Patient.body({}, meta)
+
+          assert(result.include?('Meta'))
+        end
+
+        it 'has a high level key' do
+          result = Redox::Models::Patient.body({Z: 'hi'}, meta)
+
+          assert(result.include?(:Z))
+        end
+      end
+
+      it 'merges with a default meta' do
+        meta = Redox::Models::Meta.new(EventType: 'bob', Test: false)
+        result = Redox::Models::Patient.body({}, meta)
+
+        assert_equal('bob', result['Meta']['EventType'])
+        assert_equal(false, result['Meta']['Test'])
+        assert_equal(false, result['Meta']['EventDateTime'].nil?)
+      end
+
+      it 'fails nil meta' do
+        assert_raises { Redox::Models::Patient.body({}, nil) }
+      end
+    end
+
+    describe 'redox calls' do
+      before do
+        stub_request(:post, /#{Redox::Authentication::BASE_ENDPOINT}/)
+          .with(body: hash_including({ apiKey: '123'}))
+          .to_return(status: 200, body: { accessToken: 'let.me.in', expires: (Time.now + 60).utc.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), refreshToken: 'rtoken' }.to_json )
+
+        WebMock.after_request do |request, response|
+          @request = request
+        end
+      end
+
+      describe '#query' do
+        before do
+          @query_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Models::Patient::QUERY_ENDPOINT))
+            .with(headers: { 'Authorization' => 'Bearer let.me.in' })
+            .to_return(status: 200, body: load_sample('patient_search_single_result.response.json'))
+        end
+
+        describe 'request' do
+          it 'has an endpoint' do
+            Redox::Models::Patient.query({})
+
+            assert_requested(@query_stub, times: 1)
+          end
+
+          it 'sends meta' do
+            Redox::Models::Patient.query({})
+
+            assert_equal('Query', Redox::Models::Meta.new(JSON.parse(@request.body)).EventType)
+            assert_equal('PatientSearch', Redox::Models::Meta.new(JSON.parse(@request.body)).DataModel)
+          end
+        end
+
+        describe 'response' do
+          it 'returns a valid response' do
+            response = Redox::Models::Patient.query({})
+
+            assert(response.is_a?(Redox::Models::Model))
+          end
+        end
+      end
+
+      describe '#create' do
+        before do
+          create_sample = load_sample('patient_search_single_result.response.json', parse: true)
+          create_sample['Meta'].merge!(Redox::Models::Patient::CREATE_META)
+
+          @create_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Connection::DEFAULT_ENDPOINT))
+            .with(body: hash_including('Meta' => hash_including('EventType' => 'NewPatient')))
+            .to_return(status: 200, body: create_sample.to_json)
+        end
+
+        describe 'request' do
+          it 'has an endpoint' do
+            Redox::Models::Patient.new.create()
+
+            assert_requested(@create_stub, times: 1)
+          end
+
+          it 'sends meta' do
+            Redox::Models::Patient.new.create()
+
+            assert_equal('NewPatient', Redox::Models::Meta.new(JSON.parse(@request.body)).EventType)
+            assert_equal('PatientAdmin', Redox::Models::Meta.new(JSON.parse(@request.body)).DataModel)
+          end
+        end
+
+        describe 'response' do
+          it 'returns a valid response' do
+            response = Redox::Models::Patient.new.create()
+
+            assert(response.is_a?(Redox::Models::Model))
+          end
+        end
+      end
+
+      describe '#update' do
+        before do
+          update_sample = load_sample('patient_search_single_result.response.json', parse: true)
+          update_sample['Meta'].merge!(Redox::Models::Patient::UPDATE_META)
+
+          @update_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Connection::DEFAULT_ENDPOINT))
+            .with(body: hash_including('Meta' => hash_including('EventType' => 'PatientUpdate')))
+            .to_return(status: 200, body: update_sample.to_json)
+        end
+
+        describe 'request' do
+          it 'has an endpoint' do
+            Redox::Models::Patient.new.update()
+
+            assert_requested(@update_stub, times: 1)
+          end
+
+          it 'sends meta' do
+            Redox::Models::Patient.new.update()
+
+            assert_equal('PatientUpdate', Redox::Models::Meta.new(JSON.parse(@request.body)).EventType)
+            assert_equal('PatientAdmin', Redox::Models::Meta.new(JSON.parse(@request.body)).DataModel)
+          end
+        end
+
+        describe 'response' do
+          it 'returns a valid response' do
+            response = Redox::Models::Patient.new.update()
+
+            assert(response.is_a?(Redox::Models::Model))
+          end
+        end
+      end
+    end
   end
 end

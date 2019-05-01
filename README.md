@@ -21,34 +21,90 @@ Or install it yourself as:
 
 ## Usage
 
+### Setup
+
+Make sure you're [configured](#configuration)!
+
 ```ruby
-source = {
-  Name: 'Redox Dev Tools',
-  ID: ENV['REDOX_SRC_ID']
+patient = Redox::Models::Patient.new
+patient.demographics.first_name = 'Joe'
+patient.demographics['LastName'] = 'Joerson'
+patient.add_identifier(type: 'TheType', value: 'x13005')
+
+meta = Redox::Models::Meta.new
+meta.set_source(name: 'MySource', id: '123-584')
+meta.add_destination(name: 'TheDest', id: '973-238')
+```
+
+### Create
+
+```ruby
+response = patient.create(meta: meta)
+```
+
+### Update
+
+```ruby
+response = patient.update(meta: meta)
+```
+
+### Search
+
+```ruby
+response = Redox::Models::Patient.query(patient, meta: meta)
+```
+
+### Response
+
+The response object is a base `Redox::Models::Model` class.
+
+With the HTTParty response object
+```ruby
+response.response
+#<HTTParty::Response:0x7fa354c1fbe8>
+
+response.response.ok?
+true
+```
+
+And any `Model` objects that were returned
+```ruby
+response.patient
+{
+  "Identifiers"=> [
+      {"IDType"=>"MR", "ID"=>"0000000003"},
+      {"ID"=>"e3fedf48-c8bf-4728-845f-cb810001b571", "IDType"=>"EHRID"}
+    ],
+  "Demographics"=> {
+    "Race"=>"Black",
+    "SSN"=>"303-03-0003",
+    "Nickname"=>"Walt"
+...
+  }
+  "PCP"=> {
+    "NPI"=>nil,
+  }
 }
 
-destinations = [
-  {
-    Name: 'Redox EMR',
-    ID: ENV['REDOX_DEST_ID']
-  }
-]
+response.meta
+{
+  "EventDateTime"=>"2019-04-26T20:03:00.304866Z",
+  "DataModel"=>"PatientAdmin",
+  ...
+  "Transmission"=>{"ID"=>797225234},
+  "Message"=>{"ID"=>1095117817}
+}
+```
 
-redox = Redox::Redox.new(
-  api_key: ENV['REDOX_KEY'],
-  secret: ENV['REDOX_SECRET'],
-  source: source,
-  destinations: destinations,
-  test: true
-)
+### Configuration
 
-redox.add_patient(
-  Identifiers: [...],
-  Demographics: {
-    FirstName: 'Joe'
-    ...
-  }
-)
+```ruby
+Redox.configure do |c|
+  c.api_key      = ENV['REDOX_API_KEY']
+  c.secret       = ENV['REDOX_SECRET']
+  c.api_endpoint = 'http://hello.com' # Defaults to Redox endpoint
+  c.token_expiry_padding = 120 # Defaults to 60 seconds
+end
 ```
 
 ## Development

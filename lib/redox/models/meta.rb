@@ -1,78 +1,44 @@
 module Redox
   module Models
     class Meta < Model
-      KEY = 'Meta'.freeze
+      TO_DATETIME_FORMAT   = '%Y-%m-%dT%H:%M:%S.%6NZ'.freeze
+      FROM_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%N%Z'.freeze
 
-      DEFAULT = -> () {
-        return {
-          KEY => {
-            'DataModel' => nil,
-            'EventType' => nil,
-            'EventDateTime' => Time.now.strftime("%Y-%m-%dT%H:%M:%S.%6NZ"),
-            'Test' => true,
-            'Source' => {},
-            'Destinations' => [],
-            'FacilityCode' => nil
-          }
-        }
-      }
+      property :DataModel, from: :data_model, required: false
+      property :EventType, from: :event_type, required: false
+      property :EventDateTime, from: :event_date_time, default: ->() { Time.now.utc.strftime(TO_DATETIME_FORMAT) }
+      property :Test, from: :test, default: true
+      property :Source, from: :source, required: false
+      property :Destinations, from: :destinations, required: false
+      property :FacilityCode, from: :facility_code, required: false
 
-      def initialize(data = DEFAULT.call)
-        super(data)
-      end
+      alias_method :data_model, :DataModel
+      alias_method :event_type, :EventType
+      alias_method :event_date_time, :EventDateTime
+      alias_method :test, :Test
+      alias_method :source, :Source
+      alias_method :destinations, :Destinations
+      alias_method :facility_code, :FacilityCode
 
-      def add_destination(name, id)
-        self.inner['Destinations'] << Meta.build_subscription(name, id)
-
-        return self
-      end
-
-      def set_source(name, id)
-        self.source = Meta.build_subscription(name, id)
+      def add_destination(name: , id: )
+        self[:Destinations] ||= []
+        self[:Destinations] << Meta.build_subscription(name: name, id: id)
 
         return self
       end
 
-      def source=(source)
-        self.inner['Source'] = source
-      end
-
-      def facility_code=(facility_code)
-        self.inner['FacilityCode'] = facility_code.to_s
-      end
-
-      def test=(test)
-        self.inner['Test'] = (true == test)
-      end
-
-      def merge(other)
-        if (other.is_a?(Hash))
-          if (other.include?(KEY))
-            self.inner.merge!(other[KEY])
-          else
-            self.inner.merge!(other)
-          end
-        elsif (other.is_a?(self.class))
-          self.inner.merge!(other.inner.select {|k,v| !v.nil?})
-        end
+      def set_source(name: , id: )
+        self[:Source] = Meta.build_subscription(name: name, id: id)
 
         return self
-      end
-
-      def to_h
-        return JSON.parse(@data.to_json)
       end
 
       class << self
-        def build_subscription(name, id)
+        def build_subscription(name: , id:)
           return {
             'ID' => id,
             'Name' => name
           }
-        end
-
-        def from_h(hash)
-          return Meta.new.merge(hash)
         end
       end
     end
