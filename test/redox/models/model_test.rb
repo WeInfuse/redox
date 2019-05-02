@@ -6,6 +6,20 @@ end
 
 class ModelTest < Minitest::Test
   describe 'model' do
+    describe 'removes top level key' do
+      it 'works for string' do
+        z = Redox::Models::Model.new('Model' => {HelloWorld: 50})
+
+        assert_equal(50, z['HelloWorld'])
+      end
+
+      it 'works for symbols' do
+        z = Redox::Models::Model.new(:Model => {HelloWorld: 50})
+
+        assert_equal(50, z['HelloWorld'])
+      end
+    end
+
     it 'ignores undeclared' do
       z = Redox::Models::Model.new({other: 50})
 
