@@ -6,6 +6,7 @@ module Redox
 
       property :Meta, from: :meta, required: false
       property :Patient, from: :patient, required: false
+      property :Extensions, from: :extensions, required: false
       property :response, required: false
 
       alias_method :patient, :Patient

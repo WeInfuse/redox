@@ -1,0 +1,180 @@
+{
+   "Patient" : {
+      "Demographics" : {
+         "SSN" : "303-03-0003",
+         "Language" : "es",
+         "IsHispanic" : true,
+         "EmailAddresses" : [
+            "wc1945@test.net"
+         ],
+         "MaritalStatus" : "Widowed",
+         "DOB" : "1945-03-04",
+         "Address" : {
+            "ZIP" : "91301",
+            "State" : "CA",
+            "StreetAddress" : "648 Ethan Terrace",
+            "Country" : "US",
+            "County" : "Los Angelas",
+            "City" : "Agoura Hills"
+         },
+         "FirstName" : "Walter",
+         "LastName" : "Carthwright",
+         "PhoneNumber" : {
+            "Home" : "+18088675310",
+            "Mobile" : "+1888372372",
+            "Office" : "+1888372372"
+         },
+         "Race" : "Black",
+         "Nickname" : "Walt",
+         "Sex" : "Male"
+      },
+      "Identifiers" : [
+         {
+            "ID" : "0000000003",
+            "IDType" : "MR"
+         },
+         {
+            "IDType" : "EHRID",
+            "ID" : "e3fedf48-c8bf-4728-845f-cb810001b571"
+         },
+         {
+            "ID" : "ef05d4068ee144f^^^&1.3.6.1.4.1.21367.2005.13.20.1000&ISO",
+            "IDType" : "NIST"
+         }
+      ],
+      "Insurances": [
+         {
+            "Extensions": {
+               "insurance-id": {
+                  "url": "https://api.redoxengine.com/extensions/insurance-id",
+                  "identifier": {
+                     "value": "ins3705305"
+                  }
+               }
+            },
+            "Plan": {
+               "ID": "CIGNA",
+               "IDType": null,
+               "Name": null,
+               "Type": null
+            },
+            "MemberNumber": null,
+            "Company": {
+               "ID": "car7147",
+               "IDType": null,
+               "Name": "CIGNA HEALTH CARE",
+               "Address": {
+                  "StreetAddress": "PO BOX 8012",
+                  "City": "PLANVILLE",
+                  "State": null,
+                  "ZIP": "06062",
+                  "County": null,
+                  "Country": null
+               },
+               "PhoneNumber": null
+            },
+            "GroupNumber": "99999",
+            "GroupName": null,
+            "EffectiveDate": null,
+            "ExpirationDate": null,
+            "PolicyNumber": "846262692",
+            "AgreementType": null,
+            "CoverageType": null,
+            "Insured": {
+               "Identifiers": [],
+               "LastName": "JOHNSON",
+               "FirstName": "MARY",
+               "SSN": null,
+               "Relationship": "SELF",
+               "DOB": "2000-02-02",
+               "Sex": null,
+               "Address": {
+                  "StreetAddress": null,
+                  "City": null,
+                  "State": null,
+                  "ZIP": null,
+                  "County": null,
+                  "Country": null
+               }
+            }
+         },
+         {
+            "Extensions": {
+               "insurance-id": {
+                  "url": "https://api.redoxengine.com/extensions/insurance-id",
+                  "identifier": {
+                     "value": "ins3705306"
+                  }
+               }
+            },
+            "Plan": {
+               "ID": "CIGNA",
+               "IDType": null,
+               "Name": null,
+               "Type": null
+            },
+            "MemberNumber": null,
+            "Company": {
+               "ID": "car7147",
+               "IDType": null,
+               "Name": "CIGNA HEALTH CARE",
+               "Address": {
+                  "StreetAddress": "PO BOX 8012",
+                  "City": "PLANVILLE",
+                  "State": null,
+                  "ZIP": "06062",
+                  "County": null,
+                  "Country": null
+               },
+               "PhoneNumber": null
+            },
+            "GroupNumber": "99999",
+            "GroupName": null,
+            "EffectiveDate": null,
+            "ExpirationDate": null,
+            "PolicyNumber": "846262692",
+            "AgreementType": null,
+            "CoverageType": null,
+            "Insured": {
+               "Identifiers": [],
+               "LastName": "JOHNSON",
+               "FirstName": "MARY",
+               "SSN": null,
+               "Relationship": "SELF",
+               "DOB": "2000-02-02",
+               "Sex": null,
+               "Address": {
+                  "StreetAddress": null,
+                  "City": null,
+                  "State": null,
+                  "ZIP": null,
+                  "County": null,
+                  "Country": null
+               }
+            }
+         }
+      ]
+   },
+   "Meta" : {
+      "Transmission" : {
+         "ID" : 797225234
+      },
+      "Destinations" : [
+         {
+            "ID" : "0f4bd1d1-451d-4351-8cfd-b767d1b488d6",
+            "Name" : "Patient Search Endpoint"
+         }
+      ],
+      "Message" : {
+         "ID" : 1095117817
+      },
+      "Test" : true,
+      "DataModel" : "PatientSearch",
+      "EventDateTime" : null,
+      "FacilityCode" : null,
+      "EventType" : "Query",
+      "Source" : {
+         "ID" : "2e2b982c-7b9d-41c8-a02b-34b181f5094c"
+      }
+   }
+}

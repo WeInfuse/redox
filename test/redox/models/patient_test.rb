@@ -47,6 +47,12 @@ class PatientTest < Minitest::Test
         p.add_insurance(Plan: 'zz')
         assert_equal('zz', p.insurances.first['Plan'])
       end
+
+      it 'can be converted using method' do
+        p = Redox::Models::Patient.new(load_sample('patient_callback.request.json', parse: true))
+
+        assert(p.insurances.first.is_a?(Redox::Models::Insurance))
+      end
     end
 
     describe 'identifiers' do

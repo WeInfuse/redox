@@ -19,6 +19,10 @@ module Redox
         self[:Demographics] ||= Demographics.new
       end
 
+      def insurances
+        self[:Insurances] = self[:Insurances].map {|ins| ins.is_a?(Redox::Models::Insurance) ? ins : Insurance.new(ins) }
+      end
+
       def primary_care_provider
         self[:PCP] ||= PCP.new
       end
