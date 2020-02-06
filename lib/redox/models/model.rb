@@ -6,9 +6,11 @@ module Redox
 
       property :Meta, from: :meta, required: false
       property :Patient, from: :patient, required: false
+      property :PotentialMatches, from: :potential_matches, required: false
       property :Extensions, from: :extensions, required: false
       property :response, required: false
 
+      alias_method :potential_matches, :PotentialMatches
       alias_method :patient, :Patient
       alias_method :meta, :Meta
 
@@ -37,7 +39,7 @@ module Redox
           model = Model.new
           model.response = response
 
-          %w[Meta Patient].each do |k|
+          %w[Meta Patient PotentialMatches].each do |k|
             begin
               model.send("#{k}=", Module.const_get("Redox::Models::#{k}").new(response[k])) if response[k]
             rescue

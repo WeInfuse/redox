@@ -72,35 +72,6 @@ class PatientTest < Minitest::Test
       end
     end
 
-    describe '#body' do
-      describe 'creates a request' do
-        it 'has a meta' do
-          result = Redox::Models::Patient.body({}, meta)
-
-          assert(result.include?('Meta'))
-        end
-
-        it 'has a high level key' do
-          result = Redox::Models::Patient.body({Z: 'hi'}, meta)
-
-          assert(result.include?(:Z))
-        end
-      end
-
-      it 'merges with a default meta' do
-        meta = Redox::Models::Meta.new(EventType: 'bob', Test: false)
-        result = Redox::Models::Patient.body({}, meta)
-
-        assert_equal('bob', result['Meta']['EventType'])
-        assert_equal(false, result['Meta']['Test'])
-        assert_equal(false, result['Meta']['EventDateTime'].nil?)
-      end
-
-      it 'fails nil meta' do
-        assert_raises { Redox::Models::Patient.body({}, nil) }
-      end
-    end
-
     describe 'redox calls' do
       before do
         stub_request(:post, /#{Redox::Authentication::BASE_ENDPOINT}/)
@@ -114,7 +85,7 @@ class PatientTest < Minitest::Test
 
       describe '#query' do
         before do
-          @query_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Models::Patient::QUERY_ENDPOINT))
+          @query_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Request::PatientSearch::QUERY_ENDPOINT))
             .with(headers: { 'Authorization' => 'Bearer let.me.in' })
             .to_return(status: 200, body: load_sample('patient_search_single_result.response.json'))
         end
@@ -146,7 +117,7 @@ class PatientTest < Minitest::Test
       describe '#create' do
         before do
           create_sample = load_sample('patient_search_single_result.response.json', parse: true)
-          create_sample['Meta'].merge!(Redox::Models::Patient::CREATE_META)
+          create_sample['Meta'].merge!(Redox::Request::PatientAdmin::CREATE_META)
 
           @create_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Connection::DEFAULT_ENDPOINT))
             .with(body: hash_including('Meta' => hash_including('EventType' => 'NewPatient')))
@@ -180,7 +151,7 @@ class PatientTest < Minitest::Test
       describe '#update' do
         before do
           update_sample = load_sample('patient_search_single_result.response.json', parse: true)
-          update_sample['Meta'].merge!(Redox::Models::Patient::UPDATE_META)
+          update_sample['Meta'].merge!(Redox::Request::PatientAdmin::UPDATE_META)
 
           @update_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Connection::DEFAULT_ENDPOINT))
             .with(body: hash_including('Meta' => hash_including('EventType' => 'PatientUpdate')))
