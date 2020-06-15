@@ -11,6 +11,9 @@ require 'redox/models/patient/demographics'
 require 'redox/models/patient/identifier'
 require 'redox/models/patient/insurance'
 require 'redox/models/patient/p_c_p'
+require 'redox/models/potential_matches'
+require 'redox/request/patient_admin'
+require 'redox/request/patient_search'
 
 module Redox
   class Configuration

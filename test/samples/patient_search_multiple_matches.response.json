@@ -1,0 +1,125 @@
+{
+   "PotentialMatches": [
+      {
+         "Identifiers": [
+            {
+               "ID": "44cfe603-9137-4c9e-83ec-70e167e42d2a",
+               "IDType": "ID"
+            },
+            {
+               "ID": "2299238486",
+               "IDType": "Chart Number"
+            }
+         ],
+         "Demographics": {
+            "FirstName": "Feb One",
+            "LastName": "Test",
+            "MiddleName": null,
+            "DOB": "1993-01-01",
+            "Sex": "Male",
+            "Language": "",
+            "PhoneNumber": {},
+            "Address": {
+               "StreetAddress": "100 MAIN ST",
+               "City": "ANYTOWN",
+               "State": "TX",
+               "ZIP": "11111"
+            },
+            "EmailAddresses": [
+               null
+            ],
+            "MaritalStatus": "",
+            "Race": ""
+         },
+         "PCP": {
+            "ID": null,
+            "IDType": "None Specified"
+         },
+         "Guarantor": {
+            "Number": "12677135",
+            "FirstName": "Feb One",
+            "LastName": "Test",
+            "MiddleName": null,
+            "Sex": "Male",
+            "DOB": "1993-01-01",
+            "RelationToPatient": "Self",
+            "Address": {
+               "StreetAddress": "100 MAIN ST",
+               "City": "ANYTOWN",
+               "State": "TX",
+               "ZIP": "11111"
+            }
+         },
+         "Insurances": []
+      },
+      {
+         "Identifiers": [
+            {
+               "ID": "d2b48067-aa65-4ccc-9660-d835c4d7e4ee",
+               "IDType": "ID"
+            },
+            {
+               "ID": "2299238461",
+               "IDType": "Chart Number"
+            }
+         ],
+         "Demographics": {
+            "FirstName": "One",
+            "LastName": "Test",
+            "MiddleName": null,
+            "DOB": "1993-01-01",
+            "Sex": "Female",
+            "Language": "en",
+            "PhoneNumber": {},
+            "Address": {
+               "StreetAddress": "UNKNOWN",
+               "City": "UNKNOWN",
+               "State": "TX",
+               "ZIP": "11111"
+            },
+            "EmailAddresses": [
+               null
+            ],
+            "MaritalStatus": "",
+            "Race": ""
+         },
+         "PCP": {
+            "ID": null,
+            "IDType": "None Specified"
+         },
+         "Guarantor": {
+            "Number": "12677009",
+            "FirstName": "One",
+            "LastName": "Test",
+            "MiddleName": null,
+            "Sex": "Female",
+            "DOB": "1993-01-01",
+            "RelationToPatient": "Self",
+            "Address": {
+               "StreetAddress": "UNKNOWN",
+               "City": "UNKNOWN",
+               "State": "TX",
+               "ZIP": "11111"
+            }
+         },
+         "Insurances": []
+      }
+   ],
+   "Patient": {},
+   "Meta": {
+      "DataModel": "PatientSearch",
+      "EventType": "Query",
+      "Message": {
+         "ID": 4033535541
+      },
+      "Source": {
+         "ID": "e15d3ec6-de0b-471a-a6d5-41b786c93c17"
+      },
+      "Destinations": [
+         {
+            "ID": "a87b2534-35f6-4a91-8b4f-e340336cac85",
+            "Name": "CareCloud Playground Destination (s)"
+         }
+      ]
+   }
+}

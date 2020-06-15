@@ -69,19 +69,38 @@ class ModelTest < Minitest::Test
     end
 
     describe '#from_response' do
-      it 'adds response' do
-        model = Redox::Models::Model.from_response('bob')
-        assert_equal('bob', model.response)
+      let(:model) { Redox::Models::Model.from_response(model_data) }
+
+      describe 'response' do
+        let(:model_data) { 'bob' }
+
+        it 'adds' do
+          assert_equal(model_data, model.response)
+        end
       end
 
-      it 'adds patient' do
-        model = Redox::Models::Model.from_response({ 'Patient' => {'Demographics' => {'FirstName' => 'Charles'}}})
-        assert_equal('Charles', model.patient.demographics.first_name)
+      describe 'patient' do
+        let(:model_data) { { 'Patient' => {'Demographics' => {'FirstName' => 'Charles'}} } }
+
+        it 'adds' do
+          assert_equal('Charles', model.patient.demographics.first_name)
+        end
       end
 
-      it 'adds meta' do
-        model = Redox::Models::Model.from_response({ 'Meta' => {'FacilityCode' => '09'}})
-        assert_equal('09', model.meta.facility_code)
+      describe 'meta' do
+        let(:model_data) { { 'Meta' => {'FacilityCode' => '09'}} }
+
+        it 'adds' do
+          assert_equal('09', model.meta.facility_code)
+        end
+      end
+
+      describe 'potential matches' do
+        let(:model_data) { { 'PotentialMatches' => [ { 'FirstName' => 'bob1'}, { 'FirstName' => 'bob2' }] } }
+
+        it 'adds' do
+          assert_equal(2, model.potential_matches.size)
+        end
       end
     end
   end
