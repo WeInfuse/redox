@@ -8,6 +8,14 @@ require 'byebug'
 Redox.configuration.api_key = '123'
 Redox.configuration.secret  = 'abc'
 
+def patient_admin_responses(event_type = :patient_update, parse: true)
+  if (:patient_update == event_type)
+    return load_sample('patient_search_single_result.response.json', parse: parse)
+  else
+    return load_sample("#{event_type}.response.json", parse: true)
+  end
+end
+
 def load_sample(file, parse: false)
   file = File.join('test', 'samples', file)
   file_contents = nil

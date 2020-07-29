@@ -5,8 +5,8 @@ require 'redox/version'
 Gem::Specification.new do |spec|
   spec.name          = 'redox'
   spec.version       = Redox::VERSION
-  spec.authors       = ['Alexander Clark', 'Mike Crockett']
-  spec.email         = ['alexander.clark@weinfuse.com', 'mike.crockett@weinfuse.com']
+  spec.authors       = ['Alexander Clark', 'Mike Crockett', 'Mike Carr']
+  spec.email         = ['alexander.clark@weinfuse.com', 'mike.crockett@weinfuse.com', 'michael.carr@weinfuse.com']
 
   spec.summary       = 'Ruby wrapper for the Redox Engine API'
   spec.homepage      = 'https://github.com/WeInfuse/redox'
@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.licenses      = ['MIT']
 
-  spec.add_dependency 'httparty', '~> 0.17'
+  spec.add_dependency 'httparty', '~> 0.18'
   spec.add_dependency 'hashie', '~> 3.5'
   spec.add_development_dependency 'bundler', '>=1', '<3'
   spec.add_development_dependency 'byebug', '~> 11'
