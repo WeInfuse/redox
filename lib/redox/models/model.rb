@@ -6,12 +6,14 @@ module Redox
 
       property :Meta, from: :meta, required: false
       property :Patient, from: :patient, required: false
+      property :Visit, from: :visit, required: false
       property :PotentialMatches, from: :potential_matches, required: false
       property :Extensions, from: :extensions, required: false
       property :response, required: false
 
       alias_method :potential_matches, :PotentialMatches
       alias_method :patient, :Patient
+      alias_method :visit, :Visit
       alias_method :meta, :Meta
 
       def initialize(data = {})
@@ -34,12 +36,16 @@ module Redox
         return self.to_h.to_json
       end
 
+      def insurances
+        (self.patient&.insurances || []) + (self.visit&.insurances || [])
+      end
+
       class << self
         def from_response(response)
           model = Model.new
           model.response = response
 
-          %w[Meta Patient PotentialMatches].each do |k|
+          %w[Meta Patient Visit PotentialMatches].each do |k|
             begin
               model.send("#{k}=", Module.const_get("Redox::Models::#{k}").new(response[k])) if response[k]
             rescue

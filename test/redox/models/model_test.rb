@@ -87,6 +87,14 @@ class ModelTest < Minitest::Test
         end
       end
 
+      describe 'visit' do
+        let(:model_data) { { 'Visit' => {'Insurances' => ['PolicyNumber' => '1277777']} } }
+
+        it 'adds' do
+          assert_equal(1, model.visit.insurances.size)
+        end
+      end
+
       describe 'meta' do
         let(:model_data) { { 'Meta' => {'FacilityCode' => '09'}} }
 
@@ -100,6 +108,46 @@ class ModelTest < Minitest::Test
 
         it 'adds' do
           assert_equal(2, model.potential_matches.size)
+        end
+      end
+
+      describe 'insurances helper' do
+        let(:model_data) { 'bob' }
+
+        describe 'no insurances' do
+          it 'returns empty arrray' do
+            assert_equal([], model.insurances)
+          end
+        end
+
+        describe 'patient' do
+          let(:model_data) { { 'Patient' => {'Insurances' => ['PolicyNumber' => '0123']} } }
+
+          it 'uses the patient insurances' do
+            assert_equal('0123', model.insurances.first.policy_number)
+          end
+        end
+
+        describe 'visit' do
+          let(:model_data) { { 'Visit' => {'Insurances' => ['PolicyNumber' => '3210']} } }
+
+          it 'uses the visit insurances' do
+            assert_equal('3210', model.insurances.first.policy_number)
+          end
+        end
+
+        describe 'patient and visit' do
+          let(:model_data) {
+            {
+              'Patient' => {'Insurances' => ['PolicyNumber' => '0123']},
+              'Visit'   => {'Insurances' => ['PolicyNumber' => '3210']}
+            }
+          }
+
+          it 'concats' do
+            assert_equal('0123', model.insurances.first.policy_number)
+            assert_equal('3210', model.insurances.last.policy_number)
+          end
         end
       end
     end

@@ -2,8 +2,6 @@ require 'test_helper'
 
 class PatientTest < Minitest::Test
   describe 'patient' do
-    let (:meta) { Redox::Models::Meta.new }
-
     describe 'demographics' do
       it 'can be initialized' do
         p = Redox::Models::Patient.new('Demographics' => {'FirstName' => 'Joe'})
