@@ -6,18 +6,12 @@ module Redox
 
       def self.create(patient: , meta: Redox::Models::Meta.new)
         meta = CREATE_META.merge(meta)
-        return Redox::Models::Model.from_response((RedoxClient.connection.request(body: Redox::Request::PatientAdmin.build_body(patient, meta))))
+        return Redox::Models::Model.from_response((RedoxClient.connection.request(body: Redox::Request.build_body(patient, meta))))
       end
 
       def self.update(patient: , meta: Redox::Models::Meta.new)
         meta = UPDATE_META.merge(meta)
-        return Redox::Models::Model.from_response((RedoxClient.connection.request(body: Redox::Request::PatientAdmin.build_body(patient, meta))))
-      end
-
-      def self.build_body(params, meta)
-        meta = Redox::Models::Meta.new.merge(meta)
-
-        return meta.to_h.merge(params.to_h)
+        return Redox::Models::Model.from_response((RedoxClient.connection.request(body: Redox::Request.build_body(patient, meta))))
       end
     end
   end

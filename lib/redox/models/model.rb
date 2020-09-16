@@ -1,5 +1,13 @@
 module Redox
   module Models
+    def self.format_datetime(d)
+      if d.respond_to?(:strftime)
+        d.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT)
+      else
+        d
+      end
+    end
+
     class Model < Hashie::Trash
       include Hashie::Extensions::IgnoreUndeclared
       include Hashie::Extensions::IndifferentAccess
@@ -32,7 +40,7 @@ module Redox
         return { key => super.to_h }
       end
 
-      def to_json
+      def to_json(args = {})
         return self.to_h.to_json
       end
 
