@@ -31,10 +31,22 @@ module Redox
         self[:Insurances] = self[:Insurances].map {|ins| ins.is_a?(Redox::Models::Insurance) ? ins : Insurance.new(ins) }
       end
 
-      def to_json(args = nil)
-        d = self.dup
-        d[:VisitDateTime] = Redox::Models.format_datetime(d[:VisitDateTime])
-        d.to_h.to_json
+      def to_h
+        result = super.to_h
+
+        %w[VisitDateTime].each do |k|
+          result[key][k] = Redox::Models.format_datetime(result[key][k])
+        end
+
+        result
+      end
+
+      def to_json(args = {})
+        self.to_h.to_json
+      end
+
+      def as_json(args = {})
+        self.to_h.dig('Visit')
       end
     end
   end

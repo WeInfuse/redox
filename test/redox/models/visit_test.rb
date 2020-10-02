@@ -4,6 +4,7 @@ class VisitTest < Minitest::Test
   describe 'visit' do
     let(:visit) { Redox::Models::Visit.new(data) }
     let(:deserialized) { JSON.parse(visit.to_json) }
+    let(:as_json) { visit.as_json }
     let(:data) { {} }
 
     describe 'insurances' do
@@ -57,16 +58,32 @@ class VisitTest < Minitest::Test
         describe 'date or time object' do
           let(:datetime) { Time.now }
 
-          it 'converts to redox format' do
-            assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), deserialized.dig('Visit', 'VisitDateTime'))
+          describe '#to_json' do
+            it 'converts to redox format' do
+              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), deserialized.dig('Visit', 'VisitDateTime'))
+            end
+          end
+
+          describe '#as_json' do
+            it 'converts to redox format' do
+              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), as_json.dig('VisitDateTime'))
+            end
           end
         end
 
         describe 'string object' do
           let(:datetime) { '2020-04-05T11:38:41.483' }
 
-          it 'leaves it be' do
-            assert_equal(datetime, deserialized.dig('Visit', 'VisitDateTime'))
+          describe '#to_json' do
+            it 'leaves it be' do
+              assert_equal(datetime, deserialized.dig('Visit', 'VisitDateTime'))
+            end
+          end
+
+          describe '#as_json' do
+            it 'leaves it be' do
+              assert_equal(datetime, as_json.dig('VisitDateTime'))
+            end
           end
         end
 
@@ -74,7 +91,7 @@ class VisitTest < Minitest::Test
           let(:datetime) { nil }
 
           it 'leaves it be' do
-            assert_nil(JSON.parse(visit.to_json).dig('Visit', 'VisitDateTime'))
+            assert_nil(deserialized.dig('Visit', 'VisitDateTime'))
           end
         end
       end
