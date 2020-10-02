@@ -48,14 +48,18 @@ module Redox
         self
       end
 
-      def to_json(args = nil)
-        d = self.dup
+      def to_h
+        result = super.to_h
 
-        [:EndDateTime, :DateTimeOfService].each do |k|
-          d[k] = Redox::Models.format_datetime(d[k])
+        %w[EndDateTime DateTimeOfService].each do |k|
+          result[k] = Redox::Models.format_datetime(result[k])
         end
 
-        d.to_h.to_json
+        result
+      end
+
+      def as_json(args)
+        self.to_h
       end
     end
   end
