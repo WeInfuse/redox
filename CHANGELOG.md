@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2020-10-??
+### Added
+- AbstractModel that does not add top level key
+- Provider that is the base for PCP
+
 ## [1.3.1] - 2020-10-02
 ### Added
 - Transaction#as\_json
@@ -113,6 +118,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial Release
 
+[1.4.0]: https://github.com/WeInfuse/redox/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/WeInfuse/redox/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/WeInfuse/redox/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/WeInfuse/redox/compare/v1.1.1...v1.2.0

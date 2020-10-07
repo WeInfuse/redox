@@ -1,9 +1,6 @@
 module Redox
   module Models
-    class Transaction < Hashie::Trash
-      include Hashie::Extensions::IgnoreUndeclared
-      include Hashie::Extensions::IndifferentAccess
-
+    class Transaction < AbstractModel
       property :Chargeable, required: false, from: :chargeable, default: {}
       property :DateTimeOfService, required: false, from: :start
       property :Department, required: false, from: :department, default: {}
@@ -45,6 +42,18 @@ module Redox
             }
           }
         }
+        self
+      end
+
+      def add_provider(**kwargs)
+        self[:OrderingProviders] ||= []
+        self[:OrderingProviders] << Provider.new(kwargs)
+        self
+      end
+
+      def add_performer(**kwargs)
+        self[:Performers] ||= []
+        self[:Performers] << Provider.new(kwargs)
         self
       end
 

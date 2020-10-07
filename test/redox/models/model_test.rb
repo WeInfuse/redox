@@ -1,10 +1,21 @@
 require 'test_helper'
 
-class Redox::Models::Model < Hashie::Trash
+class Redox::Models::AbstractModel < Hashie::Trash
   property :HelloWorld, from: :hello_world
 end
 
 class ModelTest < Minitest::Test
+  describe 'abstract model' do
+    describe '#to_json' do
+      it 'has no top level key' do
+        z = Redox::Models::AbstractModel.new
+        z[:HelloWorld] = 10
+
+        assert_equal({HelloWorld: 10}.to_json, z.to_json)
+      end
+    end
+  end
+
   describe 'model' do
     describe 'removes top level key' do
       it 'works for string' do
