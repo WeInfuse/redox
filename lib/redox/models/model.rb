@@ -8,7 +8,7 @@ module Redox
       end
     end
 
-    class Model < Hashie::Trash
+    class AbstractModel < Hashie::Trash
       include Hashie::Extensions::IgnoreUndeclared
       include Hashie::Extensions::IndifferentAccess
 
@@ -23,22 +23,6 @@ module Redox
       alias_method :patient, :Patient
       alias_method :visit, :Visit
       alias_method :meta, :Meta
-
-      def initialize(data = {})
-        if data.is_a?(Hash)
-          if data.include?(key)
-            data = data[key]
-          elsif data.include?(key.to_sym)
-            data = data[key.to_sym]
-          end
-        end
-
-        super(data)
-      end
-
-      def to_h
-        return { key => super.to_h }
-      end
 
       def to_json(args = {})
         return self.to_h.to_json
@@ -63,9 +47,26 @@ module Redox
           return model
         end
       end
+    end
+
+    class Model < AbstractModel
+      def initialize(data = {})
+        if data.is_a?(Hash)
+          if data.include?(key)
+            data = data[key]
+          elsif data.include?(key.to_sym)
+            data = data[key.to_sym]
+          end
+        end
+
+        super(data)
+      end
+
+      def to_h
+        return { key => super.to_h }
+      end
 
       private
-
       def key
         return self.class.to_s.split('::').last.to_s
       end
