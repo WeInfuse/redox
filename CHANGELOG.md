@@ -4,10 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.4.0] - 2020-10-??
+## [1.4.0] - 2020-10-13
 ### Added
 - AbstractModel that does not add top level key
-- Provider that is the base for PCP
+- OrderingProvider that is the base for PCP
+- Provider model
+- Provider#query
+- Created new method that can add helpers dynamically from response
 
 ## [1.3.1] - 2020-10-02
 ### Added

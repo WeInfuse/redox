@@ -55,10 +55,10 @@ class TransactionTest < Minitest::Test
       end
     end
 
-    describe '#add_provider' do
+    describe '#add_ordering_provider' do
       it 'takes kwargs' do
-        transaction.add_provider(id: 'cat', id_type: 'FELINE')
-        assert_equal([Redox::Models::Provider.new(id: 'cat', id_type: 'FELINE')], transaction[:OrderingProviders])
+        transaction.add_ordering_provider(id: 'cat', id_type: 'FELINE')
+        assert_equal([Redox::Models::OrderingProvider.new(id: 'cat', id_type: 'FELINE')], transaction[:OrderingProviders])
         assert_equal([], transaction[:Performers])
       end
     end
@@ -67,7 +67,7 @@ class TransactionTest < Minitest::Test
       it 'takes kwargs' do
         transaction.add_performer(id: 'dog', id_type: 'CANINE')
         assert_equal([], transaction[:OrderingProviders])
-        assert_equal([Redox::Models::Provider.new(id: 'dog', id_type: 'CANINE')], transaction[:Performers])
+        assert_equal([Redox::Models::OrderingProvider.new(id: 'dog', id_type: 'CANINE')], transaction[:Performers])
       end
     end
   end

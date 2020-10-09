@@ -6,6 +6,7 @@ require 'redox/connection'
 require 'redox/authentication'
 require 'redox/models/model'
 require 'redox/models/meta'
+require 'redox/models/ordering_provider'
 require 'redox/models/patient'
 require 'redox/models/provider'
 require 'redox/models/visit'
@@ -20,6 +21,7 @@ require 'redox/request/request'
 require 'redox/request/financial'
 require 'redox/request/patient_admin'
 require 'redox/request/patient_search'
+require 'redox/request/provider'
 
 module Redox
   class Configuration
