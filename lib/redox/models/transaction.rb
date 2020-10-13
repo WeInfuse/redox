@@ -45,15 +45,15 @@ module Redox
         self
       end
 
-      def add_provider(**kwargs)
+      def add_ordering_provider(**kwargs)
         self[:OrderingProviders] ||= []
-        self[:OrderingProviders] << Provider.new(kwargs)
+        self[:OrderingProviders] << OrderingProvider.new(kwargs)
         self
       end
 
       def add_performer(**kwargs)
         self[:Performers] ||= []
-        self[:Performers] << Provider.new(kwargs)
+        self[:Performers] << OrderingProvider.new(kwargs)
         self
       end
 

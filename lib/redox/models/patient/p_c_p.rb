@@ -1,6 +1,6 @@
 module Redox
   module Models
-    class PCP < Provider
+    class PCP < OrderingProvider
       property :NPI, from: :npi
 
       alias_method :npi, :NPI

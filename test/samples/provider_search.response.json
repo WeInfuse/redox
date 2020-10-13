@@ -1,0 +1,53 @@
+{
+  "Meta": {
+    "DataModel": "Provider",
+    "Destinations": [
+      {
+        "ID": "af394f14-b34a-464f-8d24-895f370af4c9",
+        "Name": "Redox EMR"
+      }
+    ],
+    "EventDateTime": "2020-09-21T13:46:12.234Z",
+    "EventType": "ProviderQuery",
+    "FacilityCode": null,
+    "Source": {
+      "ID": "abc12345-7878-7318-7312-731823712737",
+      "Name": "MySource"
+    },
+    "Test": true
+  },
+  "Providers": [
+    {
+      "Demographics": {
+        "FirstName": "Casey",
+        "LastName": "Adams"
+      },
+      "Identifiers": [
+        {
+          "ID": "prof17",
+          "IDType": "Profile ID"
+        },
+        {
+          "ID": "ADAMS",
+          "IDType": "Code"
+        }
+      ]
+    },
+    {
+      "Demographics": {
+        "FirstName": "Casey",
+        "LastName": "Babbit"
+      },
+      "Identifiers": [
+        {
+          "ID": "prof18",
+          "IDType": "Profile ID"
+        },
+        {
+          "ID": "BABBIT",
+          "IDType": "Code"
+        }
+      ]
+    }
+  ]
+}

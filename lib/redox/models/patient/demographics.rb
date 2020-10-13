@@ -1,6 +1,6 @@
 module Redox
   module Models
-    class Demographics < Model
+    class Demographics < AbstractModel
       property :FirstName, required: false, from: :first_name
       property :MiddleName, required: false, from: :middle_name
       property :LastName, required: false, from: :last_name

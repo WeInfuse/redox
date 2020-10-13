@@ -1,6 +1,6 @@
 module Redox
   module Models
-    class Identifier < Model
+    class Identifier < AbstractModel
       property :ID, from: :id
       property :IDType, from: :id_type
 

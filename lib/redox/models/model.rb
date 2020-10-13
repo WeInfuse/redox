@@ -12,6 +12,8 @@ module Redox
       include Hashie::Extensions::IgnoreUndeclared
       include Hashie::Extensions::IndifferentAccess
 
+      HIGH_LEVEL_KEYS = %w[Meta Patient Visit PotentialMatches]
+
       property :Meta, from: :meta, required: false
       property :Patient, from: :patient, required: false
       property :Visit, from: :visit, required: false
@@ -32,20 +34,58 @@ module Redox
         (self.patient&.insurances || []) + (self.visit&.insurances || [])
       end
 
-      class << self
-        def from_response(response)
-          model = Model.new
-          model.response = response
+      def self.from_response(response)
+        model = Model.new
+        model.response = response
 
-          %w[Meta Patient Visit PotentialMatches].each do |k|
-            begin
-              model.send("#{k}=", Module.const_get("Redox::Models::#{k}").new(response[k])) if response[k]
-            rescue
+        HIGH_LEVEL_KEYS.each do |k|
+          begin
+            model.send("#{k}=", Module.const_get("Redox::Models::#{k}").new(response[k])) if response[k]
+          rescue
+          end
+        end
+
+        return model
+      end
+
+      def self.from_response_inflected(response)
+        model = self.from_response(response)
+
+        if (model.response.ok?)
+          data = model.response.parsed_response
+
+          if data.respond_to?(:keys)
+            model_class = nil
+
+            if model.meta&.data_model
+              model_class = "Redox::Models::#{model.meta.data_model}"
+
+              begin
+                model_class = Object.const_get(model_class)
+              rescue NameError
+                model_class = nil
+              end
+            end
+
+            data.keys.each do |key|
+              next if HIGH_LEVEL_KEYS.include?(key.to_s)
+
+              helper_name = key.to_s.downcase.to_sym
+
+              if model_class.nil?
+                model.define_singleton_method(helper_name) { data[key] }
+              else
+                if data[key].is_a?(Array)
+                  model.define_singleton_method(helper_name) { data[key].map {|obj| model_class.new(obj) } }
+                else
+                  model.define_singleton_method(helper_name) { model_class.new(data[key]) }
+                end
+              end
             end
           end
-
-          return model
         end
+
+        return model
       end
     end
 

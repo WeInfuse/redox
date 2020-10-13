@@ -4,6 +4,26 @@ class Redox::Models::AbstractModel < Hashie::Trash
   property :HelloWorld, from: :hello_world
 end
 
+class Redox::Models::RipeBanana < Hash
+end
+
+class SimpleFakeResponse < Hash
+  def initialize(data: {}, ok: true)
+    h    = { parsed_response: data, ok: ok }
+    data = {__junk__: data} unless data.is_a?(Hash)
+
+    super(h.merge(data))
+  end
+
+  def ok?
+    self[:ok] || true
+  end
+
+  def parsed_response
+    self[:parsed_response]
+  end
+end
+
 class ModelTest < Minitest::Test
   describe 'abstract model' do
     describe '#to_json' do
@@ -158,6 +178,128 @@ class ModelTest < Minitest::Test
           it 'concats' do
             assert_equal('0123', model.insurances.first.policy_number)
             assert_equal('3210', model.insurances.last.policy_number)
+          end
+        end
+      end
+    end
+
+    describe '#from_response_inflected' do
+      let(:model) { Redox::Models::Model.from_response_inflected(fake_response) }
+      let(:ok?) { true }
+      let(:fake_response) { SimpleFakeResponse.new(data: model_data, ok: ok?) }
+
+      describe 'high level not a hash' do
+        let(:model_data) { :cat }
+
+        it 'will does not fail' do
+          assert_equal(fake_response, model.response)
+        end
+      end
+
+      describe 'high level is hash' do
+        describe 'key with array data' do
+          let(:meta) { {} }
+          let(:model_data) {
+            meta.merge(
+              BaNanas: [{z: 'm'}, {z: 'x'}]
+            )
+          }
+
+          it 'adds #bananas' do
+            assert_equal([{z: 'm'},{z: 'x'}], model.bananas)
+          end
+
+          describe 'array is of meta.DataModel type' do
+            let(:data_model) { :Banana }
+            let(:meta) { { Meta: { DataModel: data_model } } }
+
+            describe 'model exists' do
+              let(:data_model) { 'RipeBanana' }
+
+              it 'converts objects to type' do
+                assert_equal(Redox::Models::RipeBanana, model.bananas.last.class)
+              end
+            end
+
+            describe 'model does not exist' do
+              it 'leaves it alone' do
+                assert_equal(Hash, model.bananas.last.class)
+              end
+            end
+          end
+        end
+      end
+
+      describe 'does all the #from_response stuff' do
+        describe 'response' do
+          let(:model_data) { 'bob' }
+
+          it 'adds' do
+            assert_equal(fake_response, model.response)
+          end
+        end
+
+        describe 'patient' do
+          let(:model_data) { { 'Patient' => {'Demographics' => {'FirstName' => 'Charles'}} } }
+
+          it 'adds' do
+            assert_equal('Charles', model.patient.demographics.first_name)
+          end
+        end
+
+        describe 'visit' do
+          let(:model_data) { { 'Visit' => {'Insurances' => ['PolicyNumber' => '1277777']} } }
+
+          it 'adds' do
+            assert_equal(1, model.visit.insurances.size)
+          end
+        end
+
+        describe 'meta' do
+          let(:model_data) { { 'Meta' => {'FacilityCode' => '09'}} }
+
+          it 'adds' do
+            assert_equal('09', model.meta.facility_code)
+          end
+        end
+
+        describe 'insurances helper' do
+          let(:model_data) { 'bob' }
+
+          describe 'no insurances' do
+            it 'returns empty arrray' do
+              assert_equal([], model.insurances)
+            end
+          end
+
+          describe 'patient' do
+            let(:model_data) { { 'Patient' => {'Insurances' => ['PolicyNumber' => '0123']} } }
+
+            it 'uses the patient insurances' do
+              assert_equal('0123', model.insurances.first.policy_number)
+            end
+          end
+
+          describe 'visit' do
+            let(:model_data) { { 'Visit' => {'Insurances' => ['PolicyNumber' => '3210']} } }
+
+            it 'uses the visit insurances' do
+              assert_equal('3210', model.insurances.first.policy_number)
+            end
+          end
+
+          describe 'patient and visit' do
+            let(:model_data) {
+              {
+                'Patient' => {'Insurances' => ['PolicyNumber' => '0123']},
+                'Visit'   => {'Insurances' => ['PolicyNumber' => '3210']}
+              }
+            }
+
+            it 'concats' do
+              assert_equal('0123', model.insurances.first.policy_number)
+              assert_equal('3210', model.insurances.last.policy_number)
+            end
           end
         end
       end
