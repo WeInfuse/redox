@@ -9,6 +9,7 @@ module Redox
       property :Insurances, from: :insurances, required: false, default: []
       property :Location, from: :location, required: false, default: DEFAULT_LOCATION
       property :VisitDateTime, from: :start, required: false
+      property :Duration, from: :duration, required: false
       property :VisitNumber, from: :visit_number, required: false
       property :AccountNumber, from: :account_number, required: false
 

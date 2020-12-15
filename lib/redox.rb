@@ -17,11 +17,13 @@ require 'redox/models/patient/identifier'
 require 'redox/models/patient/insurance'
 require 'redox/models/patient/p_c_p'
 require 'redox/models/potential_matches'
+require 'redox/models/scheduling'
 require 'redox/request/request'
 require 'redox/request/financial'
 require 'redox/request/patient_admin'
 require 'redox/request/patient_search'
 require 'redox/request/provider'
+require 'redox/request/scheduling'
 
 module Redox
   class Configuration
