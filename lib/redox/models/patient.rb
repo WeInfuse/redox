@@ -4,6 +4,7 @@ module Redox
       property :Identifiers, from: :identifiers, required: false, default: []
       property :Insurances, from: :insurances, required: false, default: []
       property :Demographics, from: :demographics, required: false
+      property :Contacts, from: :contacts, required: false
       property :PCP, from: :primary_care_provider, required: false
 
       alias_method :identifiers, :Identifiers

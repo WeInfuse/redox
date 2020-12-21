@@ -9,7 +9,7 @@ module Redox
       property :Sex, required: false, from: :sex
       property :Race, required: false, from: :race
       property :IsHispanic, required: false
-      property :MaritalStatus, required: false, from: :martial_status
+      property :MaritalStatus, required: false, from: :marital_status
       property :IsDeceased, required: false
       property :DeathDateTime, required: false
       property :Language, required: false, from: :language
@@ -25,7 +25,7 @@ module Redox
       alias_method :ssn, :SSN
       alias_method :sex, :Sex
       alias_method :race, :Race
-      alias_method :martial_status, :MaritalStatus
+      alias_method :marital_status, :MaritalStatus
       alias_method :language, :Language
       alias_method :address, :Address
       alias_method :phone_number, :PhoneNumber
