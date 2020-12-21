@@ -17,6 +17,21 @@ class PatientTest < Minitest::Test
       end
     end
 
+    describe 'contacts' do
+      it 'can be initialized' do
+        p = Redox::Models::Patient.new('Contacts' => {'FirstName' => 'Peter'})
+
+        assert_equal('Peter', p.Contacts['FirstName'])
+      end
+
+      it 'can be built' do
+        p = Redox::Models::Patient.new
+
+        p.contacts.first_name = 'Peter'
+        assert_equal('Peter', p.Contacts['FirstName'])
+      end
+    end
+
     describe 'pcp' do
       it 'can be initialized' do
         p = Redox::Models::Patient.new('PCP' => {'FirstName' => 'Joe'})
