@@ -17,6 +17,26 @@ class PatientTest < Minitest::Test
       end
     end
 
+    describe 'contacts' do
+      it 'can be initialized' do
+        p = Redox::Models::Patient.new('Contacts' => [{'FirstName' => 'Peter'}])
+
+        assert_equal('Peter', p.Contacts.first['FirstName'])
+      end
+
+      it 'can be built' do
+        p = Redox::Models::Patient.new
+        p.contacts = [{"FirstName"=>"Barbara", "MiddleName"=>nil, "LastName"=>"Bixby"}]
+        assert_equal('Bixby', p.Contacts.first['LastName'])
+      end
+
+      it 'can be converted from an array of hashes to Contact objects using method' do
+        p = Redox::Models::Patient.new(load_sample('patient_callback.request.json', parse: true))
+
+        assert(p.contacts.first.is_a?(Redox::Models::Contact))
+      end
+    end
+
     describe 'pcp' do
       it 'can be initialized' do
         p = Redox::Models::Patient.new('PCP' => {'FirstName' => 'Joe'})

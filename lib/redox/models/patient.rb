@@ -4,10 +4,12 @@ module Redox
       property :Identifiers, from: :identifiers, required: false, default: []
       property :Insurances, from: :insurances, required: false, default: []
       property :Demographics, from: :demographics, required: false
+      property :Contacts, from: :contacts, required: false, default: []
       property :PCP, from: :primary_care_provider, required: false
 
       alias_method :identifiers, :Identifiers
       alias_method :insurances, :Insurances
+      alias_method :contacts, :Contacts
 
       def demographics
         self[:Demographics] = Demographics.new(self[:Demographics]) unless self[:Demographics].is_a?(Redox::Models::Demographics)
@@ -20,6 +22,10 @@ module Redox
 
       def primary_care_provider
         self[:PCP] ||= PCP.new
+      end
+
+      def contacts
+        self[:Contacts] = self[:Contacts].map {|contact| contact.is_a?(Redox::Models::Contact) ? contact : Contact.new(contact)}
       end
 
       def add_identifier(type: , value: )
