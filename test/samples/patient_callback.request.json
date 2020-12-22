@@ -42,6 +42,33 @@
             "IDType" : "NIST"
          }
       ],
+      "Contacts": [
+         {
+            "FirstName": "Barbara",
+            "MiddleName": "Beatrice",
+            "LastName": "Bixby",
+            "Address": {
+               "StreetAddress": "4762 Hickory Street",
+               "City": "Monroe",
+               "State": "WI",
+               "ZIP": "53566",
+               "County": "Green",
+               "Country": "US"
+            },
+            "PhoneNumber": {
+               "Home": "+18088675303",
+               "Office": "+17077543758",
+               "Mobile": "+19189368865"
+            },
+            "RelationToPatient": "Mother",
+            "EmailAddresses": [
+               "barb.bixby@test.net"
+            ],
+            "Roles": [
+               "Emergency Contact"
+            ]
+         }
+      ],
       "Insurances": [
          {
             "Extensions": {
