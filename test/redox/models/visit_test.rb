@@ -43,6 +43,15 @@ class VisitTest < Minitest::Test
       end
     end
 
+    describe '#add_equipment' do
+      it 'will add equipment' do
+        visit.add_equipment(description: 'cats and cats', code: 'meowzers')
+
+        assert_equal(1, visit.Equipment.size)
+        assert_equal({Description: 'cats and cats', Code: 'meowzers'}, visit.Equipment[0])
+      end
+    end
+
     describe 'visit date' do
       describe '#start' do
         it 'is a helper to VisitDateTime' do

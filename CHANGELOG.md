@@ -4,9 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.5.2] - 2021-01-08
+### Added
+- Visit#Type
+- Visit#Status
+- Visit#Reason
+- Visit#Equipment
+
 ## [1.5.1] - 2020-12-22
 ### Added
-
 - Contacts model
 - Patient#contacts
 
@@ -53,7 +59,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Moving to Requst classes instead of mixing in logic to models (kept backwards compatibility)
 - Added potential matches to responses and implemented for patient search
 
-=======
 ### Added
 - PotentialMatches class
 
@@ -138,6 +143,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial Release
 
+[1.5.2]: https://github.com/WeInfuse/redox/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/WeInfuse/redox/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/WeInfuse/redox/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/WeInfuse/redox/compare/v1.3.1...v1.4.0

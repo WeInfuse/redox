@@ -12,6 +12,10 @@ module Redox
       property :Duration, from: :duration, required: false
       property :VisitNumber, from: :visit_number, required: false
       property :AccountNumber, from: :account_number, required: false
+      property :Status, from: :status, required: false
+      property :Type, from: :type, required: false
+      property :Reason, from: :reason, required: false
+      property :Equipment, from: :equipment, required: false
 
       alias_method :insurances, :Insurances
       alias_method :start, :VisitDateTime
@@ -25,6 +29,12 @@ module Redox
       def facility=(v)
         self[:Location] ||= DEFAULT_LOCATION
         self[:Location][:Facility] = v
+        self
+      end
+
+      def add_equipment(description: nil, code: nil)
+        self[:Equipment] ||= []
+        self[:Equipment] << { Description: description, Code: code }
         self
       end
 
