@@ -105,5 +105,59 @@ class VisitTest < Minitest::Test
         end
       end
     end
+
+    describe 'discharge date' do
+      describe '#end' do
+        it 'is a helper to DischargeDateTime' do
+          visit.end = 'dogs'
+
+          assert_equal('dogs', visit[:DischargeDateTime])
+        end
+      end
+
+      describe 'serialization' do
+        let(:data) { { 'DischargeDateTime' => datetime } }
+
+        describe 'date or time object' do
+          let(:datetime) { Time.now }
+
+          describe '#to_json' do
+            it 'converts to redox format' do
+              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), deserialized.dig('Visit', 'DischargeDateTime'))
+            end
+          end
+
+          describe '#as_json' do
+            it 'converts to redox format' do
+              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), as_json.dig('DischargeDateTime'))
+            end
+          end
+        end
+
+        describe 'string object' do
+          let(:datetime) { '2020-04-05T12:38:41.483' }
+
+          describe '#to_json' do
+            it 'leaves it be' do
+              assert_equal(datetime, deserialized.dig('Visit', 'DischargeDateTime'))
+            end
+          end
+
+          describe '#as_json' do
+            it 'leaves it be' do
+              assert_equal(datetime, as_json.dig('DischargeDateTime'))
+            end
+          end
+        end
+
+        describe 'nil' do
+          let(:datetime) { nil }
+
+          it 'leaves it be' do
+            assert_nil(deserialized.dig('Visit', 'DischargeDateTime'))
+          end
+        end
+      end
+    end
   end
 end
