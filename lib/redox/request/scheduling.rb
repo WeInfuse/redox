@@ -5,6 +5,7 @@ module Redox
       CANCEL_META       = Redox::Models::Meta.new(EventType: 'Cancel', DataModel: 'Scheduling')
       RESCHEDULE_META   = Redox::Models::Meta.new(EventType: 'Reschedule', DataModel: 'Scheduling')
       MODIFICATION_META = Redox::Models::Meta.new(EventType: 'Modification', DataModel: 'Scheduling')
+      COMPLETED_META = Redox::Models::Meta.new(EventType: 'Completed', DataModel: 'Scheduling')
 
       def self.create(model, meta: Redox::Models::Meta.new)
         meta = CREATE_META.merge(meta)
@@ -13,6 +14,11 @@ module Redox
 
       def self.cancel(model, meta: Redox::Models::Meta.new)
         meta = CANCEL_META.merge(meta)
+        return Redox::Models::Model.from_response((RedoxClient.connection.request(body: Redox::Request.build_body(model, meta))))
+      end
+
+      def self.completed(model, meta: Redox::Models::Meta.new)
+        meta = COMPLETED_META.merge(meta)
         return Redox::Models::Model.from_response((RedoxClient.connection.request(body: Redox::Request.build_body(model, meta))))
       end
 
