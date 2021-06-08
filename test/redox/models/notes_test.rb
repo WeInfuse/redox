@@ -23,15 +23,15 @@ class NotesTest < Minitest::Test
 
       describe 'Provider subsection' do
          it 'can be initialized' do
-            notes = Redox::Models::Notes.new('Provider' => {'ID' => '123'})
+            notes = Redox::Models::Notes.new('Note' => {'ContentType' => 'Base64 Encoded', 'DocumentType' => 'Empty File', 'DocumentID' => 'b169267c', 'Provider' => {'ID' => '123'}})
 
-            assert_equal('123', notes.Provider['ID'])
+            assert_equal('123', notes.note.Provider['ID'])
          end
 
          it 'can be built' do
-            notes = Redox::Models::Notes.new('Provider' => {'ID' => '123'})
+            notes = Redox::Models::Notes.new('Note' => {'ContentType' => 'Base64 Encoded', 'DocumentType' => 'Empty File', 'DocumentID' => 'b169267c', 'Provider' => {'ID' => '123'}})
 
-            notes.provider.id = 'Bob'
+            notes.note.provider.id = 'Bob'
             assert_equal('Bob', notes.Note['ID'])
          end
       end
