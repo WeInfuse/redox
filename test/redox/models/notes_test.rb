@@ -31,16 +31,8 @@ class NotesTest < Minitest::Test
          it 'can be built' do
             notes = Redox::Models::Notes.new('Note' => {'ContentType' => 'Base64 Encoded', 'DocumentType' => 'Empty File', 'DocumentID' => 'b169267c', 'Provider' => {'ID' => '123'}})
 
-            notes.note.provider.id = 'Bob'
-            assert_equal('Bob', notes.Note['ID'])
-         end
-      end
-
-      describe 'Redox::Models::NoteProvider' do
-         it 'can be initialized' do
-            note_provider = Redox::Models::NoteProvider.new(id: "new_id!")
-
-            assert_equal('new_id!', note_provider.ID)
+            notes.note.provider = {'ID' => "Bob"}
+            assert_equal('Bob', notes.Note['Provider']['ID'])
          end
       end
 
