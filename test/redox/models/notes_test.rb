@@ -21,6 +21,21 @@ class NotesTest < Minitest::Test
          end
       end
 
+      describe 'Provider subsection' do
+         it 'can be initialized' do
+            notes = Redox::Models::Notes.new('Provider' => {'ID' => '123'})
+
+            assert_equal('123', notes.Provider['ID'])
+         end
+
+         it 'can be built' do
+            notes = Redox::Models::Notes.new('Provider' => {'ID' => '123'})
+
+            notes.provider.id = 'Bob'
+            assert_equal('Bob', notes.Note['ID'])
+         end
+      end
+
       describe 'Redox::Models::NoteProvider' do
          it 'can be initialized' do
             note_provider = Redox::Models::NoteProvider.new(id: "new_id!")
