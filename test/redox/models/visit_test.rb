@@ -43,6 +43,15 @@ class VisitTest < Minitest::Test
       end
     end
 
+    describe '#add_equipment' do
+      it 'will add equipment' do
+        visit.add_equipment(description: 'cats and cats', code: 'meowzers')
+
+        assert_equal(1, visit.Equipment.size)
+        assert_equal({Description: 'cats and cats', Code: 'meowzers'}, visit.Equipment[0])
+      end
+    end
+
     describe 'visit date' do
       describe '#start' do
         it 'is a helper to VisitDateTime' do
@@ -92,6 +101,60 @@ class VisitTest < Minitest::Test
 
           it 'leaves it be' do
             assert_nil(deserialized.dig('Visit', 'VisitDateTime'))
+          end
+        end
+      end
+    end
+
+    describe 'discharge date' do
+      describe '#end' do
+        it 'is a helper to DischargeDateTime' do
+          visit.end = 'dogs'
+
+          assert_equal('dogs', visit[:DischargeDateTime])
+        end
+      end
+
+      describe 'serialization' do
+        let(:data) { { 'DischargeDateTime' => datetime } }
+
+        describe 'date or time object' do
+          let(:datetime) { Time.now }
+
+          describe '#to_json' do
+            it 'converts to redox format' do
+              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), deserialized.dig('Visit', 'DischargeDateTime'))
+            end
+          end
+
+          describe '#as_json' do
+            it 'converts to redox format' do
+              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), as_json.dig('DischargeDateTime'))
+            end
+          end
+        end
+
+        describe 'string object' do
+          let(:datetime) { '2020-04-05T12:38:41.483' }
+
+          describe '#to_json' do
+            it 'leaves it be' do
+              assert_equal(datetime, deserialized.dig('Visit', 'DischargeDateTime'))
+            end
+          end
+
+          describe '#as_json' do
+            it 'leaves it be' do
+              assert_equal(datetime, as_json.dig('DischargeDateTime'))
+            end
+          end
+        end
+
+        describe 'nil' do
+          let(:datetime) { nil }
+
+          it 'leaves it be' do
+            assert_nil(deserialized.dig('Visit', 'DischargeDateTime'))
           end
         end
       end
