@@ -2,10 +2,24 @@ require 'test_helper'
 
 class NotesTest < Minitest::Test
    describe 'notes' do
-      
       let(:notes) { Redox::Models::Notes.new(data) }
       let(:data) { {} }
       let(:deserialized) { JSON.parse(notes.to_json) }
+
+      describe 'Note subsection' do
+         it 'can be initialized' do
+            notes = Redox::Models::Notes.new('Note' => {'ContentType' => 'Base64 Encoded'})
+
+            assert_equal('Base64 Encoded', notes.Note['ContentType'])
+         end
+
+         it 'can be built' do
+            notes = Redox::Models::Notes.new('Note' => {'ContentType' => 'Base64 Encoded', 'DocumentType' => 'Empty File', 'DocumentID' => 'b169267c'})
+
+            notes.note.content_type = 'Bob'
+            assert_equal('Bob', notes.Note['ContentType'])
+         end
+      end
 
       describe 'Redox::Models::NoteProvider' do
          it 'can be initialized' do
@@ -28,8 +42,8 @@ class NotesTest < Minitest::Test
             assert_equal(Redox::Models::Note, notes.note.class)
          end
 
-         it 'has an empty array for appointment_info' do
-            assert_equal([], notes.appointment_info)
+         it 'has a notes' do
+            assert_equal(Redox::Models::Notes, notes.class)
          end
       end
    end
