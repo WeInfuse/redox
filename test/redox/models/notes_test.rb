@@ -14,10 +14,11 @@ class NotesTest < Minitest::Test
          end
 
          it 'can be built' do
-            notes = Redox::Models::Notes.new('Note' => {'ContentType' => 'Base64 Encoded', 'DocumentType' => 'Empty File', 'DocumentID' => 'b169267c'})
+            notes = Redox::Models::Notes.new('Note' => {'ContentType' => 'Base64 Encoded', 'DocumentType' => 'Empty File', 'DocumentID' => 'b169267c'}, 'Meta' => {"DataModel" => "Notes"})
 
             notes.note.content_type = 'Bob'
             assert_equal('Bob', notes.Note['ContentType'])
+            assert_equal('Notes', notes.Meta['DataModel'])
          end
 
          describe 'Provider subsection of Notes subsection' do
@@ -37,14 +38,6 @@ class NotesTest < Minitest::Test
       end
 
       describe 'default' do
-         it 'has a patient' do
-            assert_equal(Redox::Models::Patient, notes.patient.class)
-         end
-
-         it 'has a visit' do
-            assert_equal(Redox::Models::Visit, notes.visit.class)
-         end
-
          it 'has a note' do
             assert_equal(Redox::Models::Note, notes.note.class)
          end

@@ -23,13 +23,16 @@ module Request
 
             describe 'request' do
                it 'has an endpoint' do
-               assert_requested(@post_stub, times: 1)
+                  assert_requested(@post_stub, times: 1)
                end
                
                it 'sends notes data' do
-               puts request_body
-               assert_equal('New', Redox::Models::Notes.new(request_body).Meta['EventType'])
-               assert_equal('Notes', Redox::Models::Notes.new(request_body).Meta['DataModel'])
+                  assert_equal('New', Redox::Models::Notes.new(request_body).Meta['EventType'])
+                  assert_equal('Notes', Redox::Models::Notes.new(request_body).Meta['DataModel'])
+               end
+
+               it 'returns a valid response' do
+                  assert(response.is_a?(Redox::Models::Model))
                end
             end
          end
