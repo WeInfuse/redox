@@ -1,0 +1,23 @@
+{
+  "Meta": {
+     "DataModel": "Notes",
+     "EventType": "New"
+   },
+   "Patient": {
+      "Identifiers": [
+         {
+            "ID": "0000000001",
+            "IDType": "MR"
+         }
+      ]
+   },
+   "Note": {
+      "ContentType": "Base64 Encoded",
+      "DocumentType": "Empty File",
+      "DocumentID": "b169267c", 
+      "Provider": {
+         "ID": "4356789876"
+      }
+   }
+}
+
