@@ -26,7 +26,7 @@ module Request
                   assert_requested(@post_stub, times: 1)
                end
                
-               it 'sends notes data' do
+               it 'sends meta' do
                   assert_equal('New', Redox::Models::Notes.new(request_body).Meta['EventType'])
                   assert_equal('Notes', Redox::Models::Notes.new(request_body).Meta['DataModel'])
                end
