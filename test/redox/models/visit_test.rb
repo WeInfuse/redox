@@ -43,6 +43,40 @@ class VisitTest < Minitest::Test
       end
     end
 
+    describe 'ReferringProvider' do
+      describe '#referring_provider_id=' do
+        it 'is a helper to create ReferringProvider[:ID]' do
+          visit.referring_provider_id = '123'
+
+          assert_equal('123', visit[:ReferringProvider][:ID])
+        end
+      end
+
+      describe '#referring_provider_id_type=' do
+        it 'is a helper to create ReferringProvider[:IDType]' do
+          visit.referring_provider_id_type = 'NPI'
+
+          assert_equal('NPI', visit[:ReferringProvider][:IDType])
+        end
+      end
+
+      describe '#referring_provider_first_name=' do
+        it 'is a helper to create ReferringProvider[:FirstName]' do
+          visit.referring_provider_first_name = 'May'
+
+          assert_equal('May', visit[:ReferringProvider][:FirstName])
+        end
+      end
+
+      describe '#referring_provider_last_name=' do
+        it 'is a helper to create ReferringProvider[:LastName]' do
+          visit.referring_provider_first_name = 'Bee'
+
+          assert_equal('Bee', visit[:ReferringProvider][:LastName])
+        end
+      end
+    end
+
     describe '#add_equipment' do
       it 'will add equipment' do
         visit.add_equipment(description: 'cats and cats', code: 'meowzers')

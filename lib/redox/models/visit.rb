@@ -5,6 +5,12 @@ module Redox
         Department: nil,
         Facility: nil
       }
+      DEFAULT_REFERRING_PROVIDER = {
+        ID: nil,
+        IDType: nil,
+        FirstName: nil,
+        LastName: nil
+      }
 
       property :Insurances, from: :insurances, required: false, default: []
       property :Location, from: :location, required: false, default: DEFAULT_LOCATION
@@ -18,10 +24,12 @@ module Redox
       property :Equipment, from: :equipment, required: false
       property :CancelReason, from: :cancel_reason, required: false
       property :DischargeDateTime, from: :end, required: false
+      property :ReferringProvider, from: :referring_provider, required: false, default: DEFAULT_REFERRING_PROVIDER
 
       alias_method :insurances, :Insurances
       alias_method :start, :VisitDateTime
       alias_method :end, :DischargeDateTime
+      alias_method :referring_provider, :ReferringProvider
 
       def department=(v)
         self[:Location] ||= DEFAULT_LOCATION
@@ -33,6 +41,26 @@ module Redox
         self[:Location] ||= DEFAULT_LOCATION
         self[:Location][:Facility] = v
         self
+      end
+
+      def referring_provider_id=(v)
+        self[:ReferringProvider] ||= DEFAULT_REFERRING_PROVIDER
+        self[:ReferringProvider][:ID] = v
+      end
+
+      def referring_provider_id_type=(v)
+        self[:ReferringProvider] ||= DEFAULT_REFERRING_PROVIDER
+        self[:ReferringProvider][:IDType] = v
+      end
+
+      def referring_provider_first_name=(v)
+        self[:ReferringProvider] ||= DEFAULT_REFERRING_PROVIDER
+        self[:ReferringProvider][:FirstName] = v
+      end
+
+      def referring_provider_last_name=(v)
+        self[:ReferringProvider] ||= DEFAULT_REFERRING_PROVIDER
+        self[:ReferringProvider][:LastName] = v
       end
 
       def add_equipment(description: nil, code: nil)
