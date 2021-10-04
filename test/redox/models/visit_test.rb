@@ -70,7 +70,7 @@ class VisitTest < Minitest::Test
 
       describe '#referring_provider_last_name=' do
         it 'is a helper to create ReferringProvider[:LastName]' do
-          visit.referring_provider_first_name = 'Bee'
+          visit.referring_provider_last_name = 'Bee'
 
           assert_equal('Bee', visit[:ReferringProvider][:LastName])
         end
