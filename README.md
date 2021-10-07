@@ -113,7 +113,7 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 To install this gem onto your local machine, run `bundle exec rake install`. 
 
-If you have already merged changes into the master branch of this repo and are looking to release a new version, remember to switch out of your local feature branch (if you are on one) to the master or main branch of this repo/ Then pull all changes down so you have an up to date code base.
+If you have already merged changes into the master branch of this repo and are looking to release a new version, remember to switch out of your local feature branch (if you are on one) to the master or main branch of this repo. Then pull all changes down so you have an up to date code base.
 
 To actually release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
