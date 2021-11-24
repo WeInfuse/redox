@@ -43,6 +43,40 @@ class VisitTest < Minitest::Test
       end
     end
 
+    describe 'AttendingProvider' do
+      describe '#attending_provider_id=' do
+        it 'is a helper to create AttendingProvider[:ID]' do
+          visit.attending_provider_id = '234'
+
+          assert_equal('234', visit[:AttendingProvider][:ID])
+        end
+      end
+
+      describe '#attending_provider_id_type=' do
+        it 'is a helper to create AttendingProvider[:IDType]' do
+          visit.attending_provider_id_type = 'Profile ID'
+
+          assert_equal('Profile ID', visit[:AttendingProvider][:IDType])
+        end
+      end
+
+      describe '#attending_provider_first_name=' do
+        it 'is a helper to create AttendingProvider[:FirstName]' do
+          visit.attending_provider_first_name = 'Joe'
+
+          assert_equal('Joe', visit[:AttendingProvider][:FirstName])
+        end
+      end
+
+      describe '#attending_provider_last_name=' do
+        it 'is a helper to create AttendingProvider[:LastName]' do
+          visit.attending_provider_last_name = 'King'
+
+          assert_equal('King', visit[:AttendingProvider][:LastName])
+        end
+      end
+    end
+
     describe 'ReferringProvider' do
       describe '#referring_provider_id=' do
         it 'is a helper to create ReferringProvider[:ID]' do
