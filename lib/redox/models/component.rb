@@ -5,7 +5,7 @@ module Redox
       property :Name, required: false, from: :name
       property :Value, required: false, from: :value
 
-      alias_method :id, :Id
+      alias_method :id, :ID
       alias_method :name, :Name
       alias_method :value, :Value
     end
