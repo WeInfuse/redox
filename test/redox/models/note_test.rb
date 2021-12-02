@@ -27,7 +27,7 @@ class NoteTest < Minitest::Test
 
         it 'serializes correctly' do
           assert_equal(Array, deserialized.dig('Components').class)
-          assert_equal(true, deserialized.dig('Components').first.include?('Id'))
+          assert_equal(true, deserialized.dig('Components').first.include?('ID'))
           assert_equal(true, deserialized.dig('Components').first.include?('Name'))
           assert_equal(true, deserialized.dig('Components').first.include?('Value'))
         end
