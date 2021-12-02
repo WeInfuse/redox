@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.7.4] - 2021-12-2
+### Added
+- Component Model ID Property Changed
+
 ## [1.7.3] - 2021-11-24
 ### Added
 - Visit#AttendingProvider and helpers for ID, IDType, FirstName, LastName
@@ -174,6 +178,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial Release
 
+[1.7.4]: https://github.com/WeInfuse/redox/compare/v1.7.3...v1.7.4
+[1.7.3]: https://github.com/WeInfuse/redox/compare/v1.7.2...v1.7.3
 [1.7.2]: https://github.com/WeInfuse/redox/compare/v1.7.1...v1.7.2
 [1.7.1]: https://github.com/WeInfuse/redox/compare/v1.7...v1.7.1
 [1.7]: https://github.com/WeInfuse/redox/compare/v1.6.1...v1.7
