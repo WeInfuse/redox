@@ -1,7 +1,7 @@
 module Redox
   module Models
     class Component < AbstractModel
-      property :Id, required: false, from: :id
+      property :ID, required: false, from: :id
       property :Name, required: false, from: :name
       property :Value, required: false, from: :value
 
