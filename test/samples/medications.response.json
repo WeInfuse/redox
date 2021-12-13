@@ -1,0 +1,258 @@
+{
+   "Meta": {
+      "DataModel": "Medications",
+      "EventType": "Administration",
+      "EventDateTime": "2021-12-03T16:44:13.517Z",
+      "Test": true,
+      "Source": {
+         "ID": "7ce6f387-c33c-417d-8682-81e83628cbd9",
+         "Name": "Redox Dev Tools"
+      },
+      "Destinations": [
+         {
+            "ID": "af394f14-b34a-464f-8d24-895f370af4c9",
+            "Name": "Redox EMR"
+         }
+      ],
+      "Logs": [
+         {
+            "ID": "d9f5d293-7110-461e-a875-3beb089e79f3",
+            "AttemptID": "925d1617-2fe0-468c-a14c-f8c04b572c54"
+         }
+      ],
+      "Message": {
+         "ID": 5565
+      },
+      "Transmission": {
+         "ID": 12414
+      },
+      "FacilityCode": null
+   },
+   "Patient": {
+      "Identifiers": [
+         {
+            "ID": "0000000001",
+            "IDType": "MR"
+         },
+         {
+            "ID": "e167267c-16c9-4fe3-96ae-9cff5703e90a",
+            "IDType": "EHRID"
+         },
+         {
+            "ID": "a1d4ee8aba494ca",
+            "IDType": "NIST"
+         }
+      ],
+      "Demographics": {
+         "FirstName": "Timothy",
+         "MiddleName": "Paul",
+         "LastName": "Bixby",
+         "DOB": "2008-01-06",
+         "SSN": "101-01-0001",
+         "Sex": "Male",
+         "Race": "White",
+         "IsHispanic": null,
+         "Religion": null,
+         "MaritalStatus": "Single",
+         "IsDeceased": null,
+         "DeathDateTime": null,
+         "PhoneNumber": {
+            "Home": "+18088675301",
+            "Office": null,
+            "Mobile": null
+         },
+         "EmailAddresses": [],
+         "Language": "en",
+         "Citizenship": [],
+         "Address": {
+            "StreetAddress": "4762 Hickory Street",
+            "City": "Monroe",
+            "State": "WI",
+            "ZIP": "53566",
+            "County": "Green",
+            "Country": "US"
+         }
+      },
+      "Notes": []
+   },
+   "Visit": {
+      "VisitDateTime": "2021-12-03T16:44:14.074Z",
+      "VisitNumber": "1234",
+      "AccountNumber": null,
+      "PatientClass": null,
+      "Location": {
+         "Type": null,
+         "Facility": null,
+         "Department": null,
+         "Room": null,
+         "Bed": null
+      },
+      "AttendingProvider": {
+         "ID": null,
+         "IDType": null,
+         "FirstName": null,
+         "LastName": null,
+         "Credentials": [],
+         "Address": {
+            "StreetAddress": null,
+            "City": null,
+            "State": null,
+            "ZIP": null,
+            "County": null,
+            "Country": null
+         },
+         "EmailAddresses": [],
+         "PhoneNumber": {
+            "Office": null
+         },
+         "Location": {
+            "Type": null,
+            "Facility": null,
+            "Department": null,
+            "Room": null
+         }
+      },
+      "ReferringProvider": {
+         "ID": null,
+         "IDType": null,
+         "FirstName": null,
+         "LastName": null,
+         "Credentials": [],
+         "Address": {
+            "StreetAddress": null,
+            "City": null,
+            "State": null,
+            "ZIP": null,
+            "County": null,
+            "Country": null
+         },
+         "EmailAddresses": [],
+         "PhoneNumber": {
+            "Office": null
+         },
+         "Location": {
+            "Type": null,
+            "Facility": null,
+            "Department": null,
+            "Room": null
+         }
+      }
+   },
+   "Administrations": [
+      {
+         "Status": "Complete",
+         "Medication": {
+            "Order": {
+               "ID": "7c0e58ad-d642-4b4a-9946-2f6ccc0b0fc6"
+            },
+            "LotNumber": null,
+            "Dose": {
+               "Quantity": 4,
+               "Units": "mg"
+            },
+            "Rate": {
+               "Quantity": null,
+               "Units": null
+            },
+            "Route": {
+               "Code": "C38288",
+               "CodeSystem": "2.16.840.1.113883.3.26.1.1",
+               "CodeSystemName": "NCI Thesaurus",
+               "Name": "Oral",
+               "AltCodes": []
+            },
+            "Components": [],
+            "Product": {
+               "Code": "104894",
+               "CodeSystem": "2.16.840.1.113883.6.88",
+               "CodeSystemName": "RxNorm",
+               "Name": "Ondansetron 4 Mg Po Tbdp",
+               "AltCodes": []
+            },
+            "Indications": []
+         },
+         "StartDate": "2021-12-03T16:44:13.515Z",
+         "EndDate": null,
+         "AdministeringProvider": {
+            "NPI": "4356789876",
+            "ID": "4356789876",
+            "IDType": "NPI",
+            "FirstName": "Pat",
+            "LastName": "Granite",
+            "Credentials": [
+               "MD"
+            ],
+            "Address": {
+               "StreetAddress": "123 Main St.",
+               "City": "Madison",
+               "State": "WI",
+               "ZIP": "53703",
+               "County": "Dane",
+               "Country": "USA"
+            },
+            "EmailAddresses": [],
+            "PhoneNumber": {
+               "Office": "+16085551234"
+            },
+            "Location": {
+               "Type": null,
+               "Facility": null,
+               "Department": null,
+               "Room": null
+            }
+         },
+         "OrderedBy": {
+            "ID": "4356789876",
+            "IDType": "NPI",
+            "FirstName": "Pat",
+            "LastName": "Granite",
+            "Credentials": [
+               "MD"
+            ],
+            "Address": {
+               "StreetAddress": "123 Main St.",
+               "City": "Madison",
+               "State": "WI",
+               "ZIP": "53703",
+               "County": "Dane",
+               "Country": "USA"
+            },
+            "EmailAddresses": [],
+            "PhoneNumber": {
+               "Office": "+16085551234"
+            },
+            "Location": {
+               "Type": null,
+               "Facility": null,
+               "Department": null,
+               "Room": null
+            }
+         },
+         "VerifiedBy": {
+            "ID": null,
+            "IDType": null,
+            "FirstName": null,
+            "LastName": null,
+            "Credentials": [],
+            "Address": {
+               "StreetAddress": null,
+               "City": null,
+               "State": null,
+               "ZIP": null,
+               "County": null,
+               "Country": null
+            },
+            "EmailAddresses": [],
+            "PhoneNumber": {
+               "Office": null
+            },
+            "Location": {
+               "Type": null,
+               "Facility": null,
+               "Department": null,
+               "Room": null
+            }
+         }
+      }
+   ]
+}

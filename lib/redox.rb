@@ -16,6 +16,9 @@ require 'redox/models/notes'
 require 'redox/models/note'
 require 'redox/models/media'
 require 'redox/models/media_upload'
+require 'redox/models/medication'
+require 'redox/models/medications'
+require 'redox/models/administration'
 require 'redox/models/patient/demographics'
 require 'redox/models/patient/contacts'
 require 'redox/models/patient/identifier'
@@ -32,6 +35,7 @@ require 'redox/request/patient_search'
 require 'redox/request/provider'
 require 'redox/request/scheduling'
 require 'redox/request/media'
+require 'redox/request/medications'
 
 module Redox
   class Configuration
