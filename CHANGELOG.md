@@ -4,9 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.8.1] - 2022-1-19
+## [1.8.1] - 2022-1-25
 ### Added
-- Components, OrderedBy, Indications to Medication Model
+- Components, OrderedBy, Indications, and AdministeringProvider to Medication Model
 
 ## [1.8.0] - 2021-12-13
 ### Added
