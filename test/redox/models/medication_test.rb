@@ -2,7 +2,7 @@ require 'test_helper'
 
 class MedicationTest < Minitest::Test
   describe 'medications' do
-    med_data = {
+    let(:med_data) {{
       order: {"ID": 1},
       lot_number: nil,
       start_date: nil,
@@ -13,10 +13,10 @@ class MedicationTest < Minitest::Test
       indications: [{ "Code": 1, "Codeset": "ICD-10" }],
       ordered_by: { "ID": 1 },
       administering_provider: { "ID": 1, "NPI": 1 },
-    }
+    }}
 
     describe 'default' do
-      med = Redox::Models::Medication.new(med_data)
+      let(:med) { Redox::Models::Medication.new(med_data) }
 
       it 'builds order' do
         assert_equal(1, med["Order"]["ID"])
