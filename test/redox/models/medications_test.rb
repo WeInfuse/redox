@@ -28,8 +28,13 @@ class MedicationsTest < Minitest::Test
 
       it 'can be built' do
         m = Redox::Models::Medications.new
-        m.administrations = [{"Status"=>"Complete", "Medication"=>{"Product"=>{"Code"=>"12341234"}}}]
+        m.administrations = [{"Status"=>"Complete", "Medication"=>{"Product"=>{"Code"=>"12341234"}, "Components" => [], "OrderedBy" => {}, "Indications" => [], "AdministeringProvider" => {}}}]
+        med = m.administrations.first["Medication"]
         assert_equal('Complete', m.Administrations.first['Status'])
+        assert_equal([], med["Components"])
+        assert_equal({}, med["OrderedBy"])
+        assert_equal([], med["Indications"])
+        assert_equal({}, med["AdministeringProvider"])
       end
     end
   end
