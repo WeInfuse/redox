@@ -10,6 +10,8 @@ module Redox
       property :DocumentID, from: :document_id, required: false
       property :Availability, from: :availability, required: false
       property :Provider, from: :provider, required: false
+      property :DirectAddressFrom, from: :direct_address_from, required: false
+      property :DirectAddressTo, from: :direct_address_to, required: false
 
       alias_method  :file_type, :FileType
       alias_method  :file_name, :FileName
@@ -18,6 +20,8 @@ module Redox
       alias_method  :document_id, :DocumentID
       alias_method  :availability, :Availability
       alias_method  :provider, :Provider
+      alias_method  :direct_address_from, :DirectAddressFrom
+      alias_method  :direct_address_to, :DirectAddressTo
 
       def availability=(value)
         case value
