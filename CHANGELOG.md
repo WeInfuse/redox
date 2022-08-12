@@ -4,9 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.8.3] - 2022-8-12
+### Added
+- Improved RedoxException error handling
+
 ## [1.8.2] - 2022-2-23
 ### Added
 - DirectAddressFrom and DirectAddressTo to Media Model
+
 ## [1.8.1] - 2022-1-25
 ### Added
 - Components, OrderedBy, Indications, and AdministeringProvider to Medication Model
@@ -190,6 +195,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial Release
 
+[1.8.3]: https://github.com/WeInfuse/redox/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/WeInfuse/redox/compare/v1.8.1...v1.8.2
 [1.8.1]: https://github.com/WeInfuse/redox/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/WeInfuse/redox/compare/v1.7.4...v1.8.0
