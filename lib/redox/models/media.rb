@@ -12,6 +12,7 @@ module Redox
       property :Provider, from: :provider, required: false
       property :DirectAddressFrom, from: :direct_address_from, required: false
       property :DirectAddressTo, from: :direct_address_to, required: false
+      property :ServiceDateTime, from: :service_date_time, required: false
 
       alias_method  :file_type, :FileType
       alias_method  :file_name, :FileName
@@ -22,6 +23,7 @@ module Redox
       alias_method  :provider, :Provider
       alias_method  :direct_address_from, :DirectAddressFrom
       alias_method  :direct_address_to, :DirectAddressTo
+      alias_method  :service_date_time, :ServiceDateTime
 
       def availability=(value)
         case value
