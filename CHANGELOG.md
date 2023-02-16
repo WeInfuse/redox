@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.8.5] - 2023-02-16
+### Added
+- Notifications to Media Model
+
 ## [1.8.4] - 2022-10-26
 ### Added
 - ServiceDateTime to Media Model
@@ -199,6 +203,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial Release
 
+[1.8.5]: https://github.com/WeInfuse/redox/compare/v1.8.4...v1.8.5
 [1.8.4]: https://github.com/WeInfuse/redox/compare/v1.8.3...v1.8.4
 [1.8.3]: https://github.com/WeInfuse/redox/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/WeInfuse/redox/compare/v1.8.1...v1.8.2
