@@ -62,5 +62,17 @@ class MediaTest < Minitest::Test
         end
       end 
     end
+
+    describe 'notifications' do
+      it 'can be initialized' do
+        m = Redox::Models::Media.new('Notifications' => [{'ID' => 'xx', 'IDType' => 'NPI', 'FirstName' => 'John', 'LastName' => 'Doe', 'Credentials' => ['AS']}])
+
+        assert_equal('xx', m.Notifications.first['ID'])
+        assert_equal('NPI', m.notifications.first['IDType'])
+        assert_equal('John', m.notifications.first['FirstName'])
+        assert_equal('Doe', m.notifications.first['LastName'])
+        assert_equal('AS', m.notifications.first['Credentials'].first)
+      end
+    end
   end
 end
