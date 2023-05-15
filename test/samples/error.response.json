@@ -2,9 +2,12 @@
    "Meta": {
       "DataModel": "PatientSearch",
       "EventType": "Query",
-      "Message": {
-         "ID": 1135210193
-      },
+      "Logs": [
+         {
+            "ID": 1234567890,
+            "AttemptID": 987654321
+         }
+      ],
       "Source": {
          "ID": "x72i2ec6-de0b-471a-a6d5-41b786c93c17",
          "Name": "Development Source"
