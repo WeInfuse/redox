@@ -14,12 +14,12 @@
         "Name": "Redox EMR"
       }
     ],
-    "Message": {
-      "ID": 5565
-    },
-    "Transmission": {
-      "ID": 12414
-    },
+    "Logs": [
+         {
+            "ID": 1234567890,
+            "AttemptID": 987654321
+         }
+      ],
     "FacilityCode": null
   },
   "Patient": {
