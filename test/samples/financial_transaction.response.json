@@ -15,11 +15,11 @@
       }
     ],
     "Logs": [
-         {
-            "ID": 1234567890,
-            "AttemptID": 987654321
-         }
-      ],
+      {
+        "ID": 1234567890,
+        "AttemptID": 987654321
+      }
+    ],
     "FacilityCode": null
   },
   "Patient": {
