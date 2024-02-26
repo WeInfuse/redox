@@ -4,6 +4,8 @@ require 'redox/version'
 require 'redox/redox_exception'
 require 'redox/connection'
 require 'redox/authentication'
+require 'redox/fhir_authentication'
+require 'redox/platform_authentication'
 require 'redox/models/model'
 require 'redox/models/meta'
 require 'redox/models/ordering_provider'
@@ -40,11 +42,13 @@ require 'redox/request/medications'
 
 module Redox
   class Configuration
-    attr_accessor :api_key, :secret
+    attr_accessor :fhir_client_id, :fhir_private_key, :platform_client_id, :platform_private_key
 
     def initialize
-      @api_key  =  nil
-      @secret   =  nil
+      @fhir_client_id =  nil
+      @fhir_private_key =  nil
+      @platform_client_id = nil
+      @platform_private_key = nil
     end
 
     def api_endpoint=(endpoint)
@@ -52,33 +56,37 @@ module Redox
     end
 
     def api_endpoint
-      return Connection.base_uri
+      Connection.base_uri
     end
 
     def token_expiry_padding=(time_in_seconds)
-      Authentication.token_expiry_padding = time_in_seconds
+      FHIRAuthentication.token_expiry_padding = time_in_seconds
     end
 
     def token_expiry_padding
-      return Authentication.token_expiry_padding
+      FHIRAuthentication.token_expiry_padding
     end
 
     def to_h
-      return {
-        api_key: @api_key,
-        secret: @secret,
+      {
+        fhir_client_id: @fhir_client_id,
+        fhir_private_key: @fhir_private_key,
+        platform_client_id: @platform_client_id,
+        platform_private_key: @platform_private_key,
         api_endpoint: api_endpoint,
         token_expiry_padding: token_expiry_padding
       }
     end
 
     def from_h(h)
-      self.api_key = h[:api_key]
-      self.secret  = h[:secret]
+      self.fhir_client_id = h[:fhir_client_id]
+      self.fhir_private_key = h[:fhir_private_key]
+      self.platform_client_id = h[:platform_client_id]
+      self.platform_private_key = h[:platform_private_key]
       self.api_endpoint = h[:api_endpoint]
       self.token_expiry_padding = h[:token_expiry_padding]
 
-      return self
+      self
     end
   end
 

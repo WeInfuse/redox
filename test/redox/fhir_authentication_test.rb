@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class AuthenticationTest < Minitest::Test
+class FHIRAuthenticationTest < Minitest::Test
   describe 'authentication' do
     before do
       auth_stub
@@ -10,7 +10,7 @@ class AuthenticationTest < Minitest::Test
         .with(body: { apiKey: 'wrong', secret: 'abc' })
         .to_return(status: 401, body: 'Invalid request')
 
-      @redox_auth = Redox::Authentication.new
+      @redox_auth = Redox::FHIRAuthentication.new
       @config = Redox.configuration.to_h
     end
 
@@ -20,8 +20,8 @@ class AuthenticationTest < Minitest::Test
 
     describe 'configuration' do
       it 'can set the expiry padding to 0' do
-        Redox::Authentication.token_expiry_padding = 0
-        assert_equal(0, Redox::Authentication.token_expiry_padding)
+        Redox::FHIRAuthentication.token_expiry_padding = 0
+        assert_equal(0, Redox::FHIRAuthentication.token_expiry_padding)
       end
     end
 
@@ -32,7 +32,7 @@ class AuthenticationTest < Minitest::Test
       end
 
       it 'uses refresh endpoint if we already have a token' do
-        Redox::Authentication.token_expiry_padding = 9999
+        Redox::FHIRAuthentication.token_expiry_padding = 9999
 
         @redox_auth.authenticate
         @redox_auth.authenticate
@@ -44,7 +44,7 @@ class AuthenticationTest < Minitest::Test
       end
 
       it 'makes no calls when token wont expire inside padding time' do
-        Redox::Authentication.token_expiry_padding = -60
+        Redox::FHIRAuthentication.token_expiry_padding = -60
 
         @redox_auth.authenticate
         @redox_auth.authenticate
@@ -55,15 +55,15 @@ class AuthenticationTest < Minitest::Test
         assert_equal('let.me.in', @redox_auth.access_token)
       end
 
-      it 'fails with a resonable exception and with nil response' do
+      it 'fails with a reasonable exception and with nil response' do
         @redox_auth.expire!
 
-        key = Redox.configuration.api_key
-        Redox.configuration.api_key = 'wrong'
+        key = Redox.configuration.fhir_client_id
+        Redox.configuration.fhir_client_id = 'wrong'
 
         error = assert_raises(Redox::RedoxException) { @redox_auth.authenticate }
 
-        Redox.configuration.api_key = key
+        Redox.configuration.fhir_client_id = key
 
         assert_match(/Failed Authenticat/, error.message)
         assert_match(/HTTP code: 401/, error.message)
@@ -100,14 +100,14 @@ class AuthenticationTest < Minitest::Test
       end
 
       it 'uses the default' do
-        Redox::Authentication.token_expiry_padding = 9999
+        Redox::FHIRAuthentication.token_expiry_padding = 9999
 
         assert(@redox_auth.expires?)
       end
     end
 
     after do
-      Redox::Authentication.token_expiry_padding = nil
+      Redox::FHIRAuthentication.token_expiry_padding = nil
     end
 
   end

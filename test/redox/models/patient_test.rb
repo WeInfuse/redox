@@ -103,6 +103,7 @@ class PatientTest < Minitest::Test
 
       describe '#query' do
         before do
+          debugger
           @query_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Request::PatientSearch::QUERY_ENDPOINT))
             .with(headers: { 'Authorization' => 'Bearer let.me.in' })
             .to_return(status: 200, body: load_sample('patient_search_single_result.response.json'))

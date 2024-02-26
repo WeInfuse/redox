@@ -4,7 +4,7 @@ class VisitTest < Minitest::Test
   describe 'visit' do
     let(:visit) { Redox::Models::Visit.new(data) }
     let(:deserialized) { JSON.parse(visit.to_json) }
-    let(:as_json) { visit.as_json }
+    let(:visit_as_json) { visit.as_json }
     let(:data) { {} }
 
     describe 'insurances' do
@@ -143,7 +143,7 @@ class VisitTest < Minitest::Test
 
           describe '#as_json' do
             it 'converts to redox format' do
-              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), as_json.dig('VisitDateTime'))
+              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), visit_as_json.dig('VisitDateTime'))
             end
           end
         end
@@ -159,7 +159,7 @@ class VisitTest < Minitest::Test
 
           describe '#as_json' do
             it 'leaves it be' do
-              assert_equal(datetime, as_json.dig('VisitDateTime'))
+              assert_equal(datetime, visit_as_json.dig('VisitDateTime'))
             end
           end
         end
@@ -197,7 +197,7 @@ class VisitTest < Minitest::Test
 
           describe '#as_json' do
             it 'converts to redox format' do
-              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), as_json.dig('DischargeDateTime'))
+              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), visit_as_json.dig('DischargeDateTime'))
             end
           end
         end
@@ -213,7 +213,7 @@ class VisitTest < Minitest::Test
 
           describe '#as_json' do
             it 'leaves it be' do
-              assert_equal(datetime, as_json.dig('DischargeDateTime'))
+              assert_equal(datetime, visit_as_json.dig('DischargeDateTime'))
             end
           end
         end
