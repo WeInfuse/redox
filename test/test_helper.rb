@@ -63,12 +63,12 @@ end
 def stub_redox(body:)
   body = body.to_json if body.is_a?(Hash)
 
-  stub_request(:post, /#{Redox::Authentication::BASE_ENDPOINT}/)
+  stub_request(:post, /#{Redox::Authentication::AUTH_ENDPOINT}/)
     # .with(body: hash_including({ grant_type: 'client_credentials'}))
     .to_return(status: 200, body: { accessToken: 'let.me.in' }.to_json )
 
   @post_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Connection::DEFAULT_ENDPOINT))
-    .with(headers: { 'Authorization' => 'Bearer let.me.in' })
+    # .with(headers: { 'Authorization' => 'Bearer let.me.in' })
     .to_return(status: 200, body: body)
 end
 

@@ -47,6 +47,14 @@ module Redox
       @last_auth_time + @response['expires_in'] < (Time.now + self.class.token_expiry_padding).utc
     end
 
+    def expires?(seconds_from_now = self.class.token_expiry_padding)
+      @last_auth_time + @response['expires_in'].to_i < (Time.now + seconds_from_now).utc
+    end
+
+    def expire!
+      @response = nil
+    end
+
     private
 
     def generate_jwt(audience = AUTH_URL)
