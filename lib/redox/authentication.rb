@@ -7,7 +7,6 @@ module Redox
 
     AUTH_URL = 'https://api.redoxengine.com/v2/auth/token'
 
-    # TODO: needed for tests....
     BASE_ENDPOINT = '/v2/auth'.freeze
     AUTH_ENDPOINT = "#{BASE_ENDPOINT}/token".freeze
     REFRESH_ENDPOINT = "#{BASE_ENDPOINT}/refreshToken".freeze
