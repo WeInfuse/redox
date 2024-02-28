@@ -94,7 +94,7 @@ class PatientTest < Minitest::Test
       before do
         stub_request(:post, /#{Redox::Authentication::AUTH_ENDPOINT}/)
           # .with(body: hash_including({ apiKey: '123'}))
-          .to_return(status: 200, body: { accessToken: 'let.me.in', expires: (Time.now + 60).utc.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), refreshToken: 'rtoken' }.to_json )
+          .to_return(status: 200, body: { access_token: 'let.me.in', expires: (Time.now + 60).utc.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), refreshToken: 'rtoken' }.to_json )
 
         WebMock.after_request do |request, response|
           @request = request

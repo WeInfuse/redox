@@ -5,8 +5,10 @@ require 'minitest/autorun'
 require 'webmock/minitest'
 require 'byebug'
 
+Redox.configuration.api_key = '123'
+Redox.configuration.secret = 'abc'
 Redox.configuration.fhir_client_id = '123456' * 5
-Redox.configuration.fhir_private_key  = {
+Redox.configuration.fhir_private_key = {
   "p": "7JnNtPpHFQtqRx25HuOAiyLcJ4B_Ol8pYytSitB2C24NJMm9DPV-rhG78c0Q1ZmU9QoPq_wo_QjlrLM35Pux6vOcbMNvqRl4zP5YJNJvSgvz4CGrmLsNqSBPryxOlNf1pnJ3XVFLlIJKy1A1EHJHFPFVVQ8gfXbFmdLQx0jwba8",
   "kty": "RSA",
   "q": "uup7I0MPcFjsonGFbaobTr1bmL_e5IxntmQUuwdn7eoNA-dUTcBlyzbHAV4Ar08Z-kU8DEuac7RGaN2OTXmeO94EBwYs9L2RK0YWZEvZT47ziAno5GsHGIL-JyTjEiUzQGlUFCZy4djcnaL6_JBCrz_lyw5vdQPTbR1jzEnsI_s",
@@ -63,9 +65,9 @@ end
 def stub_redox(body:)
   body = body.to_json if body.is_a?(Hash)
 
-  stub_request(:post, /#{Redox::Authentication::AUTH_ENDPOINT}/)
+  @auth_stub = stub_request(:post, /#{Redox::Authentication::AUTH_ENDPOINT}/)
     # .with(body: hash_including({ grant_type: 'client_credentials'}))
-    .to_return(status: 200, body: { accessToken: 'let.me.in' }.to_json )
+    .to_return(status: 200, body: { access_token: 'let.me.in', expires_in: 300 }.to_json )
 
   @post_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Connection::DEFAULT_ENDPOINT))
     # .with(headers: { 'Authorization' => 'Bearer let.me.in' })
@@ -75,11 +77,56 @@ end
 def auth_stub
   @auth_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Authentication::AUTH_ENDPOINT))
     # .with(body: { apiKey: '123', secret: 'abc' })
-    .to_return(status: 200, body: { accessToken: 'let.me.in', expires: (Time.now + 60).utc.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), refreshToken: 'rtoken' }.to_json )
+    .to_return(status: 200, body: { access_token: 'let.me.in', expires_in: 300, refreshToken: 'rtoken' }.to_json )
 end
 
-def refresh_stub
-  @refresh_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::FHIRAuthentication::REFRESH_ENDPOINT))
-    # .with(body: { apiKey: '123', refreshToken: 'rtoken' })
-    .to_return(status: 200, body: { accessToken: 'let.me.in.again', expires: (Time.now + 60).utc.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), refreshToken: 'rtoken' }.to_json )
+# def refresh_stub
+#   @refresh_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::FHIRAuthentication::REFRESH_ENDPOINT))
+#     # .with(body: { apiKey: '123', refreshToken: 'rtoken' })
+#     .to_return(status: 200, body: { access_token: 'let.me.in.again', expires_in: 300, refreshToken: 'rtoken' }.to_json )
+# end
+
+def legacy_stub_redox(status: 200, body:, endpoint: Redox::LegacyConnection::DEFAULT_ENDPOINT)
+  body = body.to_json if body.is_a?(Hash)
+
+  @legacy_auth_stub = stub_request(:post, /#{Redox::LegacyAuthentication::AUTH_ENDPOINT}/)
+    .with(body: hash_including({ apiKey: '123', secret: 'abc' }))
+    .to_return(status: 200,
+               body: { accessToken: 'let.me.in',
+                       expires: (Time.now + 60).utc.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT) }.to_json )
+
+  @legacy_post_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::LegacyConnection::DEFAULT_ENDPOINT))
+                 .with(headers: { 'Authorization' => 'Bearer let.me.in' })
+                 .to_return(status: 200, body: body)
+end
+
+def legacy_auth_stub
+  @legacy_auth_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::LegacyAuthentication::AUTH_ENDPOINT))
+                 .with(body: { apiKey: '123', secret: 'abc' })
+                 .to_return(status: 200,
+                            body: { accessToken: 'let.me.in',
+                                    expires: (Time.now + 60).utc.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT),
+                                    refreshToken: 'rtoken' }.to_json )
+end
+
+def legacy_refresh_stub
+  @legacy_refresh_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::LegacyAuthentication::REFRESH_ENDPOINT))
+                    .with(body: { apiKey: '123', refreshToken: 'rtoken' })
+                    .to_return(status: 200,
+                               body: { accessToken: 'let.me.in.again',
+                                       expires: (Time.now + 60).utc.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT),
+                                       refreshToken: 'rtoken' }.to_json )
+end
+
+class Minitest::Spec
+  after do
+    # clean stubbed requests
+    remove_request_stub(@legacy_auth_stub) if @legacy_auth_stub
+    remove_request_stub(@legacy_post_stub) if @legacy_post_stub
+    remove_request_stub(@legacy_refresh_stub) if @legacy_refresh_stub
+
+    # debugger if @auth_stub
+    remove_request_stub(@auth_stub) if @auth_stub
+    remove_request_stub(@post_stub) if @post_stub
+  end
 end

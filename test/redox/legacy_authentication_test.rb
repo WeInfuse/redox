@@ -1,42 +1,43 @@
 require 'test_helper'
 
-class FHIRAuthenticationTest < Minitest::Test
-  describe 'authentication' do
+class LegacyAuthenticationTest < Minitest::Test
+  describe 'legacy_authentication' do
     before do
-      auth_stub
+      legacy_stub_redox(body: {})
 
-      stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Authentication::AUTH_ENDPOINT))
-        .with(body: { apiKey: 'wrong', secret: 'abc' })
-        .to_return(status: 401, body: 'Invalid request')
+      # stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Authentication::AUTH_ENDPOINT))
+        # .with(body: { apiKey: 'wrong', secret: 'abc' })
+        # .to_return(status: 401, body: 'Invalid request')
 
-      @redox_auth = Redox::FHIRAuthentication.new
+      @redox_auth = Redox::LegacyAuthentication.new
       @config = Redox.configuration.to_h
     end
 
     after do
       Redox.configuration.from_h(@config)
+      Redox::LegacyAuthentication.token_expiry_padding = nil
     end
 
     describe 'configuration' do
       it 'can set the expiry padding to 0' do
-        Redox::FHIRAuthentication.token_expiry_padding = 0
-        assert_equal(0, Redox::FHIRAuthentication.token_expiry_padding)
+        Redox::LegacyAuthentication.token_expiry_padding = 0
+        assert_equal(0, Redox::LegacyAuthentication.token_expiry_padding)
       end
     end
 
     describe 'authentication' do
       it 'calls redox endpoint' do
         @redox_auth.authenticate
-        assert_requested(@auth_stub, times: 1)
+        assert_requested(@legacy_auth_stub, times: 1)
       end
 
       it 'makes no calls when token wont expire inside padding time' do
-        Redox::FHIRAuthentication.token_expiry_padding = -60
+        Redox::LegacyAuthentication.token_expiry_padding = -60
 
         @redox_auth.authenticate
         @redox_auth.authenticate
 
-        assert_requested(@auth_stub, times: 1)
+        assert_requested(@legacy_auth_stub, times: 1)
 
         assert_equal('let.me.in', @redox_auth.access_token)
       end
@@ -44,7 +45,7 @@ class FHIRAuthenticationTest < Minitest::Test
       it 'fails with a reasonable exception and with nil response' do
         @redox_auth.expire!
 
-        @auth_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Authentication::AUTH_ENDPOINT))
+        @auth_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::LegacyAuthentication::AUTH_ENDPOINT))
                        .to_return(status: 401, body: 'Invalid request' )
 
         error = assert_raises(Redox::RedoxException) { @redox_auth.authenticate }
@@ -84,15 +85,10 @@ class FHIRAuthenticationTest < Minitest::Test
       end
 
       it 'uses the default' do
-        Redox::FHIRAuthentication.token_expiry_padding = 9999
+        Redox::LegacyAuthentication.token_expiry_padding = 9999
 
         assert(@redox_auth.expires?)
       end
     end
-
-    after do
-      Redox::FHIRAuthentication.token_expiry_padding = nil
-    end
-
   end
 end

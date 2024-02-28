@@ -3,8 +3,10 @@ require 'hashie'
 require 'redox/version'
 require 'redox/redox_exception'
 require 'redox/connection'
+require 'redox/legacy_connection'
 require 'redox/authentication'
 require 'redox/fhir_authentication'
+require 'redox/legacy_authentication'
 require 'redox/platform_authentication'
 require 'redox/models/model'
 require 'redox/models/meta'
@@ -42,9 +44,14 @@ require 'redox/request/medications'
 
 module Redox
   class Configuration
-    attr_accessor :fhir_client_id, :fhir_private_key, :platform_client_id, :platform_private_key
+    attr_accessor :api_key, :secret, :fhir_client_id, :fhir_private_key, :platform_client_id, :platform_private_key
 
     def initialize
+      # legacy
+      @api_key = nil
+      @secret = nil
+
+      # oauth
       @fhir_client_id =  nil
       @fhir_private_key =  nil
       @platform_client_id = nil
@@ -69,6 +76,8 @@ module Redox
 
     def to_h
       {
+        api_key: @api_key,
+        secret: @secret,
         fhir_client_id: @fhir_client_id,
         fhir_private_key: @fhir_private_key,
         platform_client_id: @platform_client_id,
@@ -79,6 +88,9 @@ module Redox
     end
 
     def from_h(h)
+      self.api_key = h[:api_key]
+      self.secret = h[:secret]
+
       self.fhir_client_id = h[:fhir_client_id]
       self.fhir_private_key = h[:fhir_private_key]
       self.platform_client_id = h[:platform_client_id]

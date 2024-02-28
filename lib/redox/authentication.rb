@@ -3,17 +3,18 @@ require 'jwt'
 
 module Redox
   module Authentication
-    attr_reader :client_id, :environment, :private_key
+    attr_reader :client_id, :environment, :private_key, :response
 
     AUTH_URL = 'https://api.redoxengine.com/v2/auth/token'
 
-    # TODO: needed for tests...
+    # TODO: needed for tests....
     BASE_ENDPOINT = '/v2/auth'.freeze
     AUTH_ENDPOINT = "#{BASE_ENDPOINT}/token".freeze
     REFRESH_ENDPOINT = "#{BASE_ENDPOINT}/refreshToken".freeze
 
     def authenticate
-      # debugger
+      return self unless expired?
+
       jwt_token = generate_jwt
       payload = {
         body: {
@@ -26,7 +27,7 @@ module Redox
       response = HTTParty.post(AUTH_URL, payload)
 
       if response.ok?
-        @response = response
+        @response = JSON.parse(response.body)
       else
         @response = nil
         raise RedoxException.from_response(response, msg: 'Authentication')
@@ -44,10 +45,14 @@ module Redox
     end
 
     def expired?
-      @last_auth_time + @response['expires_in'] < (Time.now + self.class.token_expiry_padding).utc
+      return true unless @response
+
+      @last_auth_time + @response['expires_in'].to_i < (Time.now + self.class.token_expiry_padding).utc
     end
 
     def expires?(seconds_from_now = self.class.token_expiry_padding)
+      return true unless @response
+
       @last_auth_time + @response['expires_in'].to_i < (Time.now + seconds_from_now).utc
     end
 
@@ -75,11 +80,10 @@ module Redox
       headers = { kid: kid_value, alg: 'RS384' }
 
       # Sign the JWT with the appropriate private key and RS384 algorithm that Redox supports
-      # debugger
       JWT.encode(payload, key_for_jwt, 'RS384', headers)
     end
 
-    # Parse either the keyjwk or pem value depending on availability
+    # Parse either the jwk or pem value depending on availability
     def extract_private_key
       if private_key.is_a?(String) && valid_json?(private_key)
         JSON::JWK.new(JSON.parse(private_key))
