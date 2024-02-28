@@ -66,25 +66,16 @@ def stub_redox(body:)
   body = body.to_json if body.is_a?(Hash)
 
   @auth_stub = stub_request(:post, /#{Redox::Authentication::AUTH_ENDPOINT}/)
-    # .with(body: hash_including({ grant_type: 'client_credentials'}))
     .to_return(status: 200, body: { access_token: 'let.me.in', expires_in: 300 }.to_json )
 
   @post_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Connection::DEFAULT_ENDPOINT))
-    # .with(headers: { 'Authorization' => 'Bearer let.me.in' })
     .to_return(status: 200, body: body)
 end
 
 def auth_stub
   @auth_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::Authentication::AUTH_ENDPOINT))
-    # .with(body: { apiKey: '123', secret: 'abc' })
     .to_return(status: 200, body: { access_token: 'let.me.in', expires_in: 300, refreshToken: 'rtoken' }.to_json )
 end
-
-# def refresh_stub
-#   @refresh_stub = stub_request(:post, File.join(Redox.configuration.api_endpoint, Redox::FHIRAuthentication::REFRESH_ENDPOINT))
-#     # .with(body: { apiKey: '123', refreshToken: 'rtoken' })
-#     .to_return(status: 200, body: { access_token: 'let.me.in.again', expires_in: 300, refreshToken: 'rtoken' }.to_json )
-# end
 
 def legacy_stub_redox(status: 200, body:, endpoint: Redox::LegacyConnection::DEFAULT_ENDPOINT)
   body = body.to_json if body.is_a?(Hash)
@@ -125,7 +116,6 @@ class Minitest::Spec
     remove_request_stub(@legacy_post_stub) if @legacy_post_stub
     remove_request_stub(@legacy_refresh_stub) if @legacy_refresh_stub
 
-    # debugger if @auth_stub
     remove_request_stub(@auth_stub) if @auth_stub
     remove_request_stub(@post_stub) if @post_stub
   end
