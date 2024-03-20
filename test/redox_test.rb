@@ -36,8 +36,8 @@ class RedoxTest < Minitest::Test
     end
 
     {
-      api_key: 'a',
-      secret: 'b',
+      fhir_client_id: 'a',
+      fhir_private_key: 'b',
       api_endpoint: 'http://hi.com',
       token_expiry_padding: 123
     }.each do |method, value|

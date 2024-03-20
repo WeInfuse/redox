@@ -1,77 +1,116 @@
+require 'json/jwt'
+require 'jwt'
+
 module Redox
-  class Authentication < Connection
-    attr_accessor :response
+  module Authentication
+    attr_reader :client_id, :environment, :private_key, :response
 
-    BASE_ENDPOINT    = '/auth'.freeze
+    AUTH_URL = 'https://api.redoxengine.com/v2/auth/token'
 
-    AUTH_ENDPOINT    = "#{BASE_ENDPOINT}/authenticate".freeze
+    BASE_ENDPOINT = '/v2/auth'.freeze
+    AUTH_ENDPOINT = "#{BASE_ENDPOINT}/token".freeze
     REFRESH_ENDPOINT = "#{BASE_ENDPOINT}/refreshToken".freeze
 
-    class << self
-      attr_accessor :token_expiry_padding
-
-      @@token_expiry_padding = 0
-    end
-
-    def initialize
-      @response = nil
-    end
-
     def authenticate
-      if (self.expires?)
-        if (self.refresh_token)
-          request = {
-            body: { apiKey: Redox.configuration.api_key, refreshToken: self.refresh_token },
-            endpoint: REFRESH_ENDPOINT
-          }
-        else
-          request = {
-            body: { apiKey: Redox.configuration.api_key, secret: Redox.configuration.secret },
-            endpoint: AUTH_ENDPOINT
-          }
-        end
+      return self unless expired?
 
-        response = self.request(**request, auth: false)
+      jwt_token = generate_jwt
+      payload = {
+        body: {
+          grant_type: 'client_credentials',
+          client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+          client_assertion: jwt_token
+        }
+      }
+      @last_auth_time = Time.now.utc
+      response = HTTParty.post(AUTH_URL, payload)
 
-        if (false == response.ok?)
-          @response = nil
-          raise RedoxException.from_response(response, msg: 'Authentication')
-        else
-          @response = response
-        end
-      end
-
-      return self
-    end
-
-    def access_token
-      return @response['accessToken'] if @response
-    end
-
-    def expiry
-      return @response['expires'] if @response
-    end
-
-    def refresh_token
-      return @response['refreshToken'] if @response
-    end
-
-    def expires?(seconds_from_now = Authentication.token_expiry_padding)
-      if (self.expiry)
-        return DateTime.strptime(self.expiry, Models::Meta::FROM_DATETIME_FORMAT).to_time.utc <= (Time.now + seconds_from_now).utc
+      if response.ok?
+        @response = JSON.parse(response.body)
       else
-        return true
+        @response = nil
+        raise RedoxException.from_response(response, msg: 'Authentication')
       end
+
+      self
     end
 
     def access_header
-      return {
-        'Authorization' => "Bearer #{self.access_token}",
-      }
+      { 'Authorization' => "Bearer #{access_token}" }
+    end
+
+    def access_token
+      @response['access_token'] if @response
+    end
+
+    def expired?
+      return true unless @response
+
+      @last_auth_time + @response['expires_in'].to_i < (Time.now + self.class.token_expiry_padding).utc
+    end
+
+    def expires?(seconds_from_now = self.class.token_expiry_padding)
+      return true unless @response
+
+      @last_auth_time + @response['expires_in'].to_i < (Time.now + seconds_from_now).utc
     end
 
     def expire!
       @response = nil
+    end
+
+    private
+
+    def generate_jwt(audience = AUTH_URL)
+      private_key = extract_private_key
+      kid_value = extract_or_generate_kid(private_key)
+
+      payload = {
+        iss: client_id,
+        sub: client_id,
+        aud: audience,
+        exp: 5.minutes.from_now.to_i,
+        iat: Time.now.to_i,
+        jti: SecureRandom.uuid
+      }
+
+      # Use private_key directly if it's an instance of OpenSSL::PKey::RSA
+      key_for_jwt = private_key.is_a?(OpenSSL::PKey::RSA) ? private_key : private_key.to_key
+      headers = { kid: kid_value, alg: 'RS384' }
+
+      # Sign the JWT with the appropriate private key and RS384 algorithm that Redox supports
+      JWT.encode(payload, key_for_jwt, 'RS384', headers)
+    end
+
+    # Parse either the jwk or pem value depending on availability
+    def extract_private_key
+      if private_key.is_a?(String) && valid_json?(private_key)
+        JSON::JWK.new(JSON.parse(private_key))
+      elsif private_key.is_a?(String)
+        OpenSSL::PKey::RSA.new(private_key)
+      else
+        raise 'Invalid private key format. Expected JSON or PEM string.'
+      end
+    end
+
+    def extract_or_generate_kid(key)
+      if key.is_a?(JSON::JWK)
+        key[:kid]
+      elsif key.is_a?(OpenSSL::PKey::RSA)
+        digest = OpenSSL::Digest.new('SHA256')
+        Base64.urlsafe_encode64(digest.digest(key.to_der)).strip
+      else
+        raise 'Unsupported key type for generating kid.'
+      end
+    end
+
+    def valid_json?(json)
+      return false if json.nil?
+
+      JSON.parse(json)
+      true
+    rescue JSON::ParserError
+      false
     end
   end
 end

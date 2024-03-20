@@ -100,8 +100,16 @@ response.meta
 
 ```ruby
 Redox.configure do |c|
-  c.api_key      = ENV['REDOX_API_KEY']
-  c.secret       = ENV['REDOX_SECRET']
+  # legacy keys
+  c.api_key = ENV['REDOX_API_KEY']
+  c.secret = ENV['REDOX_SECRET']
+  # FHIR oauth keys
+  c.fhir_client_id = ENV['REDOX_FHIR_CLIENT_ID']
+  c.fhir_private_key = ENV['REDOX_FHIR_PRIVATE_KEY']
+  # platform oauth keys
+  c.platform_client_id = ENV['REDOX_PLATFORM_CLIENT_ID']
+  c.platform_private_key = ENV['REDOX_PLATFORM_PRIVATE_KEY']
+
   c.api_endpoint = 'http://hello.com' # Defaults to Redox endpoint
   c.token_expiry_padding = 120 # Defaults to 60 seconds
 end
@@ -111,7 +119,7 @@ end
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. 
+To install this gem onto your local machine, run `bundle exec rake install`.
 
 If you have already merged changes into the master branch of this repo and are looking to release a new version, remember to switch out of your local feature branch (if you are on one) to the master or main branch of this repo. Then pull all changes down so you have an up to date code base.
 

@@ -21,7 +21,7 @@ class ConnectionTest < Minitest::Test
 
     describe 'auth option' do
       it 'defaults to sending auth header' do
-        @connection.request()
+        @connection.request
 
         assert_requested(@auth_stub, times: 1)
         assert_requested(@authorized_stub, times: 1)
@@ -35,7 +35,7 @@ class ConnectionTest < Minitest::Test
     end
 
     it 'returns response' do
-      response = @connection.request()
+      response = @connection.request
 
       assert(response.ok?)
       assert_equal({}, response.parsed_response)
