@@ -21,6 +21,7 @@ class AuthenticationTest < Minitest::Test
     describe 'configuration' do
       it 'can set the expiry padding to 0' do
         Redox::Authentication.token_expiry_padding = 0
+
         assert_equal(0, Redox::Authentication.token_expiry_padding)
       end
     end
@@ -28,6 +29,7 @@ class AuthenticationTest < Minitest::Test
     describe 'authentication' do
       it 'calls redox endpoint' do
         @redox_auth.authenticate
+
         assert_requested(@auth_stub, times: 1)
       end
 
@@ -96,19 +98,18 @@ class AuthenticationTest < Minitest::Test
       end
 
       it 'is false when token is far enough from expire' do
-        assert(false == @redox_auth.expires?(0))
+        assert_equal(false, @redox_auth.expires?(0))
       end
 
       it 'uses the default' do
         Redox::Authentication.token_expiry_padding = 9999
 
-        assert(@redox_auth.expires?)
+        assert_predicate(@redox_auth, :expires?)
       end
     end
 
     after do
       Redox::Authentication.token_expiry_padding = nil
     end
-
   end
 end

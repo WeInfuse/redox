@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Models
     class MediaUpload < AbstractModel
@@ -5,9 +7,9 @@ module Redox
       property :Visit, required: false, from: :visit, default: Redox::Models::Visit.new
       property :Media, required: false, from: :media, default: Redox::Models::Media.new
 
-      alias_method :patient, :Patient
-      alias_method :visit, :Visit
-      alias_method :media, :Media
+      alias patient Patient
+      alias visit Visit
+      alias media Media
     end
   end
 end

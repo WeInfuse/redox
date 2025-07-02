@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Models
     class Insurance < Model
@@ -13,17 +15,17 @@ module Redox
       property :CoverageType, required: false, from: :coverage_type
       property :Insured, required: false, from: :insured, default: {}
 
-      alias_method :plan, :Plan
-      alias_method :member_number, :MemberNumber
-      alias_method :company, :Company
-      alias_method :group_number, :GroupNumber
-      alias_method :group_name, :GroupName
-      alias_method :effective_date, :EffectiveDate
-      alias_method :expiration_date, :ExpirationDate
-      alias_method :policy_number, :PolicyNumber
-      alias_method :agreement_type, :AgreementType
-      alias_method :coverage_type, :CoverageType
-      alias_method :insured, :Insured
+      alias plan Plan
+      alias member_number MemberNumber
+      alias company Company
+      alias group_number GroupNumber
+      alias group_name GroupName
+      alias effective_date EffectiveDate
+      alias expiration_date ExpirationDate
+      alias policy_number PolicyNumber
+      alias agreement_type AgreementType
+      alias coverage_type CoverageType
+      alias insured Insured
     end
   end
 end

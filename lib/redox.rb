@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'base64'
 require 'httparty'
 require 'hashie'
@@ -53,7 +55,7 @@ module Redox
     end
 
     def api_endpoint
-      return Connection.base_uri
+      Connection.base_uri
     end
 
     def token_expiry_padding=(time_in_seconds)
@@ -61,11 +63,11 @@ module Redox
     end
 
     def token_expiry_padding
-      return Authentication.token_expiry_padding
+      Authentication.token_expiry_padding
     end
 
     def to_h
-      return {
+      {
         api_key: @api_key,
         secret: @secret,
         api_endpoint: api_endpoint,
@@ -79,7 +81,7 @@ module Redox
       self.api_endpoint = h[:api_endpoint]
       self.token_expiry_padding = h[:token_expiry_padding]
 
-      return self
+      self
     end
   end
 

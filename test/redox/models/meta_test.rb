@@ -11,7 +11,7 @@ class MetaTest < Minitest::Test
 
     describe 'defaults' do
       it 'provides event date time' do
-        assert_equal("2019-04-17T19:33:26.563008Z".size, Redox::Models::Meta.new[:EventDateTime].size)
+        assert_equal('2019-04-17T19:33:26.563008Z'.size, Redox::Models::Meta.new[:EventDateTime].size)
       end
 
       it 'provides test' do
@@ -21,14 +21,14 @@ class MetaTest < Minitest::Test
       it 'has correct key' do
         result = JSON.parse(Redox::Models::Meta.new.to_json)
 
-        assert(result.include?('Meta'))
+        assert_includes(result, 'Meta')
       end
     end
 
     it 'can add destinations' do
       assert_equal([@subscription_h, @subscription_h],
-                 Redox::Models::Meta.new.add_destination(name: 'Mike', id: '100').add_destination(name: 'Mike', id: '100')['Destinations']
-      )
+                   Redox::Models::Meta.new.add_destination(name: 'Mike', id: '100').add_destination(name: 'Mike',
+                                                                                                    id: '100')['Destinations'])
     end
 
     it 'can set source' do

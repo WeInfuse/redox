@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Models
     class Patient < Model
@@ -7,17 +9,19 @@ module Redox
       property :Contacts, from: :contacts, required: false, default: []
       property :PCP, from: :primary_care_provider, required: false
 
-      alias_method :identifiers, :Identifiers
-      alias_method :insurances, :Insurances
-      alias_method :contacts, :Contacts
+      alias identifiers Identifiers
+      alias insurances Insurances
+      alias contacts Contacts
 
       def demographics
-        self[:Demographics] = Demographics.new(self[:Demographics]) unless self[:Demographics].is_a?(Redox::Models::Demographics)
+        unless self[:Demographics].is_a?(Redox::Models::Demographics)
+          self[:Demographics] = Demographics.new(self[:Demographics])
+        end
         self[:Demographics] ||= Demographics.new
       end
 
       def insurances
-        self[:Insurances] = self[:Insurances].map {|ins| ins.is_a?(Redox::Models::Insurance) ? ins : Insurance.new(ins) }
+        self[:Insurances] = self[:Insurances].map { |ins| ins.is_a?(Redox::Models::Insurance) ? ins : Insurance.new(ins) }
       end
 
       def primary_care_provider
@@ -25,19 +29,19 @@ module Redox
       end
 
       def contacts
-        self[:Contacts] = self[:Contacts].map {|contact| contact.is_a?(Redox::Models::Contact) ? contact : Contact.new(contact)}
+        self[:Contacts] = self[:Contacts].map { |contact| contact.is_a?(Redox::Models::Contact) ? contact : Contact.new(contact) }
       end
 
-      def add_identifier(type: , value: )
-        self[:Identifiers] << Identifier.new({'ID' => value, 'IDType' => type})
+      def add_identifier(type:, value:)
+        self[:Identifiers] << Identifier.new({ 'ID' => value, 'IDType' => type })
 
-        return self
+        self
       end
 
       def add_insurance(data = {})
         self[:Insurances] << Insurance.new(data)
 
-        return self
+        self
       end
 
       def update(meta: Meta.new)
@@ -50,7 +54,7 @@ module Redox
 
       class << self
         def query(params, meta: Meta.new)
-          return Redox::Request::PatientSearch.query(params, meta: meta)
+          Redox::Request::PatientSearch.query(params, meta: meta)
         end
       end
     end

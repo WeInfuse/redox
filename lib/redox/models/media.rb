@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Models
     class Media < AbstractModel
@@ -15,37 +17,35 @@ module Redox
       property :Provider, from: :provider, required: false
       property :ServiceDateTime, from: :service_date_time, required: false
 
-      alias_method  :availability, :Availability
-      alias_method  :direct_address_from, :DirectAddressFrom
-      alias_method  :direct_address_to, :DirectAddressTo
-      alias_method  :document_id, :DocumentID
-      alias_method  :document_type, :DocumentType
-      alias_method  :file_contents, :FileContents
-      alias_method  :file_name, :FileName
-      alias_method  :file_type, :FileType
-      alias_method  :provider, :Provider
-      alias_method  :service_date_time, :ServiceDateTime
-      alias_method  :notifications, :Notifications
+      alias availability Availability
+      alias direct_address_from DirectAddressFrom
+      alias direct_address_to DirectAddressTo
+      alias document_id DocumentID
+      alias document_type DocumentType
+      alias file_contents FileContents
+      alias file_name FileName
+      alias file_type FileType
+      alias provider Provider
+      alias service_date_time ServiceDateTime
+      alias notifications Notifications
 
       def availability=(value)
-        case value
-        when true
-          self[:Availability] = 'Available'
-        when false
-          self[:Availability] = 'Unavailable'
-        else
-          self[:Availability] = value
-        end
+        self[:Availability] = case value
+                              when true
+                                'Available'
+                              when false
+                                'Unavailable'
+                              else
+                                value
+                              end
       end
 
       def add_filepath(path)
-        if File.size(path) > BLOB_REQUIRED_SIZE
-          raise 'Not implemented'
-        else
-          self.file_contents = Base64::encode64(File.read(path))
-          self.file_type     = "#{File.extname(path)}".delete_prefix('.').upcase
-          self.file_name     = File.basename(path, '.*')
-        end
+        raise 'Not implemented' if File.size(path) > BLOB_REQUIRED_SIZE
+
+        self.file_contents = Base64.encode64(File.read(path))
+        self.file_type     = File.extname(path).to_s.delete_prefix('.').upcase
+        self.file_name     = File.basename(path, '.*')
       end
     end
   end

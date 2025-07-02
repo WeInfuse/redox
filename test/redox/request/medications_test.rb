@@ -13,7 +13,7 @@ module Request
         before do
           stub_redox(body: sample)
 
-          WebMock.after_request do |actual_request, actual_response|
+          WebMock.after_request do |actual_request, _actual_response|
             @actual_request = actual_request
           end
 
@@ -34,7 +34,7 @@ module Request
             end
 
             it 'sends data' do
-              assert_equal([], request_body['Administrations'])
+              assert_empty(request_body['Administrations'])
               assert_equal(false, request_body['Patient'].nil?)
               assert_equal(false, request_body['Visit'].nil?)
             end
@@ -42,7 +42,7 @@ module Request
 
           describe 'response' do
             it 'returns a valid response' do
-              assert(response.is_a?(Redox::Models::Model))
+              assert_kind_of(Redox::Models::Model, response)
             end
           end
         end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Models
     class Contact < AbstractModel
@@ -10,11 +12,11 @@ module Redox
       property :PhoneNumber, required: false, default: {}
       property :Roles, required: false, default: []
 
-      alias_method :first_name, :FirstName
-      alias_method :middle_name, :MiddleName
-      alias_method :last_name, :LastName
-      alias_method :address, :Address
-      alias_method :phone_number, :PhoneNumber
+      alias first_name FirstName
+      alias middle_name MiddleName
+      alias last_name LastName
+      alias address Address
+      alias phone_number PhoneNumber
     end
   end
 end

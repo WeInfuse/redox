@@ -3,7 +3,9 @@ require 'test_helper'
 class RedoxExceptionTest < Minitest::Test
   describe 'redox exceptions' do
     let(:redox_exception) { Redox::RedoxException.from_response(sample_response) }
-    let(:sample_response) { OpenStruct.new(code: 500, parsed_response: load_sample('error.response.json', parse: true)) }
+    let(:sample_response) do
+      OpenStruct.new(code: 500, parsed_response: load_sample('error.response.json', parse: true))
+    end
 
     describe 'redox error response' do
       it 'handles the arrays' do

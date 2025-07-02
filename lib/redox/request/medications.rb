@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Request
     class Medications
@@ -5,7 +7,9 @@ module Redox
 
       def self.administration(model, meta: Redox::Models::Meta.new)
         meta = ADMINISTRATION_META.merge(meta)
-        return Redox::Models::Model.from_response((RedoxClient.connection.request(body: Redox::Request.build_body(model, meta))))
+        Redox::Models::Model.from_response(RedoxClient.connection.request(body: Redox::Request.build_body(
+          model, meta
+        )))
       end
     end
   end

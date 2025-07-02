@@ -38,9 +38,8 @@ class MediaTest < Minitest::Test
           media.add_filepath(filepath)
         end
 
-
         it 'base64 encodes' do
-          assert_equal(Base64::encode64(File.read(filepath)), media[:FileContents])
+          assert_equal(Base64.encode64(File.read(filepath)), media[:FileContents])
         end
 
         it 'adds file extension' do
@@ -60,12 +59,13 @@ class MediaTest < Minitest::Test
 
           assert_equal('Not implemented', err.message)
         end
-      end 
+      end
     end
 
     describe 'notifications' do
       it 'can be initialized' do
-        m = Redox::Models::Media.new('Notifications' => [{'ID' => 'xx', 'IDType' => 'NPI', 'FirstName' => 'John', 'LastName' => 'Doe', 'Credentials' => ['AS']}])
+        m = Redox::Models::Media.new('Notifications' => [{ 'ID' => 'xx', 'IDType' => 'NPI', 'FirstName' => 'John',
+                                                           'LastName' => 'Doe', 'Credentials' => ['AS'] }])
 
         assert_equal('xx', m.Notifications.first['ID'])
         assert_equal('NPI', m.notifications.first['IDType'])

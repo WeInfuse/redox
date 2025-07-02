@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 module Redox
   class Authentication < Connection
     attr_accessor :response
 
-    BASE_ENDPOINT    = '/auth'.freeze
+    BASE_ENDPOINT    = '/auth'
 
-    AUTH_ENDPOINT    = "#{BASE_ENDPOINT}/authenticate".freeze
-    REFRESH_ENDPOINT = "#{BASE_ENDPOINT}/refreshToken".freeze
+    AUTH_ENDPOINT    = "#{BASE_ENDPOINT}/authenticate"
+    REFRESH_ENDPOINT = "#{BASE_ENDPOINT}/refreshToken"
 
     class << self
       attr_accessor :token_expiry_padding
@@ -18,22 +20,22 @@ module Redox
     end
 
     def authenticate
-      if (self.expires?)
-        if (self.refresh_token)
-          request = {
-            body: { apiKey: Redox.configuration.api_key, refreshToken: self.refresh_token },
-            endpoint: REFRESH_ENDPOINT
-          }
-        else
-          request = {
-            body: { apiKey: Redox.configuration.api_key, secret: Redox.configuration.secret },
-            endpoint: AUTH_ENDPOINT
-          }
-        end
+      if expires?
+        request = if refresh_token
+                    {
+                      body: { apiKey: Redox.configuration.api_key, refreshToken: refresh_token },
+                      endpoint: REFRESH_ENDPOINT
+                    }
+                  else
+                    {
+                      body: { apiKey: Redox.configuration.api_key, secret: Redox.configuration.secret },
+                      endpoint: AUTH_ENDPOINT
+                    }
+                  end
 
         response = self.request(**request, auth: false)
 
-        if (false == response.ok?)
+        if false == response.ok?
           @response = nil
           raise RedoxException.from_response(response, msg: 'Authentication')
         else
@@ -41,32 +43,33 @@ module Redox
         end
       end
 
-      return self
+      self
     end
 
     def access_token
-      return @response['accessToken'] if @response
+      @response['accessToken'] if @response
     end
 
     def expiry
-      return @response['expires'] if @response
+      @response['expires'] if @response
     end
 
     def refresh_token
-      return @response['refreshToken'] if @response
+      @response['refreshToken'] if @response
     end
 
     def expires?(seconds_from_now = Authentication.token_expiry_padding)
-      if (self.expiry)
-        return DateTime.strptime(self.expiry, Models::Meta::FROM_DATETIME_FORMAT).to_time.utc <= (Time.now + seconds_from_now).utc
+      if expiry
+        DateTime.strptime(expiry,
+                          Models::Meta::FROM_DATETIME_FORMAT).to_time.utc <= (Time.now + seconds_from_now).utc
       else
-        return true
+        true
       end
     end
 
     def access_header
-      return {
-        'Authorization' => "Bearer #{self.access_token}",
+      {
+        'Authorization' => "Bearer #{access_token}"
       }
     end
 
