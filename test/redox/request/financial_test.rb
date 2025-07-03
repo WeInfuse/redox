@@ -8,7 +8,7 @@ class FinancialTest < Minitest::Test
       before do
         stub_redox(body: sample)
 
-        WebMock.after_request do |request, response|
+        WebMock.after_request do |request, _response|
           @request = request
         end
       end
@@ -35,9 +35,9 @@ class FinancialTest < Minitest::Test
           it 'sends data' do
             Redox::Request::Financial.create(financial)
 
-            assert_equal([], request_body.dig('Transactions'))
-            assert_equal(false, request_body.dig('Patient').nil?)
-            assert_equal(false, request_body.dig('Visit').nil?)
+            assert_empty(request_body['Transactions'])
+            assert_equal(false, request_body['Patient'].nil?)
+            assert_equal(false, request_body['Visit'].nil?)
           end
         end
 
@@ -45,7 +45,7 @@ class FinancialTest < Minitest::Test
           it 'returns a valid response' do
             response = Redox::Request::Financial.create(financial)
 
-            assert(response.is_a?(Redox::Models::Model))
+            assert_kind_of(Redox::Models::Model, response)
           end
         end
       end

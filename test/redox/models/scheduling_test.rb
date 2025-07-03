@@ -7,15 +7,15 @@ class SchedulingTest < Minitest::Test
 
     describe 'default' do
       it 'has a patient' do
-        assert_equal(Redox::Models::Patient, scheduling.patient.class)
+        assert_instance_of(Redox::Models::Patient, scheduling.patient)
       end
 
       it 'has a visit' do
-        assert_equal(Redox::Models::Visit, scheduling.visit.class)
+        assert_instance_of(Redox::Models::Visit, scheduling.visit)
       end
 
       it 'has an empty array for appointment_info' do
-        assert_equal([], scheduling.appointment_info)
+        assert_empty(scheduling.appointment_info)
       end
     end
 
@@ -28,11 +28,11 @@ class SchedulingTest < Minitest::Test
 
         describe 'manual add' do
           before do
-            scheduling.appointment_info << info 
+            scheduling.appointment_info << info
           end
 
           it 'serializes correctly' do
-            assert_equal(Array, deserialized_infos.class)
+            assert_instance_of(Array, deserialized_infos)
             assert_equal(info[:Code], deserialized_info['Code'])
             assert_equal(info[:Codeset], deserialized_info['Codeset'])
             assert_equal(info[:Description], deserialized_info['Description'])
@@ -42,17 +42,18 @@ class SchedulingTest < Minitest::Test
 
         describe 'helper add' do
           before do
-            scheduling.add_appointment_info(code: info[:Code], codeset: info[:Codeset], description: info[:Description], value: info[:Value]) 
+            scheduling.add_appointment_info(code: info[:Code], codeset: info[:Codeset],
+                                            description: info[:Description], value: info[:Value])
           end
 
           it 'serializes correctly' do
-            assert_equal(Array, deserialized_infos.class)
+            assert_instance_of(Array, deserialized_infos)
             assert_equal(info[:Code], deserialized_info['Code'])
             assert_equal(info[:Codeset], deserialized_info['Codeset'])
             assert_equal(info[:Description], deserialized_info['Description'])
             assert_equal(info[:Value], deserialized_info['Value'])
           end
-          end
+        end
       end
     end
   end

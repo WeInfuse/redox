@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Models
     class Transaction < AbstractModel
@@ -15,19 +17,19 @@ module Redox
       property :Procedure, required: false, from: :procedure, default: {}
       property :Type, required: false, from: :type
 
-      alias_method :chargeable, :Chargeable
-      alias_method :start, :DateTimeOfService
-      alias_method :department, :Department
-      alias_method :diagnoses, :Diagnoses
-      alias_method :end, :EndDateTime
-      alias_method :extensions, :Extensions
-      alias_method :id, :ID
-      alias_method :ndc, :NDC
-      alias_method :order_id, :OrderID
-      alias_method :ordering_providers, :OrderingProviders
-      alias_method :performers, :Performers
-      alias_method :procedure, :Procedure
-      alias_method :type, :Type
+      alias chargeable Chargeable
+      alias start DateTimeOfService
+      alias department Department
+      alias diagnoses Diagnoses
+      alias end EndDateTime
+      alias extensions Extensions
+      alias id ID
+      alias ndc NDC
+      alias order_id OrderID
+      alias ordering_providers OrderingProviders
+      alias performers Performers
+      alias procedure Procedure
+      alias type Type
 
       def add_medication(ndc_code: nil, quantity: nil, magnitude: nil, unit: nil, description: nil)
         self[:NDC] = { Code: ndc_code, Description: description }
@@ -67,8 +69,8 @@ module Redox
         result
       end
 
-      def as_json(args)
-        self.to_h
+      def as_json(_args)
+        to_h
       end
     end
   end

@@ -8,33 +8,33 @@ class FinancialTest < Minitest::Test
 
     describe 'default' do
       it 'has a patient' do
-        assert_equal(Redox::Models::Patient, financial.patient.class)
+        assert_instance_of(Redox::Models::Patient, financial.patient)
       end
 
       it 'has a visit' do
-        assert_equal(Redox::Models::Visit, financial.visit.class)
+        assert_instance_of(Redox::Models::Visit, financial.visit)
       end
 
       it 'has an empty array for transactions' do
-        assert_equal([], financial.transactions)
+        assert_empty(financial.transactions)
       end
     end
 
     describe 'to_json' do
       describe 'with a transaction' do
-        let(:transaction) {
+        let(:transaction) do
           t = Redox::Models::Transaction.new
           t.add_medication(ndc_code: '0011', description: 'Inject Actemra', quantity: 4, unit: 'ML', magnitude: 142)
-        }
+        end
 
         before do
           financial.transactions << transaction
         end
 
         it 'serializes correctly' do
-          assert_equal(Array, deserialized.dig('Transactions').class)
-          assert_equal(true, deserialized.dig('Transactions').first.include?('Extensions'))
-          assert_equal(true, deserialized.dig('Transactions').first.include?('NDC'))
+          assert_instance_of(Array, deserialized['Transactions'])
+          assert_equal(true, deserialized['Transactions'].first.include?('Extensions'))
+          assert_equal(true, deserialized['Transactions'].first.include?('NDC'))
         end
       end
     end

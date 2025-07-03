@@ -1,22 +1,25 @@
+# frozen_string_literal: true
+
+# rubocop:disable Naming/MethodParameterName
 module Redox
   module Models
     class Visit < Model
       DEFAULT_LOCATION = {
         Department: nil,
         Facility: nil
-      }
+      }.freeze
       DEFAULT_REFERRING_PROVIDER = {
         ID: nil,
         IDType: nil,
         FirstName: nil,
         LastName: nil
-      }
+      }.freeze
       DEFAULT_ATTENDING_PROVIDER = {
         ID: nil,
         IDType: nil,
         FirstName: nil,
         LastName: nil
-      }
+      }.freeze
 
       property :Insurances, from: :insurances, required: false, default: []
       property :Location, from: :location, required: false, default: DEFAULT_LOCATION
@@ -33,22 +36,19 @@ module Redox
       property :ReferringProvider, from: :referring_provider, required: false, default: DEFAULT_REFERRING_PROVIDER
       property :AttendingProvider, from: :attending_provider, required: false, default: DEFAULT_ATTENDING_PROVIDER
 
-      alias_method :insurances, :Insurances
-      alias_method :start, :VisitDateTime
-      alias_method :end, :DischargeDateTime
-      alias_method :referring_provider, :ReferringProvider
-      alias_method :attending_provider, :AttendingProvider
+      alias start VisitDateTime
+      alias end DischargeDateTime
+      alias referring_provider ReferringProvider
+      alias attending_provider AttendingProvider
 
       def department=(v)
         self[:Location] ||= DEFAULT_LOCATION
         self[:Location][:Department] = v
-        self
       end
 
       def facility=(v)
         self[:Location] ||= DEFAULT_LOCATION
         self[:Location][:Facility] = v
-        self
       end
 
       def attending_provider_id=(v)
@@ -98,7 +98,7 @@ module Redox
       end
 
       def insurances
-        self[:Insurances] = self[:Insurances].map {|ins| ins.is_a?(Redox::Models::Insurance) ? ins : Insurance.new(ins) }
+        self[:Insurances] = self[:Insurances].map { |ins| ins.is_a?(Redox::Models::Insurance) ? ins : Insurance.new(ins) }
       end
 
       def to_h
@@ -111,13 +111,14 @@ module Redox
         result
       end
 
-      def to_json(args = {})
-        self.to_h.to_json
+      def to_json(_args = {})
+        to_h.to_json
       end
 
-      def as_json(args = {})
-        self.to_h.dig('Visit')
+      def as_json(_args = {})
+        to_h['Visit']
       end
     end
   end
 end
+# rubocop:enable Naming/MethodParameterName

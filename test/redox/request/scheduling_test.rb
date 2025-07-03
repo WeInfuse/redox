@@ -1,5 +1,6 @@
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 module Request
   class SchedulingTest < Minitest::Test
     describe 'Scheduling' do
@@ -13,7 +14,7 @@ module Request
         before do
           stub_redox(body: sample)
 
-          WebMock.after_request do |actual_request, actual_response|
+          WebMock.after_request do |actual_request, _actual_response|
             @actual_request = actual_request
           end
 
@@ -34,7 +35,7 @@ module Request
             end
 
             it 'sends data' do
-              assert_equal([], request_body['AppointmentInfo'])
+              assert_empty(request_body['AppointmentInfo'])
               assert_equal(false, request_body['Patient'].nil?)
               assert_equal(false, request_body['Visit'].nil?)
             end
@@ -42,7 +43,7 @@ module Request
 
           describe 'response' do
             it 'returns a valid response' do
-              assert(response.is_a?(Redox::Models::Model))
+              assert_kind_of(Redox::Models::Model, response)
             end
           end
         end
@@ -61,7 +62,7 @@ module Request
             end
 
             it 'sends data' do
-              assert_equal([], request_body['AppointmentInfo'])
+              assert_empty(request_body['AppointmentInfo'])
               assert_equal(false, request_body['Patient'].nil?)
               assert_equal(false, request_body['Visit'].nil?)
             end
@@ -69,7 +70,7 @@ module Request
 
           describe 'response' do
             it 'returns a valid response' do
-              assert(response.is_a?(Redox::Models::Model))
+              assert_kind_of(Redox::Models::Model, response)
             end
           end
         end
@@ -88,7 +89,7 @@ module Request
             end
 
             it 'sends data' do
-              assert_equal([], request_body['AppointmentInfo'])
+              assert_empty(request_body['AppointmentInfo'])
               assert_equal(false, request_body['Patient'].nil?)
               assert_equal(false, request_body['Visit'].nil?)
             end
@@ -96,7 +97,7 @@ module Request
 
           describe 'response' do
             it 'returns a valid response' do
-              assert(response.is_a?(Redox::Models::Model))
+              assert_kind_of(Redox::Models::Model, response)
             end
           end
         end
@@ -115,7 +116,7 @@ module Request
             end
 
             it 'sends data' do
-              assert_equal([], request_body['AppointmentInfo'])
+              assert_empty(request_body['AppointmentInfo'])
               assert_equal(false, request_body['Patient'].nil?)
               assert_equal(false, request_body['Visit'].nil?)
             end
@@ -123,7 +124,7 @@ module Request
 
           describe 'response' do
             it 'returns a valid response' do
-              assert(response.is_a?(Redox::Models::Model))
+              assert_kind_of(Redox::Models::Model, response)
             end
           end
         end
@@ -131,3 +132,4 @@ module Request
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Request
     class Financial
@@ -5,7 +7,9 @@ module Redox
 
       def self.create(financial, meta: Redox::Models::Meta.new)
         meta = TRANSACTION_META.merge(meta)
-        return Redox::Models::Model.from_response((RedoxClient.connection.request(body: Redox::Request.build_body(financial, meta))))
+        Redox::Models::Model.from_response(RedoxClient.connection.request(body: Redox::Request.build_body(
+          financial, meta
+        )))
       end
     end
   end

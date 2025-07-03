@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Redox
   class Connection
-    DEFAULT_ENDPOINT = '/endpoint'.freeze
+    DEFAULT_ENDPOINT = '/endpoint'
 
     include HTTParty
 
-    base_uri 'https://api.redoxengine.com/'.freeze
+    base_uri 'https://api.redoxengine.com/'
 
     headers 'Content-Type' => 'application/json'
 
@@ -22,7 +24,7 @@ module Redox
     def auth_header
       @auth ||= Authentication.new
 
-      return @auth.authenticate.access_header
+      @auth.authenticate.access_header
     end
   end
 end

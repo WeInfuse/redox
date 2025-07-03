@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Request
     class Provider
@@ -5,7 +7,9 @@ module Redox
 
       def self.query(provider, meta: Redox::Models::Meta.new)
         meta = QUERY_META.merge(meta)
-        return Redox::Models::Model.from_response_inflected((RedoxClient.connection.request(body: Redox::Request.build_body(provider, meta))))
+        Redox::Models::Model.from_response_inflected(RedoxClient.connection.request(body: Redox::Request.build_body(
+          provider, meta
+        )))
       end
     end
   end

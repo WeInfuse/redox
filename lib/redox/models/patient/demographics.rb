@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Models
     class Demographics < AbstractModel
@@ -18,17 +20,17 @@ module Redox
       property :Address, required: false, default: {}
       property :PhoneNumber, required: false, default: {}
 
-      alias_method :first_name, :FirstName
-      alias_method :middle_name, :MiddleName
-      alias_method :last_name, :LastName
-      alias_method :dob, :DOB
-      alias_method :ssn, :SSN
-      alias_method :sex, :Sex
-      alias_method :race, :Race
-      alias_method :marital_status, :MaritalStatus
-      alias_method :language, :Language
-      alias_method :address, :Address
-      alias_method :phone_number, :PhoneNumber
+      alias first_name FirstName
+      alias middle_name MiddleName
+      alias last_name LastName
+      alias dob DOB
+      alias ssn SSN
+      alias sex Sex
+      alias race Race
+      alias marital_status MaritalStatus
+      alias language Language
+      alias address Address
+      alias phone_number PhoneNumber
     end
   end
 end
