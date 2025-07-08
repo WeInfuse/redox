@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Models
     class OrderingProvider < AbstractModel
@@ -6,10 +8,10 @@ module Redox
       property :FirstName, required: false, from: :first_name
       property :LastName, required: false, from: :last_name
 
-      alias_method :first_name, :FirstName
-      alias_method :last_name, :LastName
-      alias_method :id, :ID
-      alias_method :id_type, :IDType
+      alias first_name FirstName
+      alias last_name LastName
+      alias id ID
+      alias id_type IDType
     end
   end
 end

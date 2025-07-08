@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Redox
   module Models
     class PCP < OrderingProvider
       property :NPI, from: :npi
 
-      alias_method :npi, :NPI
+      alias npi NPI
     end
   end
 end

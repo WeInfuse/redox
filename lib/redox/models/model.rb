@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Redox
   module Models
-    def self.format_datetime(d)
-      if d.respond_to?(:strftime)
-        d.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT)
+    def self.format_datetime(date)
+      if date.respond_to?(:strftime)
+        date.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT)
       else
-        d
+        date
       end
     end
 
@@ -12,7 +14,7 @@ module Redox
       include Hashie::Extensions::IgnoreUndeclared
       include Hashie::Extensions::IndifferentAccess
 
-      HIGH_LEVEL_KEYS = %w[Meta Patient Visit PotentialMatches]
+      HIGH_LEVEL_KEYS = %w[Meta Patient Visit PotentialMatches].freeze
 
       property :Meta, from: :meta, required: false
       property :Patient, from: :patient, required: false
@@ -21,72 +23,78 @@ module Redox
       property :Extensions, from: :extensions, required: false
       property :response, required: false
 
-      alias_method :potential_matches, :PotentialMatches
-      alias_method :patient, :Patient
-      alias_method :visit, :Visit
-      alias_method :meta, :Meta
+      alias potential_matches PotentialMatches
+      alias patient Patient
+      alias visit Visit
+      alias meta Meta
 
-      def to_json(args = {})
-        return self.to_h.to_json
+      def to_json(_args = {})
+        to_h.to_json
       end
 
       def insurances
-        (self.patient&.insurances || []) + (self.visit&.insurances || [])
+        (patient&.insurances || []) + (visit&.insurances || [])
       end
 
       def self.from_response(response)
         model = Model.new
         model.response = response
 
+        # rubocop:disable Lint/SuppressedException
         HIGH_LEVEL_KEYS.each do |k|
-          begin
-            model.send("#{k}=", Module.const_get("Redox::Models::#{k}").new(response[k])) if response[k]
-          rescue
-          end
+          model.send("#{k}=", Module.const_get("Redox::Models::#{k}").new(response[k])) if response[k]
+        rescue StandardError
         end
+        # rubocop:enable Lint/SuppressedException
 
-        return model
+        model
       end
 
       def self.from_response_inflected(response)
-        model = self.from_response(response)
+        model = from_response(response)
 
-        if (model.response.ok?)
-          data = model.response.parsed_response
+        return model unless model.response.ok?
 
-          if data.respond_to?(:keys)
-            model_class = nil
+        data = model.response.parsed_response
 
-            if model.meta&.data_model
-              model_class = "Redox::Models::#{model.meta.data_model}"
+        return model unless data.respond_to?(:keys)
 
-              begin
-                model_class = Object.const_get(model_class)
-              rescue NameError
-                model_class = nil
-              end
-            end
+        add_helpers(model, data)
+      end
 
-            data.keys.each do |key|
-              next if HIGH_LEVEL_KEYS.include?(key.to_s)
+      def self.get_inflected_class(data_model)
+        return if data_model.nil?
 
-              helper_name = key.to_s.downcase.to_sym
+        model_class = "Redox::Models::#{data_model}"
 
-              if model_class.nil?
-                model.define_singleton_method(helper_name) { data[key] }
-              else
-                if data[key].is_a?(Array)
-                  model.define_singleton_method(helper_name) { data[key].map {|obj| model_class.new(obj) } }
-                else
-                  model.define_singleton_method(helper_name) { model_class.new(data[key]) }
-                end
-              end
-            end
+        begin
+          Object.const_get(model_class)
+        rescue NameError
+          nil
+        end
+      end
+
+      # rubocop:disable Metrics/AbcSize
+      def self.add_helpers(model, data)
+        model_class = get_inflected_class(model.meta&.data_model)
+
+        data.each_key do |key|
+          next if HIGH_LEVEL_KEYS.include?(key.to_s)
+
+          helper_name = key.to_s.downcase.to_sym
+
+          if model_class.nil?
+            model.define_singleton_method(helper_name) { data[key] }
+          elsif data[key].is_a?(Array)
+            model.define_singleton_method(helper_name) { data[key].map { |obj| model_class.new(obj) } }
+          else
+            model.define_singleton_method(helper_name) { model_class.new(data[key]) }
           end
         end
 
-        return model
+        model
       end
+      # rubocop:enable Metrics/AbcSize
     end
 
     class Model < AbstractModel
@@ -99,16 +107,17 @@ module Redox
           end
         end
 
-        super(data)
+        super
       end
 
       def to_h
-        return { key => super.to_h }
+        { key => super.to_h }
       end
 
       private
+
       def key
-        return self.class.to_s.split('::').last.to_s
+        self.class.to_s.split('::').last.to_s
       end
     end
   end

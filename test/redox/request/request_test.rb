@@ -8,13 +8,13 @@ class RequestTest < Minitest::Test
       it 'has a meta' do
         result = Redox::Request.build_body({}, meta)
 
-        assert(result.include?('Meta'))
+        assert_includes(result, 'Meta')
       end
 
       it 'has a high level key' do
-        result = Redox::Request.build_body({Z: 'hi'}, meta)
+        result = Redox::Request.build_body({ Z: 'hi' }, meta)
 
-        assert(result.include?(:Z))
+        assert_includes(result, :Z)
       end
 
       it 'merges with a default meta' do
@@ -27,7 +27,7 @@ class RequestTest < Minitest::Test
       end
 
       it 'fails nil meta' do
-        assert_raises { Redox::Request.build_body({}, nil) }
+        assert_raises(StandardError) { Redox::Request.build_body({}, nil) }
       end
     end
   end

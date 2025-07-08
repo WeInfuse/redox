@@ -1,19 +1,29 @@
 require 'test_helper'
 
-class Redox::Models::AbstractModel < Hashie::Trash
-  property :HelloWorld, from: :hello_world
+module Redox
+  module Models
+    class AbstractModel < Hashie::Trash
+      property :HelloWorld, from: :hello_world
+    end
+  end
 end
 
-class Redox::Models::RipeBanana < Hash
+module Redox
+  module Models
+    class RipeBanana < Hash
+    end
+  end
 end
 
 class SimpleFakeResponse < Hash
+  # rubocop:disable Naming/MethodParameterName
   def initialize(data: {}, ok: true)
     h    = { parsed_response: data, ok: ok }
-    data = {__junk__: data} unless data.is_a?(Hash)
+    data = { __junk__: data } unless data.is_a?(Hash)
 
     super(h.merge(data))
   end
+  # rubocop:enable Naming/MethodParameterName
 
   def ok?
     self[:ok] || true
@@ -24,6 +34,7 @@ class SimpleFakeResponse < Hash
   end
 end
 
+# rubocop:disable Metrics/ClassLength
 class ModelTest < Minitest::Test
   describe 'abstract model' do
     describe '#to_json' do
@@ -31,7 +42,7 @@ class ModelTest < Minitest::Test
         z = Redox::Models::AbstractModel.new
         z[:HelloWorld] = 10
 
-        assert_equal({HelloWorld: 10}.to_json, z.to_json)
+        assert_equal({ HelloWorld: 10 }.to_json, z.to_json)
       end
     end
   end
@@ -39,22 +50,22 @@ class ModelTest < Minitest::Test
   describe 'model' do
     describe 'removes top level key' do
       it 'works for string' do
-        z = Redox::Models::Model.new('Model' => {HelloWorld: 50})
+        z = Redox::Models::Model.new('Model' => { HelloWorld: 50 })
 
         assert_equal(50, z['HelloWorld'])
       end
 
       it 'works for symbols' do
-        z = Redox::Models::Model.new(:Model => {HelloWorld: 50})
+        z = Redox::Models::Model.new(Model: { HelloWorld: 50 })
 
         assert_equal(50, z['HelloWorld'])
       end
     end
 
     it 'ignores undeclared' do
-      z = Redox::Models::Model.new({other: 50})
+      z = Redox::Models::Model.new({ other: 50 })
 
-      assert_raises { z[:other] }
+      assert_raises(StandardError) { z[:other] }
     end
 
     it 'has indifferent access hash' do
@@ -68,8 +79,8 @@ class ModelTest < Minitest::Test
     it 'can deep merge' do
       y = Redox::Models::Model.new
       z = Redox::Models::Model.new
-      y[:HelloWorld] = {i: {j: 20}}
-      z[:HelloWorld] = {i: {j: 10}}
+      y[:HelloWorld] = { i: { j: 20 } }
+      z[:HelloWorld] = { i: { j: 10 } }
 
       assert_equal(y, z.merge(y))
     end
@@ -82,8 +93,8 @@ class ModelTest < Minitest::Test
     end
 
     it 'can methods instead' do
-      y = Redox::Models::Model.new()
-      z = Redox::Models::Model.new()
+      y = Redox::Models::Model.new
+      z = Redox::Models::Model.new
       y.hello_world = 10
       z.HelloWorld = 10
 
@@ -95,7 +106,7 @@ class ModelTest < Minitest::Test
         z = Redox::Models::Model.new
         z[:HelloWorld] = 10
 
-        assert_equal({'Model' => {HelloWorld: 10}}.to_json, z.to_json)
+        assert_equal({ 'Model' => { HelloWorld: 10 } }.to_json, z.to_json)
       end
     end
 
@@ -111,7 +122,7 @@ class ModelTest < Minitest::Test
       end
 
       describe 'patient' do
-        let(:model_data) { { 'Patient' => {'Demographics' => {'FirstName' => 'Charles'}} } }
+        let(:model_data) { { 'Patient' => { 'Demographics' => { 'FirstName' => 'Charles' } } } }
 
         it 'adds' do
           assert_equal('Charles', model.patient.demographics.first_name)
@@ -119,7 +130,7 @@ class ModelTest < Minitest::Test
       end
 
       describe 'visit' do
-        let(:model_data) { { 'Visit' => {'Insurances' => ['PolicyNumber' => '1277777']} } }
+        let(:model_data) { { 'Visit' => { 'Insurances' => ['PolicyNumber' => '1277777'] } } }
 
         it 'adds' do
           assert_equal(1, model.visit.insurances.size)
@@ -127,7 +138,7 @@ class ModelTest < Minitest::Test
       end
 
       describe 'meta' do
-        let(:model_data) { { 'Meta' => {'FacilityCode' => '09'}} }
+        let(:model_data) { { 'Meta' => { 'FacilityCode' => '09' } } }
 
         it 'adds' do
           assert_equal('09', model.meta.facility_code)
@@ -135,7 +146,7 @@ class ModelTest < Minitest::Test
       end
 
       describe 'potential matches' do
-        let(:model_data) { { 'PotentialMatches' => [ { 'FirstName' => 'bob1'}, { 'FirstName' => 'bob2' }] } }
+        let(:model_data) { { 'PotentialMatches' => [{ 'FirstName' => 'bob1' }, { 'FirstName' => 'bob2' }] } }
 
         it 'adds' do
           assert_equal(2, model.potential_matches.size)
@@ -147,12 +158,12 @@ class ModelTest < Minitest::Test
 
         describe 'no insurances' do
           it 'returns empty arrray' do
-            assert_equal([], model.insurances)
+            assert_empty(model.insurances)
           end
         end
 
         describe 'patient' do
-          let(:model_data) { { 'Patient' => {'Insurances' => ['PolicyNumber' => '0123']} } }
+          let(:model_data) { { 'Patient' => { 'Insurances' => ['PolicyNumber' => '0123'] } } }
 
           it 'uses the patient insurances' do
             assert_equal('0123', model.insurances.first.policy_number)
@@ -160,7 +171,7 @@ class ModelTest < Minitest::Test
         end
 
         describe 'visit' do
-          let(:model_data) { { 'Visit' => {'Insurances' => ['PolicyNumber' => '3210']} } }
+          let(:model_data) { { 'Visit' => { 'Insurances' => ['PolicyNumber' => '3210'] } } }
 
           it 'uses the visit insurances' do
             assert_equal('3210', model.insurances.first.policy_number)
@@ -168,12 +179,12 @@ class ModelTest < Minitest::Test
         end
 
         describe 'patient and visit' do
-          let(:model_data) {
+          let(:model_data) do
             {
-              'Patient' => {'Insurances' => ['PolicyNumber' => '0123']},
-              'Visit'   => {'Insurances' => ['PolicyNumber' => '3210']}
+              'Patient' => { 'Insurances' => ['PolicyNumber' => '0123'] },
+              'Visit' => { 'Insurances' => ['PolicyNumber' => '3210'] }
             }
-          }
+          end
 
           it 'concats' do
             assert_equal('0123', model.insurances.first.policy_number)
@@ -199,14 +210,14 @@ class ModelTest < Minitest::Test
       describe 'high level is hash' do
         describe 'key with array data' do
           let(:meta) { {} }
-          let(:model_data) {
+          let(:model_data) do
             meta.merge(
-              BaNanas: [{z: 'm'}, {z: 'x'}]
+              BaNanas: [{ z: 'm' }, { z: 'x' }]
             )
-          }
+          end
 
           it 'adds #bananas' do
-            assert_equal([{z: 'm'},{z: 'x'}], model.bananas)
+            assert_equal([{ z: 'm' }, { z: 'x' }], model.bananas)
           end
 
           describe 'array is of meta.DataModel type' do
@@ -217,13 +228,13 @@ class ModelTest < Minitest::Test
               let(:data_model) { 'RipeBanana' }
 
               it 'converts objects to type' do
-                assert_equal(Redox::Models::RipeBanana, model.bananas.last.class)
+                assert_instance_of(Redox::Models::RipeBanana, model.bananas.last)
               end
             end
 
             describe 'model does not exist' do
               it 'leaves it alone' do
-                assert_equal(Hash, model.bananas.last.class)
+                assert_instance_of(Hash, model.bananas.last)
               end
             end
           end
@@ -240,7 +251,7 @@ class ModelTest < Minitest::Test
         end
 
         describe 'patient' do
-          let(:model_data) { { 'Patient' => {'Demographics' => {'FirstName' => 'Charles'}} } }
+          let(:model_data) { { 'Patient' => { 'Demographics' => { 'FirstName' => 'Charles' } } } }
 
           it 'adds' do
             assert_equal('Charles', model.patient.demographics.first_name)
@@ -248,7 +259,7 @@ class ModelTest < Minitest::Test
         end
 
         describe 'visit' do
-          let(:model_data) { { 'Visit' => {'Insurances' => ['PolicyNumber' => '1277777']} } }
+          let(:model_data) { { 'Visit' => { 'Insurances' => ['PolicyNumber' => '1277777'] } } }
 
           it 'adds' do
             assert_equal(1, model.visit.insurances.size)
@@ -256,7 +267,7 @@ class ModelTest < Minitest::Test
         end
 
         describe 'meta' do
-          let(:model_data) { { 'Meta' => {'FacilityCode' => '09'}} }
+          let(:model_data) { { 'Meta' => { 'FacilityCode' => '09' } } }
 
           it 'adds' do
             assert_equal('09', model.meta.facility_code)
@@ -268,12 +279,12 @@ class ModelTest < Minitest::Test
 
           describe 'no insurances' do
             it 'returns empty arrray' do
-              assert_equal([], model.insurances)
+              assert_empty(model.insurances)
             end
           end
 
           describe 'patient' do
-            let(:model_data) { { 'Patient' => {'Insurances' => ['PolicyNumber' => '0123']} } }
+            let(:model_data) { { 'Patient' => { 'Insurances' => ['PolicyNumber' => '0123'] } } }
 
             it 'uses the patient insurances' do
               assert_equal('0123', model.insurances.first.policy_number)
@@ -281,7 +292,7 @@ class ModelTest < Minitest::Test
           end
 
           describe 'visit' do
-            let(:model_data) { { 'Visit' => {'Insurances' => ['PolicyNumber' => '3210']} } }
+            let(:model_data) { { 'Visit' => { 'Insurances' => ['PolicyNumber' => '3210'] } } }
 
             it 'uses the visit insurances' do
               assert_equal('3210', model.insurances.first.policy_number)
@@ -289,12 +300,12 @@ class ModelTest < Minitest::Test
           end
 
           describe 'patient and visit' do
-            let(:model_data) {
+            let(:model_data) do
               {
-                'Patient' => {'Insurances' => ['PolicyNumber' => '0123']},
-                'Visit'   => {'Insurances' => ['PolicyNumber' => '3210']}
+                'Patient' => { 'Insurances' => ['PolicyNumber' => '0123'] },
+                'Visit' => { 'Insurances' => ['PolicyNumber' => '3210'] }
               }
-            }
+            end
 
             it 'concats' do
               assert_equal('0123', model.insurances.first.policy_number)
@@ -306,3 +317,4 @@ class ModelTest < Minitest::Test
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

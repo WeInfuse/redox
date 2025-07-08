@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Models
     class Component < AbstractModel
@@ -5,9 +7,9 @@ module Redox
       property :Name, required: false, from: :name
       property :Value, required: false, from: :value
 
-      alias_method :id, :ID
-      alias_method :name, :Name
-      alias_method :value, :Value
+      alias id ID
+      alias name Name
+      alias value Value
     end
   end
 end

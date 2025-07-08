@@ -1,0 +1,31 @@
+plugins:
+  - rubocop-minitest
+  - rubocop-performance
+
+AllCops:
+  NewCops: enable
+
+Metrics/AbcSize:
+  AllowedMethods:
+    - included
+Metrics/BlockLength:
+  AllowedMethods:
+    - class_eval
+    - describe
+Metrics/MethodLength:
+  AllowedMethods:
+    - included
+  Max: 20
+Minitest/AssertTruthy:
+  Enabled: false
+Minitest/MultipleAssertions:
+  Max: 5
+Minitest/RefuteFalse:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - "test/**/*"
+Style/YodaCondition:
+  Enabled: false

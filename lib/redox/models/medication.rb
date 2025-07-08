@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Redox
   module Models
     class Medication < AbstractModel
@@ -12,16 +14,16 @@ module Redox
       property :Indications, required: false, from: :indications, default: []
       property :AdministeringProvider, required: false, from: :administering_provider, default: {}
 
-      alias_method :order, :Order
-      alias_method :lot_number, :LotNumber
-      alias_method :dose, :Dose
-      alias_method :rate, :Rate
-      alias_method :route, :Route
-      alias_method :product, :Product
-      alias_method :components, :Components
-      alias_method :ordered_by, :OrderedBy
-      alias_method :indications, :Indications
-      alias_method :administering_provider, :AdministeringProvider
+      alias order Order
+      alias lot_number LotNumber
+      alias dose Dose
+      alias rate Rate
+      alias route Route
+      alias product Product
+      alias components Components
+      alias ordered_by OrderedBy
+      alias indications Indications
+      alias administering_provider AdministeringProvider
     end
   end
 end

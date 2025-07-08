@@ -1,5 +1,6 @@
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class VisitTest < Minitest::Test
   describe 'visit' do
     let(:visit) { Redox::Models::Visit.new(data) }
@@ -9,7 +10,7 @@ class VisitTest < Minitest::Test
 
     describe 'insurances' do
       describe 'hash initialization' do
-        let(:data) { {'Insurances' => [{'Plan' => 'xx'}]} }
+        let(:data) { { 'Insurances' => [{ 'Plan' => 'xx' }] } }
 
         it 'can be initialized' do
           assert_equal('xx', visit.Insurances.first['Plan'])
@@ -20,7 +21,7 @@ class VisitTest < Minitest::Test
         let(:data) { patient_admin_responses(:visit_update) }
 
         it 'can be converted using method' do
-          assert_equal(Redox::Models::Insurance, visit.insurances.first.class)
+          assert_instance_of(Redox::Models::Insurance, visit.insurances.first)
         end
       end
     end
@@ -116,7 +117,7 @@ class VisitTest < Minitest::Test
         visit.add_equipment(description: 'cats and cats', code: 'meowzers')
 
         assert_equal(1, visit.Equipment.size)
-        assert_equal({Description: 'cats and cats', Code: 'meowzers'}, visit.Equipment[0])
+        assert_equal({ Description: 'cats and cats', Code: 'meowzers' }, visit.Equipment[0])
       end
     end
 
@@ -137,13 +138,14 @@ class VisitTest < Minitest::Test
 
           describe '#to_json' do
             it 'converts to redox format' do
-              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), deserialized.dig('Visit', 'VisitDateTime'))
+              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT),
+                           deserialized.dig('Visit', 'VisitDateTime'))
             end
           end
 
           describe '#as_json' do
             it 'converts to redox format' do
-              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), as_json.dig('VisitDateTime'))
+              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), as_json['VisitDateTime'])
             end
           end
         end
@@ -159,7 +161,7 @@ class VisitTest < Minitest::Test
 
           describe '#as_json' do
             it 'leaves it be' do
-              assert_equal(datetime, as_json.dig('VisitDateTime'))
+              assert_equal(datetime, as_json['VisitDateTime'])
             end
           end
         end
@@ -191,13 +193,14 @@ class VisitTest < Minitest::Test
 
           describe '#to_json' do
             it 'converts to redox format' do
-              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), deserialized.dig('Visit', 'DischargeDateTime'))
+              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT),
+                           deserialized.dig('Visit', 'DischargeDateTime'))
             end
           end
 
           describe '#as_json' do
             it 'converts to redox format' do
-              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), as_json.dig('DischargeDateTime'))
+              assert_equal(datetime.strftime(Redox::Models::Meta::TO_DATETIME_FORMAT), as_json['DischargeDateTime'])
             end
           end
         end
@@ -213,7 +216,7 @@ class VisitTest < Minitest::Test
 
           describe '#as_json' do
             it 'leaves it be' do
-              assert_equal(datetime, as_json.dig('DischargeDateTime'))
+              assert_equal(datetime, as_json['DischargeDateTime'])
             end
           end
         end
@@ -229,3 +232,4 @@ class VisitTest < Minitest::Test
     end
   end
 end
+# rubocop:enable Metrics/ClassLength
