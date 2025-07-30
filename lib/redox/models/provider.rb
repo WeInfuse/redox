@@ -9,9 +9,7 @@ module Redox
       alias identifiers Identifiers
 
       def demographics
-        unless self[:Demographics].is_a?(Redox::Models::Demographics)
-          self[:Demographics] = Demographics.new(self[:Demographics])
-        end
+        self[:Demographics] = Demographics.new(self[:Demographics]) unless self[:Demographics].is_a?(Redox::Models::Demographics)
         self[:Demographics] ||= Demographics.new
       end
 

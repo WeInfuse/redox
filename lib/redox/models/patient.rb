@@ -12,14 +12,14 @@ module Redox
       alias identifiers Identifiers
 
       def demographics
-        unless self[:Demographics].is_a?(Redox::Models::Demographics)
-          self[:Demographics] = Demographics.new(self[:Demographics])
-        end
+        self[:Demographics] = Demographics.new(self[:Demographics]) unless self[:Demographics].is_a?(Redox::Models::Demographics)
         self[:Demographics] ||= Demographics.new
       end
 
       def insurances
-        self[:Insurances] = self[:Insurances].map { |ins| ins.is_a?(Redox::Models::Insurance) ? ins : Insurance.new(ins) }
+        self[:Insurances] = self[:Insurances].map do |ins|
+          ins.is_a?(Redox::Models::Insurance) ? ins : Insurance.new(ins)
+        end
       end
 
       def primary_care_provider
@@ -27,7 +27,9 @@ module Redox
       end
 
       def contacts
-        self[:Contacts] = self[:Contacts].map { |contact| contact.is_a?(Redox::Models::Contact) ? contact : Contact.new(contact) }
+        self[:Contacts] = self[:Contacts].map do |contact|
+          contact.is_a?(Redox::Models::Contact) ? contact : Contact.new(contact)
+        end
       end
 
       def add_identifier(type:, value:)

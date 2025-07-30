@@ -5,6 +5,8 @@ plugins:
 AllCops:
   NewCops: enable
 
+Layout/LineLength:
+  Max: 240
 Metrics/AbcSize:
   AllowedMethods:
     - included

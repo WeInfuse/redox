@@ -98,7 +98,9 @@ module Redox
       end
 
       def insurances
-        self[:Insurances] = self[:Insurances].map { |ins| ins.is_a?(Redox::Models::Insurance) ? ins : Insurance.new(ins) }
+        self[:Insurances] = self[:Insurances].map do |ins|
+          ins.is_a?(Redox::Models::Insurance) ? ins : Insurance.new(ins)
+        end
       end
 
       def to_h
