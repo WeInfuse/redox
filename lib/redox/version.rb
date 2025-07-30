@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Redox
-  VERSION = '1.8.6'
+  VERSION = '2.0.0-rc.1'
 end

@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'redox/version'
 
 Gem::Specification.new do |spec|
-  spec.required_ruby_version = '>= 2.7.8'
+  spec.required_ruby_version = '>= 3.0.7'
 
   spec.name          = 'redox'
   spec.version       = Redox::VERSION
@@ -34,5 +34,5 @@ Gem::Specification.new do |spec|
   spec.licenses      = ['MIT']
 
   spec.add_dependency 'hashie', '~> 3.5'
-  spec.add_dependency 'httparty', '~> 0.18'
+  spec.add_dependency 'httparty', '~> 0.21'
 end

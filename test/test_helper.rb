@@ -4,6 +4,7 @@ require 'redox'
 require 'minitest/autorun'
 require 'webmock/minitest'
 require 'byebug'
+require 'ostruct'
 
 Redox.configuration.api_key = '123'
 Redox.configuration.secret  = 'abc'

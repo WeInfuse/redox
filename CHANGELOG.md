@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.0.0-rc.1] - 2025-07-30
+### Changed
+- Gem httparty dependency version ~> 0.21
+- Gem rake version ~> 13.3
+- Required ruby version >= 3.0.7
+
+### Added
+- Gem ostruct for testing
+
 ## [1.8.6] - 2023-05-12
 ### Changed
 - Updated test JSON files for update retiring Meta.Message.ID and Meta.Transmission.ID
@@ -207,6 +216,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial Release
 
+[2.0.0-rc.1]: https://github.com/WeInfuse/redox/compare/v1.8.6...v2.0.0-rc.1
 [1.8.6]: https://github.com/WeInfuse/redox/compare/v1.8.5...v1.8.6
 [1.8.5]: https://github.com/WeInfuse/redox/compare/v1.8.4...v1.8.5
 [1.8.4]: https://github.com/WeInfuse/redox/compare/v1.8.3...v1.8.4
