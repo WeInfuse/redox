@@ -10,8 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Gemfile rake version
 - Required ruby version >= 3.0.7
 - Moved development dependencies to Gemfile
-- Updated ci configuration to use github actions
-- Rubocop suggestions applied
+- GitHub Actions CI
+- Rubocop suggestions
 
 ### Added
 - Gemfile rubocop, rubocop-minitest, rubocop-performance
