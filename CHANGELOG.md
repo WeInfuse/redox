@@ -6,12 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [2.0.0.rc1] - 2025-07-30
 ### Changed
-- Gem httparty dependency version ~> 0.21
-- Gem rake version ~> 13.3
+- Gemspec dependency httparty version
+- Gemfile rake version
 - Required ruby version >= 3.0.7
+- Moved development dependencies to Gemfile
+- Updated ci configuration to use github actions
+- Rubocop suggestions applied
 
 ### Added
-- Gem ostruct for testing
+- Gemfile rubocop, rubocop-minitest, rubocop-performance
 
 ## [1.8.6] - 2023-05-12
 ### Changed
@@ -216,7 +219,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial Release
 
-[2.0.0-rc.1]: https://github.com/WeInfuse/redox/compare/v1.8.6...v2.0.0-rc.1
+[2.0.0.rc1]: https://github.com/WeInfuse/redox/compare/v1.8.6...v2.0.0.rc1
 [1.8.6]: https://github.com/WeInfuse/redox/compare/v1.8.5...v1.8.6
 [1.8.5]: https://github.com/WeInfuse/redox/compare/v1.8.4...v1.8.5
 [1.8.4]: https://github.com/WeInfuse/redox/compare/v1.8.3...v1.8.4
