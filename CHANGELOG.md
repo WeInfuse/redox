@@ -218,7 +218,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial Release
 
-[1.8.7]: https://github.com/WeInfuse/redox/compare/v1.8.6...v2.0.0.rc1
+[1.8.7]: https://github.com/WeInfuse/redox/compare/v1.8.6...v1.8.7
 [1.8.6]: https://github.com/WeInfuse/redox/compare/v1.8.5...v1.8.6
 [1.8.5]: https://github.com/WeInfuse/redox/compare/v1.8.4...v1.8.5
 [1.8.4]: https://github.com/WeInfuse/redox/compare/v1.8.3...v1.8.4
