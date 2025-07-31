@@ -8,7 +8,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Gemspec dependency httparty version
 - Gemfile rake version
-- Required ruby version >= 3.0.7
 - Moved development dependencies to Gemfile
 - GitHub Actions CI
 - Rubocop suggestions

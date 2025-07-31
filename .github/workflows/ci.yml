@@ -13,11 +13,15 @@ concurrency:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['2.7.8', '3.0.7']
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Ruby ${{ matrix.ruby-version }}
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
 
       - name: Lint code for consistent style
@@ -25,11 +29,15 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['2.7.8', '3.0.7']
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Ruby ${{ matrix.ruby-version }}
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
 
       - name: Run tests

@@ -9,8 +9,8 @@ module Redox
 
     BASE_ENDPOINT    = '/auth'
 
-    AUTH_ENDPOINT    = "#{BASE_ENDPOINT}/authenticate".freeze
-    REFRESH_ENDPOINT = "#{BASE_ENDPOINT}/refreshToken".freeze
+    AUTH_ENDPOINT    = "#{BASE_ENDPOINT}/authenticate"
+    REFRESH_ENDPOINT = "#{BASE_ENDPOINT}/refreshToken"
 
     class << self
       attr_accessor :token_expiry_padding
