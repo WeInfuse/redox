@@ -34,5 +34,5 @@ Gem::Specification.new do |spec|
   spec.licenses      = ['MIT']
 
   spec.add_dependency 'hashie', '~> 3.5'
-  spec.add_dependency 'httparty', '~> 0.18'
+  spec.add_dependency 'httparty', '~> 0.21'
 end

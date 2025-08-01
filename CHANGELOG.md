@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.8.7] - 2025-07-30
+### Changed
+- Gemspec dependency httparty version
+- Gemfile rake version
+- Moved development dependencies to Gemfile
+- GitHub Actions CI
+- Rubocop suggestions
+
+### Added
+- Gemfile rubocop, rubocop-minitest, rubocop-performance
+
 ## [1.8.6] - 2023-05-12
 ### Changed
 - Updated test JSON files for update retiring Meta.Message.ID and Meta.Transmission.ID
@@ -207,6 +218,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial Release
 
+[1.8.7]: https://github.com/WeInfuse/redox/compare/v1.8.6...v1.8.7
 [1.8.6]: https://github.com/WeInfuse/redox/compare/v1.8.5...v1.8.6
 [1.8.5]: https://github.com/WeInfuse/redox/compare/v1.8.4...v1.8.5
 [1.8.4]: https://github.com/WeInfuse/redox/compare/v1.8.3...v1.8.4
