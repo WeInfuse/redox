@@ -35,4 +35,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'hashie', '~> 3.5'
   spec.add_dependency 'httparty', '~> 0.21'
+  spec.add_dependency 'base64'
 end
