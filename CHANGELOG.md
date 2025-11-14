@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.10.0] - 2025-11-14
+### Added
+- GitHub Actions CI support for Ruby 3.3 and 3.4
+
 ## [1.9.0] - 2025-08-18
 ### Added
 - GitHub Actions CI support for Ruby 3.1 and 3.2
@@ -222,6 +226,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial Release
 
+[1.10.0]: https://github.com/WeInfuse/redox/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/WeInfuse/redox/compare/v1.8.7...v1.9.0
 [1.8.7]: https://github.com/WeInfuse/redox/compare/v1.8.6...v1.8.7
 [1.8.6]: https://github.com/WeInfuse/redox/compare/v1.8.5...v1.8.6
