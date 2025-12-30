@@ -1,6 +1,12 @@
 require 'test_helper'
 
 class ConnectionTest < Minitest::Test
+  class CustomHash < Hash
+    def as_json(*)
+      { custom: 'value' }
+    end
+  end
+
   describe 'connection' do
     before do
       auth_stub
@@ -54,6 +60,15 @@ class ConnectionTest < Minitest::Test
 
       assert_requested(@stub, times: 1)
       assert_equal('hi', @request.body)
+    end
+
+    it 'changes body calls as_json if present hashes' do
+      custom_hash = CustomHash.new
+
+      @connection.request(auth: false, body: custom_hash)
+
+      assert_requested(@stub, times: 1)
+      assert_equal({ custom: 'value' }.to_json, @request.body)
     end
 
     it 'passes headers' do
