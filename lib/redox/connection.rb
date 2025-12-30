@@ -13,7 +13,8 @@ module Redox
     format :json
 
     def request(endpoint: DEFAULT_ENDPOINT, body: nil, headers: {}, auth: true)
-      body    = body.as_json.to_json if body.is_a?(Hash)
+      body    = body.as_json if body.is_a?(Hash) && body.respond_to?(:as_json) # compatibility with Rails 7.1+
+      body    = body.to_json if body.is_a?(Hash)
       headers = auth_header.merge(headers) if auth
 
       self.class.post(endpoint, body: body, headers: headers)
