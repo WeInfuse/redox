@@ -62,7 +62,7 @@ class ConnectionTest < Minitest::Test
       assert_equal('hi', @request.body)
     end
 
-    it 'changes body calls as_json if present hashes' do
+    it 'uses as_json on request body if present and is hash' do
       custom_hash = CustomHash.new
 
       @connection.request(auth: false, body: custom_hash)
