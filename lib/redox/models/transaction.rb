@@ -69,7 +69,7 @@ module Redox
         result
       end
 
-      def as_json(_args)
+      def as_json(_args = {})
         to_h
       end
     end
