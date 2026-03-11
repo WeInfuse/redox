@@ -1,41 +1,41 @@
 require 'test_helper'
 
-module Redox
-  module Models
-    class AbstractModel < Hashie::Trash
-      property :HelloWorld, from: :hello_world
-    end
-  end
-end
-
-module Redox
-  module Models
-    class RipeBanana < Hash
-    end
-  end
-end
-
-class SimpleFakeResponse < Hash
-  # rubocop:disable Naming/MethodParameterName
-  def initialize(data: {}, ok: true)
-    h    = { parsed_response: data, ok: ok }
-    data = { __junk__: data } unless data.is_a?(Hash)
-
-    super(h.merge(data))
-  end
-  # rubocop:enable Naming/MethodParameterName
-
-  def ok?
-    self[:ok] || true
-  end
-
-  def parsed_response
-    self[:parsed_response]
-  end
-end
-
 # rubocop:disable Metrics/ClassLength
 class ModelTest < Minitest::Test
+  module Redox
+    module Models
+      class AbstractModel < Hashie::Trash
+        property :HelloWorld, from: :hello_world
+      end
+    end
+  end
+
+  module Redox
+    module Models
+      class RipeBanana < Hash
+      end
+    end
+  end
+
+  class SimpleFakeResponse < Hash
+    # rubocop:disable Naming/MethodParameterName
+    def initialize(data: {}, ok: true)
+      h    = { parsed_response: data, ok: ok }
+      data = { __junk__: data } unless data.is_a?(Hash)
+
+      super(h.merge(data))
+    end
+    # rubocop:enable Naming/MethodParameterName
+
+    def ok?
+      self[:ok] || true
+    end
+
+    def parsed_response
+      self[:parsed_response]
+    end
+  end
+
   describe 'abstract model' do
     describe '#to_json' do
       it 'has no top level key' do
@@ -130,7 +130,7 @@ class ModelTest < Minitest::Test
       end
 
       describe 'visit' do
-        let(:model_data) { { 'Visit' => { 'Insurances' => ['PolicyNumber' => '1277777'] } } }
+        let(:model_data) { { 'Visit' => { 'Insurances' => [{ 'PolicyNumber' => '1277777' }] } } }
 
         it 'adds' do
           assert_equal(1, model.visit.insurances.size)
@@ -163,7 +163,7 @@ class ModelTest < Minitest::Test
         end
 
         describe 'patient' do
-          let(:model_data) { { 'Patient' => { 'Insurances' => ['PolicyNumber' => '0123'] } } }
+          let(:model_data) { { 'Patient' => { 'Insurances' => [{ 'PolicyNumber' => '0123' }] } } }
 
           it 'uses the patient insurances' do
             assert_equal('0123', model.insurances.first.policy_number)
@@ -171,7 +171,7 @@ class ModelTest < Minitest::Test
         end
 
         describe 'visit' do
-          let(:model_data) { { 'Visit' => { 'Insurances' => ['PolicyNumber' => '3210'] } } }
+          let(:model_data) { { 'Visit' => { 'Insurances' => [{ 'PolicyNumber' => '3210' }] } } }
 
           it 'uses the visit insurances' do
             assert_equal('3210', model.insurances.first.policy_number)
@@ -181,8 +181,8 @@ class ModelTest < Minitest::Test
         describe 'patient and visit' do
           let(:model_data) do
             {
-              'Patient' => { 'Insurances' => ['PolicyNumber' => '0123'] },
-              'Visit' => { 'Insurances' => ['PolicyNumber' => '3210'] }
+              'Patient' => { 'Insurances' => [{ 'PolicyNumber' => '0123' }] },
+              'Visit' => { 'Insurances' => [{ 'PolicyNumber' => '3210' }] }
             }
           end
 
@@ -259,7 +259,7 @@ class ModelTest < Minitest::Test
         end
 
         describe 'visit' do
-          let(:model_data) { { 'Visit' => { 'Insurances' => ['PolicyNumber' => '1277777'] } } }
+          let(:model_data) { { 'Visit' => { 'Insurances' => [{ 'PolicyNumber' => '1277777' }] } } }
 
           it 'adds' do
             assert_equal(1, model.visit.insurances.size)
@@ -284,7 +284,7 @@ class ModelTest < Minitest::Test
           end
 
           describe 'patient' do
-            let(:model_data) { { 'Patient' => { 'Insurances' => ['PolicyNumber' => '0123'] } } }
+            let(:model_data) { { 'Patient' => { 'Insurances' => [{ 'PolicyNumber' => '0123' }] } } }
 
             it 'uses the patient insurances' do
               assert_equal('0123', model.insurances.first.policy_number)
@@ -292,7 +292,7 @@ class ModelTest < Minitest::Test
           end
 
           describe 'visit' do
-            let(:model_data) { { 'Visit' => { 'Insurances' => ['PolicyNumber' => '3210'] } } }
+            let(:model_data) { { 'Visit' => { 'Insurances' => [{ 'PolicyNumber' => '3210' }] } } }
 
             it 'uses the visit insurances' do
               assert_equal('3210', model.insurances.first.policy_number)
@@ -302,8 +302,8 @@ class ModelTest < Minitest::Test
           describe 'patient and visit' do
             let(:model_data) do
               {
-                'Patient' => { 'Insurances' => ['PolicyNumber' => '0123'] },
-                'Visit' => { 'Insurances' => ['PolicyNumber' => '3210'] }
+                'Patient' => { 'Insurances' => [{ 'PolicyNumber' => '0123' }] },
+                'Visit' => { 'Insurances' => [{ 'PolicyNumber' => '3210' }] }
               }
             end
 
