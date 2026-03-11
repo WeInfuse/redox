@@ -29,5 +29,8 @@ Style/Documentation:
 Style/FrozenStringLiteralComment:
   Exclude:
     - "test/**/*"
+Style/OneClassPerFile:
+  Exclude:
+    - "test/**/*"
 Style/YodaCondition:
   Enabled: false

@@ -1,41 +1,41 @@
 require 'test_helper'
 
+module Redox
+  module Models
+    class AbstractModel < Hashie::Trash
+      property :HelloWorld, from: :hello_world
+    end
+  end
+end
+
+module Redox
+  module Models
+    class RipeBanana < Hash
+    end
+  end
+end
+
+class SimpleFakeResponse < Hash
+  # rubocop:disable Naming/MethodParameterName
+  def initialize(data: {}, ok: true)
+    h    = { parsed_response: data, ok: ok }
+    data = { __junk__: data } unless data.is_a?(Hash)
+
+    super(h.merge(data))
+  end
+  # rubocop:enable Naming/MethodParameterName
+
+  def ok?
+    self[:ok] || true
+  end
+
+  def parsed_response
+    self[:parsed_response]
+  end
+end
+
 # rubocop:disable Metrics/ClassLength
 class ModelTest < Minitest::Test
-  module Redox
-    module Models
-      class AbstractModel < Hashie::Trash
-        property :HelloWorld, from: :hello_world
-      end
-    end
-  end
-
-  module Redox
-    module Models
-      class RipeBanana < Hash
-      end
-    end
-  end
-
-  class SimpleFakeResponse < Hash
-    # rubocop:disable Naming/MethodParameterName
-    def initialize(data: {}, ok: true)
-      h    = { parsed_response: data, ok: ok }
-      data = { __junk__: data } unless data.is_a?(Hash)
-
-      super(h.merge(data))
-    end
-    # rubocop:enable Naming/MethodParameterName
-
-    def ok?
-      self[:ok] || true
-    end
-
-    def parsed_response
-      self[:parsed_response]
-    end
-  end
-
   describe 'abstract model' do
     describe '#to_json' do
       it 'has no top level key' do
