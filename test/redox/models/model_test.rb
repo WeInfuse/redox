@@ -130,7 +130,7 @@ class ModelTest < Minitest::Test
       end
 
       describe 'visit' do
-        let(:model_data) { { 'Visit' => { 'Insurances' => ['PolicyNumber' => '1277777'] } } }
+        let(:model_data) { { 'Visit' => { 'Insurances' => [{ 'PolicyNumber' => '1277777' }] } } }
 
         it 'adds' do
           assert_equal(1, model.visit.insurances.size)
@@ -163,7 +163,7 @@ class ModelTest < Minitest::Test
         end
 
         describe 'patient' do
-          let(:model_data) { { 'Patient' => { 'Insurances' => ['PolicyNumber' => '0123'] } } }
+          let(:model_data) { { 'Patient' => { 'Insurances' => [{ 'PolicyNumber' => '0123' }] } } }
 
           it 'uses the patient insurances' do
             assert_equal('0123', model.insurances.first.policy_number)
@@ -171,7 +171,7 @@ class ModelTest < Minitest::Test
         end
 
         describe 'visit' do
-          let(:model_data) { { 'Visit' => { 'Insurances' => ['PolicyNumber' => '3210'] } } }
+          let(:model_data) { { 'Visit' => { 'Insurances' => [{ 'PolicyNumber' => '3210' }] } } }
 
           it 'uses the visit insurances' do
             assert_equal('3210', model.insurances.first.policy_number)
@@ -181,8 +181,8 @@ class ModelTest < Minitest::Test
         describe 'patient and visit' do
           let(:model_data) do
             {
-              'Patient' => { 'Insurances' => ['PolicyNumber' => '0123'] },
-              'Visit' => { 'Insurances' => ['PolicyNumber' => '3210'] }
+              'Patient' => { 'Insurances' => [{ 'PolicyNumber' => '0123' }] },
+              'Visit' => { 'Insurances' => [{ 'PolicyNumber' => '3210' }] }
             }
           end
 
@@ -259,7 +259,7 @@ class ModelTest < Minitest::Test
         end
 
         describe 'visit' do
-          let(:model_data) { { 'Visit' => { 'Insurances' => ['PolicyNumber' => '1277777'] } } }
+          let(:model_data) { { 'Visit' => { 'Insurances' => [{ 'PolicyNumber' => '1277777' }] } } }
 
           it 'adds' do
             assert_equal(1, model.visit.insurances.size)
@@ -284,7 +284,7 @@ class ModelTest < Minitest::Test
           end
 
           describe 'patient' do
-            let(:model_data) { { 'Patient' => { 'Insurances' => ['PolicyNumber' => '0123'] } } }
+            let(:model_data) { { 'Patient' => { 'Insurances' => [{ 'PolicyNumber' => '0123' }] } } }
 
             it 'uses the patient insurances' do
               assert_equal('0123', model.insurances.first.policy_number)
@@ -292,7 +292,7 @@ class ModelTest < Minitest::Test
           end
 
           describe 'visit' do
-            let(:model_data) { { 'Visit' => { 'Insurances' => ['PolicyNumber' => '3210'] } } }
+            let(:model_data) { { 'Visit' => { 'Insurances' => [{ 'PolicyNumber' => '3210' }] } } }
 
             it 'uses the visit insurances' do
               assert_equal('3210', model.insurances.first.policy_number)
@@ -302,8 +302,8 @@ class ModelTest < Minitest::Test
           describe 'patient and visit' do
             let(:model_data) do
               {
-                'Patient' => { 'Insurances' => ['PolicyNumber' => '0123'] },
-                'Visit' => { 'Insurances' => ['PolicyNumber' => '3210'] }
+                'Patient' => { 'Insurances' => [{ 'PolicyNumber' => '0123' }] },
+                'Visit' => { 'Insurances' => [{ 'PolicyNumber' => '3210' }] }
               }
             end
 
